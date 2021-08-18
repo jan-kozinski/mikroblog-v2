@@ -4,10 +4,14 @@ import makeCallback from "./make-express-callback.js";
 
 export default function start() {
   const app = express();
-  app.use(express.json());
-  app.post("/api/user", makeCallback(postUser));
 
+  // CONFIG
   const PORT = process.env.PORT || 3000;
+
+  // MIDDLEWARE
+  app.use(express.json());
+  // ROUTES
+  app.post("/api/user", makeCallback(postUser));
 
   app.listen(PORT, () => {
     console.log(

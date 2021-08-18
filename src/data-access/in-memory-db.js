@@ -21,7 +21,8 @@ const inMemoryDb = {
     return !!usersToReturn.length ? usersToReturn : null;
   },
   insert(userData) {
-    this._users.push(userData);
+    const index = this._users.push(userData) - 1;
+    return this._users[index];
   },
 };
 

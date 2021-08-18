@@ -3,9 +3,8 @@ import dbMockup from "../../__test__/utils/dbMockup";
 import makeSaveUser from "./save-user";
 
 describe("create user", () => {
-  let validUserData;
-  let saveUser;
-  let genId;
+  let validUserData, saveUser, genId, hasherMock;
+
   beforeAll(() => {
     validUserData = {
       id: "1",
@@ -14,6 +13,20 @@ describe("create user", () => {
       password: "doesn't matter",
       memberSince: "doesn't matter",
     };
+
+    genId = jest.fn(() => "this is and id");
+    hasherMock = {
+      hash: jest.fn((password) => `hashed-${password}`),
+    };
+    saveUser = makeSaveUser({
+      dbGateway: dbMockup,
+      Id: { genId },
+      hasher: hasherMock,
+    });
+  });
+
+  beforeEach(() => {
+    dbMockup._RESET_DB();
     dbMockup.insert({
       id: "0",
       name: "user0",
@@ -21,18 +34,11 @@ describe("create user", () => {
       password: "doesn't matter",
       memberSince: "doesn't matter",
     });
-    genId = jest.fn(() => "this is and id");
-    saveUser = makeSaveUser({
-      dbGateway: dbMockup,
-      Id: { genId },
-    });
-  });
-
-  afterEach(() => {
     dbMockup.insert.mockClear();
     dbMockup.find.mockClear();
     dbMockup.findById.mockClear();
     genId.mockClear();
+    hasherMock.hash.mockClear();
   });
   it("Should throw an error if provided with already taken id", async () => {
     await expect(saveUser({ ...validUserData, id: "0" })).rejects.toThrow(
@@ -67,6 +73,19 @@ describe("create user", () => {
         })
       );
     }
+  });
+  it("Should hash the password before inserting user to db", async () => {
+    expect(hasherMock.hash).toBeCalledTimes(0);
+    await saveUser(validUserData);
+    expect(hasherMock.hash).toBeCalledTimes(1);
+    expect(hasherMock.hash).toBeCalledWith(validUserData.password);
+  });
+  it("Should return saved user data", async () => {
+    const user = await saveUser(validUserData);
+    expect(user).toEqual({
+      ...validUserData,
+      password: `hashed-${validUserData.password}`,
+    });
   });
   it("Given no id should generate one", async () => {
     expect(genId).toBeCalledTimes(0);

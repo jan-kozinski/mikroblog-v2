@@ -1,10 +1,5 @@
 import { jest } from "@jest/globals";
-import buildMakeUser from "./user.js";
-
-const hasherMock = {
-  hash: jest.fn((password) => `hashed-${password}`),
-};
-const makeUser = buildMakeUser({ hasher: hasherMock });
+import makeUser from "./index.js";
 
 const validUserData = {
   id: "string",
@@ -98,7 +93,7 @@ describe("makeUser", () => {
       expect.objectContaining({
         getId: expect.any(Function),
         getName: expect.any(Function),
-        getHashedPassword: expect.any(Function),
+        getPassword: expect.any(Function),
         getMemberSince: expect.any(Function),
       })
     );
@@ -109,9 +104,7 @@ describe("makeUser", () => {
     expect(user.getId()).toEqual(validUserData.id);
     expect(user.getName()).toEqual(validUserData.name);
     expect(user.getEmail()).toEqual(validUserData.email);
-    expect(user.getHashedPassword()).toEqual(
-      `hashed-${validUserData.password}`
-    );
+    expect(user.getPassword()).toEqual(validUserData.password);
     expect(user.getMemberSince()).toBeInstanceOf(Date);
   });
 });

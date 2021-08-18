@@ -17,7 +17,21 @@ const dbMockup = {
     }
     return !!usersToReturn.length ? usersToReturn : null;
   }),
-  insert: jest.fn((u) => dbMockup._users.push(u)),
+  findOne: jest.fn((queries) => {
+    for (let q in queries) {
+      for (let u of dbMockup._users) {
+        if (u[q] === queries[q]) return u;
+      }
+    }
+    return null;
+  }),
+  insert: jest.fn((u) => {
+    const index = dbMockup._users.push(u) - 1;
+    return dbMockup._users[index];
+  }),
+  _RESET_DB() {
+    this._users = [];
+  },
 };
 
 export default dbMockup;
