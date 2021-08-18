@@ -4,13 +4,20 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest src --watch"
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest src --watch",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest src --watch --collect-coverage",
+    "dev": "NODE_ENV=development nodemon src/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "jest": "^27.0.6"
+    "cuid": "^2.1.8",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "jest": "^27.0.6",
+    "nodemon": "^2.0.12"
   }
 }

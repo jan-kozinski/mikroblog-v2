@@ -1,42 +1,38 @@
-import { jest } from "@jest/globals";
+import { expect, jest } from "@jest/globals";
+import dbMockup from "../../__test__/utils/dbMockup";
 import makeSaveUser from "./save-user";
 
-const dbMockup = {
-  _users: [
-    {
+describe("create user", () => {
+  let validUserData;
+  let saveUser;
+  let genId;
+  beforeAll(() => {
+    validUserData = {
+      id: "1",
+      name: "user1",
+      email: "second@user.com",
+      password: "doesn't matter",
+      memberSince: "doesn't matter",
+    };
+    dbMockup.insert({
       id: "0",
       name: "user0",
       email: "first@user.com",
       password: "doesn't matter",
       memberSince: "doesn't matter",
-    },
-  ],
-  findById(id) {
-    if (id === "0") return this._users[0];
-  },
-  find(queries) {
-    for (let q in queries) {
-      for (let u of this._users) {
-        if (u[q] === queries[q]) return u;
-      }
-    }
-    return null;
-  },
-  insert: jest.fn(),
-};
+    });
+    genId = jest.fn(() => "this is and id");
+    saveUser = makeSaveUser({
+      dbGateway: dbMockup,
+      Id: { genId },
+    });
+  });
 
-const validUserData = {
-  id: "1",
-  name: "user1",
-  email: "second@user.com",
-  password: "doesn't matter",
-  memberSince: "doesn't matter",
-};
-
-const saveUser = makeSaveUser({ dbGateway: dbMockup });
-describe("createUser", () => {
   afterEach(() => {
     dbMockup.insert.mockClear();
+    dbMockup.find.mockClear();
+    dbMockup.findById.mockClear();
+    genId.mockClear();
   });
   it("Should throw an error if provided with already taken id", async () => {
     await expect(saveUser({ ...validUserData, id: "0" })).rejects.toThrow(
@@ -71,5 +67,10 @@ describe("createUser", () => {
         })
       );
     }
+  });
+  it("Given no id should generate one", async () => {
+    expect(genId).toBeCalledTimes(0);
+    await saveUser({ ...validUserData, id: undefined });
+    expect(genId).toBeCalledTimes(1);
   });
 });
