@@ -35,9 +35,12 @@ describe("Post user controller", () => {
       },
       statusCode: 201,
       body: {
-        name: validUserData.name,
-        email: validUserData.email,
-        memberSince: expect.any(Date),
+        success: true,
+        payload: {
+          name: validUserData.name,
+          email: validUserData.email,
+          memberSince: expect.any(Date),
+        },
       },
     };
 
@@ -72,6 +75,7 @@ describe("Post user controller", () => {
       },
       statusCode: 400,
       body: {
+        success: false,
         error: "test error",
       },
     };

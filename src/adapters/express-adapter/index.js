@@ -1,5 +1,6 @@
+import cookieParser from "cookie-parser";
 import express from "express";
-import { postUser } from "../../controllers/user-controller/index.js";
+import { postUser, signUser } from "../../controllers/user-controller/index.js";
 import makeCallback from "./make-express-callback.js";
 
 export default function start() {
@@ -10,8 +11,10 @@ export default function start() {
 
   // MIDDLEWARE
   app.use(express.json());
+  app.use(cookieParser());
   // ROUTES
   app.post("/api/user", makeCallback(postUser));
+  app.get("/api/user/auth", makeCallback(signUser));
 
   app.listen(PORT, () => {
     console.log(

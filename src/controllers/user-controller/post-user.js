@@ -9,6 +9,7 @@ export default function makePostUser({ saveUser }) {
         },
         statusCode: 400,
         body: {
+          success: false,
           error: error.message,
         },
       };
@@ -20,9 +21,12 @@ export default function makePostUser({ saveUser }) {
       },
       statusCode: 201,
       body: {
-        name: httpRequest.body.name,
-        email: httpRequest.body.email,
-        memberSince: new Date(),
+        success: true,
+        payload: {
+          name: httpRequest.body.name,
+          email: httpRequest.body.email,
+          memberSince: new Date(),
+        },
       },
     };
   };

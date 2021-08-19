@@ -15,7 +15,7 @@ export default function makeSaveUser({ dbGateway, Id, hasher }) {
       id: user.getId(),
       name: user.getName(),
       email: user.getEmail(),
-      password: hasher.hash(user.getPassword()),
+      password: await hasher.hash(user.getPassword()),
       memberSince: user.getMemberSince(),
     });
   };

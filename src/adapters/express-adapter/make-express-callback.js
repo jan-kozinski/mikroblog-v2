@@ -16,10 +16,22 @@ export default function makeExpressCallback(controller) {
       if (httpResponse.headers) {
         res.set(httpResponse.headers);
       }
+      extractCookies(httpResponse, res);
       res.type("json");
       res.status(httpResponse.statusCode).send(httpResponse.body);
     } catch (e) {
+      console.error(e);
       res.status(500).send({ error: "An unkown error occurred." });
     }
   };
+}
+
+function extractCookies(httpRes, expressRes) {
+  const { cookies } = httpRes.body;
+  if (cookies) {
+    for (const c in cookies) {
+      expressRes.cookie(c, cookies[c], { httpOnly: true });
+    }
+    delete httpRes.body.cookies;
+  }
 }
