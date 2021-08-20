@@ -1,4 +1,4 @@
-import { expect, jest } from "@jest/globals";
+import { jest } from "@jest/globals";
 import dbMockup from "../../__test__/utils/dbMockup";
 import makeSaveUser from "./save-user";
 

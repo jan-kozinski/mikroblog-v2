@@ -10,7 +10,6 @@ const token = {
     try {
       return jwt.verify(providedToken, process.env.JWT_SECRET);
     } catch (error) {
-      console.error(error);
       return null;
     }
   },

@@ -6,10 +6,9 @@ export default function makeAuthUser({ dbGateway, hasher }) {
     if (!password)
       throw new Error("Please provide with a password in order to procede");
 
-    const user = dbGateway.findOne({ email });
-    if (!user) return false;
-    const result = await hasher.compare(password, user.password);
-    console.log(result);
-    return result;
+    const user = await dbGateway.findOne({ email });
+
+    if (!user) return null;
+    return (await hasher.compare(password, user.password)) ? user : null;
   };
 }

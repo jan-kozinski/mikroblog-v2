@@ -1,18 +1,11 @@
+import respondWithError from "../send-error.js";
+
 export default function makePostUser({ saveUser }) {
   return async function postUser(httpRequest) {
     try {
       await saveUser(httpRequest.body);
     } catch (error) {
-      return {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        statusCode: 400,
-        body: {
-          success: false,
-          error: error.message,
-        },
-      };
+      return respondWithError(400, error.message);
     }
 
     return {

@@ -1,15 +1,15 @@
 import { jest } from "@jest/globals";
 
 const dbMockup = {
-  _users: [],
+  _data: [],
   findById: jest.fn((id) => {
-    for (let u of dbMockup._users) {
+    for (let u of dbMockup._data) {
       if (u.id === id) return u;
       else return null;
     }
   }),
   find: jest.fn((queries) => {
-    let usersToReturn = dbMockup._users;
+    let usersToReturn = dbMockup._data;
     for (let q in queries) {
       usersToReturn = usersToReturn.filter((u) => {
         return u[q] === queries[q];
@@ -19,18 +19,18 @@ const dbMockup = {
   }),
   findOne: jest.fn((queries) => {
     for (let q in queries) {
-      for (let u of dbMockup._users) {
+      for (let u of dbMockup._data) {
         if (u[q] === queries[q]) return u;
       }
     }
     return null;
   }),
   insert: jest.fn((u) => {
-    const index = dbMockup._users.push(u) - 1;
-    return dbMockup._users[index];
+    const index = dbMockup._data.push(u) - 1;
+    return dbMockup._data[index];
   }),
   _RESET_DB() {
-    this._users = [];
+    this._data = [];
   },
 };
 

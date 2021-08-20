@@ -1,9 +1,11 @@
+import respondWithError from "../send-error.js";
+
 export default function makeSignUser({ authUser, token }) {
   return async function signUser(httpRequest) {
     try {
-      const isAuthed = await authUser(httpRequest.body);
-      if (isAuthed) {
-        const tok = token.create({ email: httpRequest.body.email });
+      const user = await authUser(httpRequest.body);
+      if (user) {
+        const tok = token.create({ id: user.id, name: user.name });
         return {
           headers: {
             "Content-Type": "application/json",
@@ -17,30 +19,18 @@ export default function makeSignUser({ authUser, token }) {
           },
         };
       } else {
-        return respondWithError(401, "Invalid credentials");
+        return respondWithError(401, "Invalid credentials", {
+          cookies: {
+            token: "",
+          },
+        });
       }
     } catch (error) {
-      return respondWithError(400, error.message);
+      return respondWithError(400, error.message, {
+        cookies: {
+          token: "",
+        },
+      });
     }
   };
 }
-
-const respondWithError = (code, msg) => {
-  if (typeof code !== "number")
-    throw new Error("error status code must be a number");
-  if (typeof msg !== "string")
-    throw new Error("error message must be a string");
-  return {
-    headers: {
-      "Content-Type": "application/json",
-    },
-    statusCode: code,
-    body: {
-      success: false,
-      error: msg,
-      cookies: {
-        token: "",
-      },
-    },
-  };
-};

@@ -9,7 +9,7 @@ describe("Post user controller", () => {
       password: "doesn't matter",
     };
 
-    saveUser = jest.fn((u) => u);
+    saveUser = jest.fn((u) => Promise.resolve(u));
     postUser = makePostUser({ saveUser });
   });
 
@@ -53,10 +53,14 @@ describe("Post user controller", () => {
     });
   });
   it("Returns error response if saving user doesn't procede due to an error", async () => {
-    postUser = makePostUser({
-      saveUser: jest.fn(() => {
-        throw new Error("test error");
-      }),
+    const errorMsg = `test-error-${Math.round(Math.random() * 100)}`;
+    const postUserErr = makePostUser({
+      saveUser: jest.fn(
+        () =>
+          new Promise(() => {
+            throw new Error(errorMsg);
+          })
+      ),
     });
     const request = {
       headers: {
@@ -67,7 +71,7 @@ describe("Post user controller", () => {
 
     expect(saveUser).toBeCalledTimes(0);
 
-    const actual = await postUser(request);
+    const actual = await postUserErr(request);
 
     const expected = {
       headers: {
@@ -76,7 +80,7 @@ describe("Post user controller", () => {
       statusCode: 400,
       body: {
         success: false,
-        error: "test error",
+        error: errorMsg,
       },
     };
     expect(actual).toEqual(expected);

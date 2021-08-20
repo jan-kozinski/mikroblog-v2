@@ -1,4 +1,3 @@
-import { jest } from "@jest/globals";
 import makeUser from "./index.js";
 
 const validUserData = {

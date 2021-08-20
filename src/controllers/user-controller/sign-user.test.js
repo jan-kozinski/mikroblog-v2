@@ -1,7 +1,7 @@
 import { jest } from "@jest/globals";
 import { randomBytes } from "crypto";
 import makeSignUser from "./sign-user";
-describe("Post user controller", () => {
+describe("Sign user controller", () => {
   let validUserData, token, tokenValue;
   beforeAll(() => {
     validUserData = {
@@ -15,7 +15,10 @@ describe("Post user controller", () => {
     token.create.mockClear();
   });
   it("Successfully signs a user", async () => {
-    const authUser = jest.fn(() => true);
+    const authUser = jest.fn(() => ({
+      id: "good-looking-id",
+      name: "even-better-looking-name",
+    }));
     const signUser = makeSignUser({ authUser, token });
     const request = {
       headers: {
@@ -51,7 +54,10 @@ describe("Post user controller", () => {
     authUser.mockClear();
 
     expect(token.create).toBeCalledTimes(1);
-    expect(token.create).toBeCalledWith({ email: validUserData.email });
+    expect(token.create).toBeCalledWith({
+      id: "good-looking-id",
+      name: "even-better-looking-name",
+    });
   });
   it("Responds with an error if authentication fails", async () => {
     const authUser = jest.fn(() => false);
