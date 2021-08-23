@@ -1,9 +1,15 @@
 import cookieParser from "cookie-parser";
 import express from "express";
 import { postUser, signUser } from "../../controllers/user-controller/index.js";
-import { addPost } from "../../controllers/post-controller/index.js";
+import {
+  addPost,
+  updatePost,
+  getPosts,
+} from "../../controllers/post-controller/index.js";
 import makeCallback from "./make-express-callback.js";
 import helmet from "helmet";
+
+let server;
 
 export default function start() {
   const app = express();
@@ -17,13 +23,17 @@ export default function start() {
   app.use(helmet());
   // ROUTES
   app.post("/api/user", makeCallback(postUser));
-  app.get("/api/user/auth", makeCallback(signUser));
+  app.post("/api/user/auth", makeCallback(signUser));
 
   app.post("/api/post", makeCallback(addPost));
+  app.put("/api/post/:postId", makeCallback(updatePost));
+  app.get("/api/post", makeCallback(getPosts));
 
-  app.listen(PORT, () => {
+  server = app.listen(PORT, () => {
     console.log(
       `Srever is listening on port ${PORT} in ${process.env.NODE_ENV} mode`
     );
   });
 }
+
+export { server };

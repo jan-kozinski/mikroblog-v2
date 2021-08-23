@@ -1,7 +1,9 @@
 import { inMemoryDb } from "../drivers/index.js";
-import makeSaveUser from "./save-user.js";
-import makeSavePost from "./save-post.js";
-import makeAuthUser from "./auth-user.js";
+import makeSaveUser from "./user/save-user.js";
+import makeAuthUser from "./user/auth-user.js";
+import makeSavePost from "./post/save-post.js";
+import makeEditPost from "./post/edit-post.js";
+import makeListPosts from "./post/list-posts.js";
 import cuid from "cuid";
 import bcrypt from "bcrypt";
 
@@ -15,24 +17,36 @@ const hasher = {
   },
 };
 
+const usersDb = new inMemoryDb();
+const postsDb = new inMemoryDb();
+
 const saveUser = makeSaveUser({
-  dbGateway: inMemoryDb,
+  dbGateway: usersDb,
   Id: { genId: () => cuid() },
   hasher,
 });
 
-const authUser = makeAuthUser({ dbGateway: inMemoryDb, hasher });
+const authUser = makeAuthUser({ dbGateway: usersDb, hasher });
 
 const savePost = makeSavePost({
-  dbGateway: inMemoryDb,
+  postsDb,
+  usersDb,
   Id: { genId: () => cuid() },
+});
+
+const editPost = makeEditPost({ dbGateway: postsDb });
+
+const listPosts = makeListPosts({
+  dbGateway: postsDb,
 });
 
 const service = Object.freeze({
   saveUser,
   authUser,
   savePost,
+  editPost,
+  listPosts,
 });
 
 export default service;
-export { saveUser, authUser, savePost };
+export { saveUser, authUser, savePost, editPost, listPosts };

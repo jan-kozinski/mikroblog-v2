@@ -1,5 +1,5 @@
 import { expect, jest } from "@jest/globals";
-import dbMockup from "../../__test__/utils/dbMockup.js";
+import dbMockup from "../../../__test__/utils/dbMockup.js";
 import makeAuthUser from "./auth-user.js";
 
 describe("auth user use case", () => {

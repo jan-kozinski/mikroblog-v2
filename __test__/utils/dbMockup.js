@@ -4,8 +4,8 @@ const dbMockup = {
   _data: [],
   findById: jest.fn((id) => {
     for (let u of dbMockup._data) {
-      if (u.id === id) return u;
-      else return null;
+      if (u.id === id) return Promise.resolve(u);
+      else return Promise.resolve(null);
     }
   }),
   find: jest.fn((queries) => {
@@ -15,19 +15,27 @@ const dbMockup = {
         return u[q] === queries[q];
       });
     }
-    return !!usersToReturn.length ? usersToReturn : null;
+    return Promise.resolve(usersToReturn.length ? usersToReturn : null);
   }),
   findOne: jest.fn((queries) => {
     for (let q in queries) {
       for (let u of dbMockup._data) {
-        if (u[q] === queries[q]) return u;
+        if (u[q] === queries[q]) return Promise.resolve(u);
       }
     }
-    return null;
+    return Promise.resolve(null);
   }),
   insert: jest.fn((u) => {
     const index = dbMockup._data.push(u) - 1;
-    return dbMockup._data[index];
+    return Promise.resolve(dbMockup._data[index]);
+  }),
+  update: jest.fn((record, data) => {
+    let original = dbMockup.findById(record.id);
+    original = {
+      ...original,
+      ...data,
+    };
+    return Promise.resolve(original);
   }),
   _RESET_DB() {
     this._data = [];

@@ -1,16 +1,18 @@
 import { jest } from "@jest/globals";
-import makeAddPost from "./add-post.js";
+import makeUpdatePost from "./update-post";
 
-describe("Add post controller", () => {
-  let validPostData, savePost, addPost, createdAt, modifiedAt, token;
+describe("Update post controller", () => {
+  let validPostData, updatePost, editPost, token, createdAt, modifiedAt, postId;
   beforeAll(() => {
     validPostData = {
       authorId: `user-${Math.round(Math.random() * 100)}`,
       content: `content-${Math.round(Math.random() * 100)}`,
     };
+    postId = `id-${Math.round(Math.random() * 100)}`;
     createdAt = new Date(Date.now() + Math.round(Math.random() * 1000000));
     modifiedAt = new Date(Date.now() + Math.round(Math.random() * 2000000));
-    savePost = jest.fn((p) =>
+
+    editPost = jest.fn((p) =>
       Promise.resolve({
         author: p.authorId,
         content: p.content,
@@ -23,15 +25,14 @@ describe("Add post controller", () => {
         t === "legit" ? { id: validPostData.authorId } : null
       ),
     };
-    addPost = makeAddPost({ savePost, token });
-  });
 
+    updatePost = makeUpdatePost({ editPost, token });
+  });
   afterEach(() => {
-    savePost.mockClear();
+    editPost.mockClear();
     token.resolve.mockClear();
   });
-
-  it("Should respond with an error if request dosen't contain a cookie with JWT token", async () => {
+  it("Should respond with an error if request doesn't contain a param with post id", async () => {
     const request = {
       headers: {
         "Content-Type": "application/json",
@@ -42,8 +43,39 @@ describe("Add post controller", () => {
       },
     };
 
-    expect(savePost).toBeCalledTimes(0);
-    const actual = await addPost(request);
+    expect(editPost).toBeCalledTimes(0);
+    const actual = await updatePost(request);
+
+    const expected = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      statusCode: 404,
+      body: {
+        success: false,
+        error: "Post not found",
+      },
+    };
+
+    expect(actual).toEqual(expected);
+    expect(editPost).toBeCalledTimes(0);
+  });
+  it("Should respond with an error if request dosen't contain a cookie with JWT token", async () => {
+    const request = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      params: {
+        postId: postId,
+      },
+      body: {
+        authorId: validPostData.authorId,
+        content: validPostData.content,
+      },
+    };
+
+    expect(editPost).toBeCalledTimes(0);
+    const actual = await updatePost(request);
 
     const expected = {
       headers: {
@@ -57,12 +89,15 @@ describe("Add post controller", () => {
     };
 
     expect(actual).toEqual(expected);
-    expect(savePost).toBeCalledTimes(0);
+    expect(editPost).toBeCalledTimes(0);
   });
   it("Should respond with an error if request contains a cookie with invalid JWT token", async () => {
     const request = {
       headers: {
         "Content-Type": "application/json",
+      },
+      params: {
+        postId: postId,
       },
       body: {
         authorId: validPostData.authorId,
@@ -73,8 +108,8 @@ describe("Add post controller", () => {
       },
     };
 
-    expect(savePost).toBeCalledTimes(0);
-    const actual = await addPost(request);
+    expect(editPost).toBeCalledTimes(0);
+    const actual = await updatePost(request);
 
     const expected = {
       headers: {
@@ -88,12 +123,15 @@ describe("Add post controller", () => {
     };
 
     expect(actual).toEqual(expected);
-    expect(savePost).toBeCalledTimes(0);
+    expect(editPost).toBeCalledTimes(0);
   });
-  it("Should successfully add a post", async () => {
+  it("Should successfully update a post", async () => {
     const request = {
       headers: {
         "Content-Type": "application/json",
+      },
+      params: {
+        postId: postId,
       },
       body: {
         content: validPostData.content,
@@ -103,15 +141,15 @@ describe("Add post controller", () => {
       },
     };
 
-    expect(savePost).toBeCalledTimes(0);
+    expect(editPost).toBeCalledTimes(0);
     expect(token.resolve).toBeCalledTimes(0);
-    const actual = await addPost(request);
+    const actual = await updatePost(request);
 
     const expected = {
       headers: {
         "Content-Type": "application/json",
       },
-      statusCode: 201,
+      statusCode: 200,
       body: {
         success: true,
         payload: {
@@ -124,8 +162,9 @@ describe("Add post controller", () => {
     };
 
     expect(actual).toEqual(expected);
-    expect(savePost).toBeCalledTimes(1);
-    expect(savePost).toBeCalledWith({
+    expect(editPost).toBeCalledTimes(1);
+    expect(editPost).toBeCalledWith({
+      id: postId,
       authorId: validPostData.authorId,
       content: validPostData.content,
     });
@@ -135,8 +174,8 @@ describe("Add post controller", () => {
   it("Should respond with an error if saving a post doesn't procede due to an error", async () => {
     const errorMsg = `test-error-${Math.round(Math.random() * 100)}`;
 
-    const addPostErr = makeAddPost({
-      savePost: jest.fn(
+    const updatePostErr = makeUpdatePost({
+      editPost: jest.fn(
         () =>
           new Promise(() => {
             throw new Error(errorMsg);
@@ -150,15 +189,18 @@ describe("Add post controller", () => {
         "Content-Type": "application/json",
         body: { content: validPostData.content },
       },
+      params: {
+        postId: postId,
+      },
       cookies: {
         token: "legit",
       },
     };
-    expect(savePost).toBeCalledTimes(0);
+    expect(editPost).toBeCalledTimes(0);
 
-    const actual = await addPostErr(request);
+    const actual = await updatePostErr(request);
 
-    expect(savePost).toBeCalledTimes(0);
+    expect(editPost).toBeCalledTimes(0);
 
     const expected = {
       headers: {

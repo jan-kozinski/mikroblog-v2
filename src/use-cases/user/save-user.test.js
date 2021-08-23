@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals";
-import dbMockup from "../../__test__/utils/dbMockup";
+import dbMockup from "../../../__test__/utils/dbMockup";
 import makeSaveUser from "./save-user";
 
 describe("create user", () => {
@@ -42,13 +42,18 @@ describe("create user", () => {
   });
   it("Should throw an error if provided with already taken id", async () => {
     await expect(saveUser({ ...validUserData, id: "0" })).rejects.toThrow(
-      new Error("user of provided id already exists")
+      new Error("User of provided id already exists")
     );
   });
   it("Should throw an error if provided with already taken email", async () => {
     await expect(
       saveUser({ ...validUserData, email: "first@user.com" })
-    ).rejects.toThrow(new Error("user of provided email already exists"));
+    ).rejects.toThrow(new Error("User of provided email already exists"));
+  });
+  it("Should throw an error if provided with already taken name", async () => {
+    await expect(saveUser({ ...validUserData, name: "user0" })).rejects.toThrow(
+      new Error("Name already taken")
+    );
   });
   it("Given proper input should insert data to the database", async () => {
     expect(dbMockup.insert).toBeCalledTimes(0);

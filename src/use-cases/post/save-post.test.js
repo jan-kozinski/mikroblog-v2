@@ -1,7 +1,6 @@
 import { jest } from "@jest/globals";
-import dbMockup from "../../__test__/utils/dbMockup";
+import dbMockup from "../../../__test__/utils/dbMockup";
 import makeSavePost from "./save-post.js";
-import makePost from "../entities/post/index.js";
 
 describe("save post use case", () => {
   let validPostData, savePost, genId;
@@ -15,7 +14,18 @@ describe("save post use case", () => {
 
     genId = jest.fn(() => "this is an id");
     savePost = makeSavePost({
-      dbGateway: dbMockup,
+      postsDb: dbMockup,
+      usersDb: {
+        findById: jest.fn((id) => {
+          if (id === validPostData.id) return Promise.resolve(null);
+          else
+            return Promise.resolve({
+              id: validPostData.authorId,
+              name: `name-${validPostData.authorId}`,
+              email: `${validPostData.authorId}@test.com`,
+            });
+        }),
+      },
       Id: { genId },
     });
   });
@@ -36,18 +46,30 @@ describe("save post use case", () => {
         id: `${i}-${Math.round(Math.random() * 10)}`,
         authorId: `user-${i}-${Math.round(Math.random() * 10)}`,
         content: `content-${i}-${Math.round(Math.random() * 10)}`,
-        createdAt: new Date(),
-        modifiedAt: new Date(),
       };
-      await savePost(post);
+      let db = {
+        ...dbMockup,
+        findById: jest.fn((id) => {
+          if (id === post.id) return Promise.resolve(null);
+          else
+            return Promise.resolve({
+              id: post.authorId,
+              name: `name-${post.authorId}`,
+              email: `${post.authorId}@test.com`,
+            });
+        }),
+      };
+      await makeSavePost({ postsDb: dbMockup, usersDb: db, Id: { genId } })(
+        post
+      );
       expect(dbMockup.insert).toBeCalledTimes(i + 1);
       expect(dbMockup.insert.mock.calls[i][0]).toEqual(
         expect.objectContaining({
           id: post.id,
           authorId: post.authorId,
           content: post.content,
-          createdAt: post.createdAt,
-          modifiedAt: post.modifiedAt,
+          createdAt: expect.any(Date),
+          modifiedAt: expect.any(Date),
         })
       );
     }
@@ -63,7 +85,9 @@ describe("save post use case", () => {
   it("Should return saved post data", async () => {
     const post = await savePost(validPostData);
     expect(post).toEqual({
-      ...validPostData,
+      id: validPostData.id,
+      author: `name-${validPostData.authorId}`,
+      content: validPostData.content,
       createdAt: expect.any(Date),
       modifiedAt: expect.any(Date),
     });

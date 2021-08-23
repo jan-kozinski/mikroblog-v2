@@ -1,4 +1,4 @@
-import makeUser from "../entities/user/index.js";
+import makeUser from "../../entities/user/index.js";
 
 export default function makeSaveUser({ dbGateway, Id, hasher }) {
   return async function saveUser(userData) {
@@ -10,10 +10,14 @@ export default function makeSaveUser({ dbGateway, Id, hasher }) {
     const emailAlreadyTaken = !!(await dbGateway.find({
       email: user.getEmail(),
     }));
+    const nameAlreadyTaken = !!(await dbGateway.find({
+      name: user.getName(),
+    }));
 
-    if (idAlreadyTaken) throw new Error("user of provided id already exists");
+    if (idAlreadyTaken) throw new Error("User of provided id already exists");
     if (emailAlreadyTaken)
-      throw new Error("user of provided email already exists");
+      throw new Error("User of provided email already exists");
+    if (nameAlreadyTaken) throw new Error("Name already taken");
 
     return await dbGateway.insert({
       id: user.getId(),
