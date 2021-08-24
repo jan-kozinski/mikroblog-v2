@@ -11,7 +11,7 @@ import helmet from "helmet";
 
 let server;
 
-export default function start() {
+export default async function start() {
   const app = express();
 
   // CONFIG
@@ -21,6 +21,10 @@ export default function start() {
   app.use(express.json());
   app.use(cookieParser());
   app.use(helmet());
+  if (process.env.NODE_ENV === "development") {
+    const { default: morgan } = await import("morgan");
+    app.use(morgan("combined"));
+  }
   // ROUTES
   app.post("/api/user", makeCallback(postUser));
   app.post("/api/user/auth", makeCallback(signUser));

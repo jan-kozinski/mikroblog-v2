@@ -153,7 +153,6 @@ describe("Update post controller", () => {
       body: {
         success: true,
         payload: {
-          author: validPostData.authorId,
           content: validPostData.content,
           createdAt,
           modifiedAt,

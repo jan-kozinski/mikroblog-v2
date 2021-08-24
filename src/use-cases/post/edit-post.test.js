@@ -65,7 +65,7 @@ describe("edit-post use case", () => {
         content: validPostData.content,
         authorId: "not-an-actual-author",
       })
-    ).rejects.toThrow(new Error("User is not allowed to edit this post"));
+    ).rejects.toThrow(new Error("User not allowed to edit this post"));
   });
   it("Should return saved post data", async () => {
     MockDate.set(Date.now() + Math.round(Math.random() * 10000000));

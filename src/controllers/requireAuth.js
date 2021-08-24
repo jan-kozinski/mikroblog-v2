@@ -1,4 +1,4 @@
-import respondWithError from "./send-error";
+import respondWithError from "./send-error.js";
 
 export default function requireAuth(httpRequest, token) {
   if (!httpRequest.cookies || !httpRequest.cookies.token)

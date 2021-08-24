@@ -13,7 +13,7 @@ export default function makeEditPost({ dbGateway }) {
       modifiedAt: new Date(),
     });
     if (postData.authorId !== record.authorId)
-      throw new Error("User is not allowed to edit this post");
+      throw new Error("User not allowed to edit this post");
     return await dbGateway.update(record, {
       id: post.getId(),
       authorId: post.getAuthorId(),
