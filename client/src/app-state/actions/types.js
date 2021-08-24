@@ -1,0 +1,6 @@
+//POST ACIONS
+export const GET_POSTS = "GET_POSTS";
+export const POSTS_LOADING = "POSTS_LOADING";
+//ERRORS
+export const CLEAR_ERRORS = "CLEAR_ERRORS";
+export const GET_ERRORS = "GET_ERRORS";
