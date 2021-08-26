@@ -10,8 +10,7 @@ export default function respondWithError(code, msg, options = {}) {
     success: false,
     error: msg,
   };
-
-  if (options.cookies) body.cookies = options.cookies;
+  const cookies = options.cookies;
 
   return {
     headers: {
@@ -19,5 +18,6 @@ export default function respondWithError(code, msg, options = {}) {
     },
     statusCode: code,
     body,
+    cookies,
   };
 }

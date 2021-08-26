@@ -28,11 +28,11 @@ export default function makeExpressCallback(controller) {
 }
 
 function extractCookies(httpRes, expressRes) {
-  const { cookies } = httpRes.body;
+  const { cookies } = httpRes;
   if (cookies) {
     for (const c in cookies) {
       expressRes.cookie(c, cookies[c], { httpOnly: true });
     }
-    delete httpRes.body.cookies;
+    delete httpRes.cookies;
   }
 }

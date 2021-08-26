@@ -22,6 +22,7 @@ export default function makeAddPost({ savePost, token }) {
         body: {
           success: true,
           payload: {
+            id: post.id,
             author: post.author,
             content: post.content,
             createdAt: post.createdAt,

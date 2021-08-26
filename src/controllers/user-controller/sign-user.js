@@ -13,9 +13,9 @@ export default function makeSignUser({ authUser, token }) {
           statusCode: 200,
           body: {
             success: true,
-            cookies: {
-              token: tok,
-            },
+          },
+          cookies: {
+            token: tok,
           },
         };
       } else {

@@ -11,6 +11,7 @@ export default function makeSavePost({ postsDb, usersDb, Id }) {
     const record = await postsDb.insert({
       id: post.getId(),
       authorId: post.getAuthorId(),
+      author: author.name,
       content: post.getContent(),
       createdAt: post.getCreatedAt(),
       modifiedAt: post.getModifiedAt(),

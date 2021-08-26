@@ -1,7 +1,7 @@
 import axios from "axios";
 import { returnErrors } from "../error-actions";
 import { postsEndpoint } from "../../../constants/api-endpoints";
-import { GET_POSTS, POSTS_LOADING } from "../types";
+import { FETCHING_ERROR, GET_POSTS, POSTS_LOADING } from "../types";
 
 export const fetchPosts = () => async (dispatch) => {
   dispatch({
@@ -15,10 +15,15 @@ export const fetchPosts = () => async (dispatch) => {
       payload,
     });
   } catch (error) {
-    dispatch(returnErrors(error.response.data, error.response.status));
+    const internalServerError =
+      !error.response || !error.response.data || !error.response.data.error;
     dispatch({
-      type: GET_POSTS,
-      payload: [],
+      type: FETCHING_ERROR,
+      payload: {
+        message: internalServerError
+          ? "Something went wrong..."
+          : error.response.data.error,
+      },
     });
   }
 };

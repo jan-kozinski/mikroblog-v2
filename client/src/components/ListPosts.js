@@ -1,24 +1,24 @@
 import React from "react";
-import PropTypes from "prop-types";
-import { fetchPosts } from "../app-state/actions/post-actions";
-import { connect } from "react-redux";
+import { useSelector } from "react-redux";
 
-const ListPosts = ({ posts }) => {
+const ListPosts = () => {
+  const posts = useSelector((state) => state.posts).posts;
   return (
     <ul>
       {posts.map((post) => (
-        <li key={post.id}>{post.content}</li>
+        <li className="post" key={post.id}>
+          <p>
+            <span className="font-bold text-secondary">
+              {post.author + " "}
+            </span>
+            says:
+          </p>
+          <hr />
+          {post.content}
+        </li>
       ))}
     </ul>
   );
 };
 
-ListPosts.propTypes = {
-  posts: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
-};
-
-const mapStateToProps = (state) => ({
-  posts: state.posts.posts,
-});
-
-export default connect(mapStateToProps, { fetchPosts })(ListPosts);
+export default ListPosts;

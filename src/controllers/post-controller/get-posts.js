@@ -1,7 +1,7 @@
 import respondWithError from "../send-error.js";
 
 export default function makeGetPosts({ listPosts }) {
-  return async function addPost() {
+  return async function getPost() {
     try {
       const posts = await listPosts();
       return {

@@ -1,4 +1,5 @@
 import { inMemoryDb } from "../drivers/index.js";
+import { MongoDb } from "../drivers/index.js";
 import makeSaveUser from "./user/save-user.js";
 import makeAuthUser from "./user/auth-user.js";
 import makeSavePost from "./post/save-post.js";
@@ -17,8 +18,38 @@ const hasher = {
   },
 };
 
-const usersDb = new inMemoryDb();
-const postsDb = new inMemoryDb();
+let usersDb, postsDb;
+
+if (process.env.NODE_ENV !== "test") {
+  usersDb = new MongoDb("users");
+  postsDb = new MongoDb("posts");
+  await usersDb.connect();
+  await postsDb.connect();
+
+  process.on("uncaughtException", () => {
+    closeDbConnections();
+    process.exit();
+  });
+
+  process.on("SIGINT", () => {
+    closeDbConnections();
+    process.exit();
+  });
+
+  process.on("SIGTERM", () => {
+    closeDbConnections();
+    process.exit();
+  });
+
+  process.on("exit", () => {
+    closeDbConnections();
+    process.exit();
+  });
+} else {
+  console.log(process.env.NODE_ENV);
+  usersDb = new inMemoryDb();
+  postsDb = new inMemoryDb();
+}
 
 const saveUser = makeSaveUser({
   dbGateway: usersDb,
@@ -47,6 +78,11 @@ const service = Object.freeze({
   editPost,
   listPosts,
 });
+
+function closeDbConnections() {
+  usersDb.close;
+  postsDb.close;
+}
 
 export default service;
 export { saveUser, authUser, savePost, editPost, listPosts };

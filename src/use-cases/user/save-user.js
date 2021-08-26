@@ -7,10 +7,10 @@ export default function makeSaveUser({ dbGateway, Id, hasher }) {
     const user = await makeUser(userData);
 
     const idAlreadyTaken = !!(await dbGateway.findById(user.getId()));
-    const emailAlreadyTaken = !!(await dbGateway.find({
+    const emailAlreadyTaken = !!(await dbGateway.findOne({
       email: user.getEmail(),
     }));
-    const nameAlreadyTaken = !!(await dbGateway.find({
+    const nameAlreadyTaken = !!(await dbGateway.findOne({
       name: user.getName(),
     }));
 

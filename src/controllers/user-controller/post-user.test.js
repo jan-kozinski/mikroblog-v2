@@ -10,7 +10,10 @@ describe("Post user controller", () => {
     };
 
     saveUser = jest.fn((u) => Promise.resolve(u));
-    postUser = makePostUser({ saveUser });
+    postUser = makePostUser({
+      saveUser,
+      token: { create: jest.fn((t) => "token") },
+    });
   });
 
   afterEach(() => {
@@ -41,6 +44,9 @@ describe("Post user controller", () => {
           email: validUserData.email,
           memberSince: expect.any(Date),
         },
+      },
+      cookies: {
+        token: "token",
       },
     };
 
@@ -81,6 +87,9 @@ describe("Post user controller", () => {
       body: {
         success: false,
         error: errorMsg,
+      },
+      cookies: {
+        token: "",
       },
     };
     expect(actual).toEqual(expected);

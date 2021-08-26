@@ -1,34 +1,24 @@
 import { useEffect } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "../../app-state/actions/post-actions";
 import LoadingPosts from "../LoadingPosts";
 import ListPosts from "../ListPosts";
+import Wrapper from "./Wrapper";
 
 const Wall = (props) => {
+  const isLoading = useSelector((state) => state.posts.loading);
+  const error = useSelector((state) => state.posts.error);
+  const dispatch = useDispatch();
+
   useEffect(() => {
     (async () => {
-      await props.fetchPosts();
+      await dispatch(fetchPosts());
     })();
   }, []);
-  if (props.error) {
-    console.log(props.error);
-    return <div>kurwa</div>;
+  if (error) {
+    console.log(error);
+    return <Wrapper>{error.message}</Wrapper>;
   }
-  return <main>{props.isLoading ? <LoadingPosts /> : <ListPosts />}</main>;
+  return <Wrapper>{isLoading ? <LoadingPosts /> : <ListPosts />}</Wrapper>;
 };
-
-Wall.propTypes = {
-  isLoading: PropTypes.bool.isRequired,
-  error: PropTypes.string,
-};
-
-const mapStateToProps = (state) => {
-  console.log(state);
-  return {
-    isLoading: state.posts.loading,
-    error: state.errors.msg,
-  };
-};
-
-export default connect(mapStateToProps, { fetchPosts })(Wall);
+export default Wall;

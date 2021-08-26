@@ -39,9 +39,9 @@ describe("Sign user controller", () => {
       statusCode: 200,
       body: {
         success: true,
-        cookies: {
-          token: tokenValue,
-        },
+      },
+      cookies: {
+        token: tokenValue,
       },
     };
 
@@ -82,9 +82,9 @@ describe("Sign user controller", () => {
       body: {
         success: false,
         error: "Invalid credentials",
-        cookies: {
-          token: "",
-        },
+      },
+      cookies: {
+        token: "",
       },
     };
 
@@ -124,9 +124,9 @@ describe("Sign user controller", () => {
       body: {
         success: false,
         error: `test error-${error}`,
-        cookies: {
-          token: "",
-        },
+      },
+      cookies: {
+        token: "",
       },
     };
 

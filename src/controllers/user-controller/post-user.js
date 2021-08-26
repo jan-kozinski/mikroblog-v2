@@ -1,13 +1,17 @@
 import respondWithError from "../send-error.js";
 
-export default function makePostUser({ saveUser }) {
+export default function makePostUser({ saveUser, token }) {
   return async function postUser(httpRequest) {
     try {
-      await saveUser(httpRequest.body);
+      var user = await saveUser(httpRequest.body);
     } catch (error) {
-      return respondWithError(400, error.message);
+      return respondWithError(400, error.message, {
+        cookies: {
+          token: "",
+        },
+      });
     }
-
+    const tok = token.create({ id: user.id, name: user.name });
     return {
       headers: {
         "Content-Type": "application/json",
@@ -21,6 +25,7 @@ export default function makePostUser({ saveUser }) {
           memberSince: new Date(),
         },
       },
+      cookies: { token: tok },
     };
   };
 }

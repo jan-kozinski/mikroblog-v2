@@ -1,3 +1,50 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn {
+  @apply bg-secondary text-center shadow-btn p-1;
+  cursor: pointer;
+  transition: filter 0.3s ease-in-out;
+  color: #fff;
+  border: 0;
+  display: block;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.btn:hover {
+  filter: brightness(110%);
+}
+
+.panel-tiles {
+  @apply bg-primary text-center shadow-btn py-4;
+  cursor: pointer;
+  transition: filter 0.3s ease-in-out;
+  color: #fff;
+  border: 0;
+  display: block;
+  font-size: 16px;
+}
+
+.panel-tiles:hover {
+  filter: brightness(120%);
+}
+
+.btn-disabled {
+  @apply btn bg-gray-500 cursor-not-allowed;
+}
+
+.btn-danger {
+  @apply btn bg-red-800;
+}
+.post {
+  @apply bg-white text-black m-2 p-2;
+}
+.shadow-btn {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.limit-width {
+  max-width: 1960px;
+}

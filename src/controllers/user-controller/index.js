@@ -3,7 +3,7 @@ import { saveUser, authUser } from "../../use-cases/index.js";
 import makePostUser from "./post-user.js";
 import makeSignUser from "./sign-user.js";
 
-const postUser = makePostUser({ saveUser });
+const postUser = makePostUser({ saveUser, token });
 const signUser = makeSignUser({ authUser, token });
 
 const userController = Object.freeze({
