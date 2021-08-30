@@ -18,6 +18,8 @@ describe("Sign user controller", () => {
     const authUser = jest.fn(() => ({
       id: "good-looking-id",
       name: "even-better-looking-name",
+      email: "test@test.com",
+      memberSince: new Date(),
     }));
     const signUser = makeSignUser({ authUser, token });
     const request = {
@@ -39,6 +41,11 @@ describe("Sign user controller", () => {
       statusCode: 200,
       body: {
         success: true,
+        payload: {
+          email: "test@test.com",
+          memberSince: expect.any(Date),
+          name: "even-better-looking-name",
+        },
       },
       cookies: {
         token: tokenValue,

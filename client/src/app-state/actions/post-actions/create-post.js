@@ -1,23 +1,20 @@
 import axios from "axios";
 import { postsEndpoint } from "../../../constants/api-endpoints";
-import { FETCHING_ERROR, GET_POSTS, POSTS_LOADING } from "../types";
+import { POST_ADDED, ADD_POST_FAIL } from "../types";
 
-export const fetchPosts = () => async (dispatch) => {
-  dispatch({
-    type: POSTS_LOADING,
-  });
+export const createPost = (content) => async (dispatch) => {
   try {
-    const response = await axios.get(postsEndpoint);
+    const response = await axios.post(postsEndpoint, { content });
     const { payload } = response.data;
     dispatch({
-      type: GET_POSTS,
+      type: POST_ADDED,
       payload,
     });
   } catch (error) {
     const internalServerError =
       !error.response || !error.response.data || !error.response.data.error;
     dispatch({
-      type: FETCHING_ERROR,
+      type: ADD_POST_FAIL,
       payload: {
         message: internalServerError
           ? "Something went wrong..."

@@ -26,7 +26,7 @@ export default function makePost({
     getCreatedAt: () => createdAt,
     getModifiedAt: () => modifiedAt,
     changeContent: (newContent) => {
-      if (!newContent) throw new Error("New content must be provided");
+      if (!newContent) throw new Error("Content must be provided");
       if (newContent === content) return content;
       content = newContent;
       modifiedAt = new Date();

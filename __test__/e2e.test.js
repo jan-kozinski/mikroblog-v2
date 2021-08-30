@@ -80,6 +80,9 @@ describe("end to end API endpoints test", () => {
     });
     expect(response.status).toEqual(200);
     expect(response.data.success).toBe(true);
+    expect(response.data.payload.name).toEqual(userData.name);
+    expect(response.data.payload.email).toEqual(userData.email);
+    expect(response.data.payload.memberSince).toEqual(expect.any(String));
     expect(response.headers["set-cookie"]).toBeDefined();
     const cookie = response.headers["set-cookie"][0];
     expect(/^token/.test(cookie)).toBe(true);

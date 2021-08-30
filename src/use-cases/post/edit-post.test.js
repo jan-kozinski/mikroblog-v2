@@ -14,7 +14,7 @@ describe("edit-post use case", () => {
   });
   beforeEach(async () => {
     dbMockup._RESET_DB();
-
+    MockDate.reset();
     await dbMockup.insert({
       ...validPostData,
       createdAt: new Date(),
@@ -24,6 +24,7 @@ describe("edit-post use case", () => {
     dbMockup.insert.mockClear();
     dbMockup.find.mockClear();
     dbMockup.findById.mockClear();
+    dbMockup.update.mockClear();
   });
   it("Should successfully edit a comment", async () => {
     expect(dbMockup.update).toBeCalledTimes(0);
@@ -50,6 +51,13 @@ describe("edit-post use case", () => {
       );
     }
   });
+  it("Should not call the DB if new content does not differ from the old one", async () => {
+    expect(dbMockup.update).toBeCalledTimes(0);
+    MockDate.set(Date.now() + Math.round(Math.random() * 10000000));
+    const returnedValue = await editPost(validPostData);
+    expect(returnedValue.modifiedAt).toEqual(returnedValue.createdAt);
+    expect(dbMockup.update).toBeCalledTimes(0);
+  });
   it("Should throw an error if provided with invalid id", async () => {
     dbMockup._RESET_DB();
 
@@ -68,15 +76,24 @@ describe("edit-post use case", () => {
     ).rejects.toThrow(new Error("User not allowed to edit this post"));
   });
   it("Should return saved post data", async () => {
-    MockDate.set(Date.now() + Math.round(Math.random() * 10000000));
-    const post = await editPost(validPostData);
-    expect(post).toEqual({
-      id: validPostData.id,
-      authorId: validPostData.authorId,
-      content: validPostData.content,
-      createdAt: expect.any(Date),
-      modifiedAt: expect.any(Date),
-    });
-    expect(post.modifiedAt).not.toEqual(post.createdAt);
+    for (let i = 0; i < 5; i++) {
+      let newPostData = {
+        authorId: validPostData.authorId,
+        id: validPostData.id,
+        content: `content-${i}-${Math.round(Math.random() * 10)}`,
+      };
+      MockDate.set(Date.now() + Math.round(Math.random() * 10000000));
+      const returnValue = await editPost(newPostData);
+      console.log(returnValue);
+      console.log(new Date());
+      expect(returnValue).toEqual({
+        id: validPostData.id,
+        authorId: validPostData.authorId,
+        content: newPostData.content,
+        createdAt: expect.any(Date),
+        modifiedAt: expect.any(Date),
+      });
+      expect(returnValue.modifiedAt).not.toEqual(returnValue.createdAt);
+    }
   });
 });

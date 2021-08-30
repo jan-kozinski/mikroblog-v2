@@ -13,6 +13,7 @@ const initialState = {
   isAuthenticated: false,
   isLoading: false,
   user: null,
+  error: null,
 };
 
 export default function (state = initialState, action) {
@@ -47,6 +48,7 @@ export default function (state = initialState, action) {
         isAuthenticated: false,
         isLoading: false,
         user: null,
+        error: action.payload,
       };
     default:
       return state;

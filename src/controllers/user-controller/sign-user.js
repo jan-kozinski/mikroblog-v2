@@ -13,6 +13,11 @@ export default function makeSignUser({ authUser, token }) {
           statusCode: 200,
           body: {
             success: true,
+            payload: {
+              name: user.name,
+              email: user.email,
+              memberSince: user.memberSince,
+            },
           },
           cookies: {
             token: tok,

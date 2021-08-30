@@ -3,9 +3,9 @@
 @tailwind utilities;
 
 .btn {
-  @apply bg-secondary text-center shadow-btn p-1;
+  @apply bg-secondary text-center shadow-btn p-1 rounded-full px-2;
   cursor: pointer;
-  transition: filter 0.3s ease-in-out;
+  transition: filter 0.15s ease-in-out;
   color: #fff;
   border: 0;
   display: block;
@@ -14,7 +14,7 @@
 }
 
 .btn:hover {
-  filter: brightness(110%);
+  filter: brightness(120%);
 }
 
 .panel-tiles {
@@ -31,15 +31,17 @@
   filter: brightness(120%);
 }
 
-.btn-disabled {
-  @apply btn bg-gray-500 cursor-not-allowed;
+.btn-neutral {
+  @apply btn;
+  @apply bg-gray-500;
 }
 
 .btn-danger {
-  @apply btn bg-red-800;
+  @apply btn;
+  @apply bg-red-800;
 }
 .post {
-  @apply bg-white text-black m-2 p-2;
+  @apply bg-white text-black m-2 p-2 rounded-tl-lg rounded-br-lg;
 }
 .shadow-btn {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
@@ -47,4 +49,38 @@
 
 .limit-width {
   max-width: 1960px;
+}
+
+.danger {
+  @apply text-xl p-2 rounded-full bg-red-600 text-red-100 shadow-btn;
+  box-shadow: inset 0px 0px 15px 5px rgba(127, 29, 29, 0.24),
+    0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+.danger:before {
+  @apply rounded-full border-red-100 border-2 m-2 px-2;
+  content: "X";
+}
+.user-form-container {
+  @apply bg-white text-black pb-4 m-4 rounded-lg;
+}
+.user-form-headline {
+  @apply shadow-btn bg-secondary p-2 rounded-t-lg h-10;
+}
+
+.user-form-switch {
+  @apply cursor-pointer underline text-yellow-800 hover:text-primary h-8 select-none px-4;
+}
+
+.faced-down-triangle {
+  margin-left: auto;
+  margin-right: 5%;
+  width: 0;
+  height: 0;
+  border-left: 1rem solid transparent;
+  border-right: 1rem solid transparent;
+  border-top: 1rem solid #ff5500;
+}
+
+.textbox {
+  @apply rounded resize-none block w-full p-2 bg-gray-200;
 }

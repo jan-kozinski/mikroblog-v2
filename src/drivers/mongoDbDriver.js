@@ -1,8 +1,6 @@
 import { MongoClient } from "mongodb";
 
-const uri =
-  "mongodb+srv://dzonson:dz1k1dz1k@cluster0.txqzl.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-
+const uri = process.env.MONGO_DB_URI;
 class MongoDb {
   #client;
   #collection;
@@ -62,7 +60,6 @@ class MongoDb {
         ...record,
         _id: record.id,
       });
-
       return record;
     } catch (error) {
       console.error(error);
@@ -71,7 +68,7 @@ class MongoDb {
   }
   async update(record, data) {
     try {
-      return (
+      const original = (
         await this.#collection.findOneAndUpdate(
           { id: record.id },
           {
@@ -79,6 +76,7 @@ class MongoDb {
           }
         )
       ).value;
+      return { ...original, _id: undefined, ...data };
     } catch (error) {
       console.error(error);
       throw new Error("Something went wrong...");

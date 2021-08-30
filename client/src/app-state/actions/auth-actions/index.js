@@ -1,5 +1,4 @@
 import axios from "axios";
-import { returnErrors } from "../error-actions";
 
 import {
   USER_LOADING,
@@ -25,12 +24,18 @@ export const login =
       const response = await axios.post("/api/user/auth", body, httpReqConfig);
       dispatch({
         type: LOGIN_SUCCESS,
-        payload: response.data,
+        payload: response.data.payload,
       });
     } catch (error) {
-      dispatch(returnErrors(error.response.data, error.response.status));
+      const internalServerError =
+        !error.response || !error.response.data || !error.response.data.error;
       dispatch({
         type: LOGIN_FAIL,
+        payload: {
+          message: internalServerError
+            ? "Something went wrong..."
+            : error.response.data.error,
+        },
       });
     }
   };
@@ -44,12 +49,18 @@ export const register =
       const response = await axios.post("/api/user", body, httpReqConfig);
       dispatch({
         type: REGISTER_SUCCESS,
-        payload: response.data,
+        payload: response.data.payload,
       });
     } catch (error) {
-      dispatch(returnErrors(error.response.data, error.response.status));
+      const internalServerError =
+        !error.response || !error.response.data || !error.response.data.error;
       dispatch({
         type: REGISTER_FAIL,
+        payload: {
+          message: internalServerError
+            ? "Something went wrong..."
+            : error.response.data.error,
+        },
       });
     }
   };

@@ -1,10 +1,12 @@
 //POST
 export const GET_POSTS = "GET_POSTS";
 export const POSTS_LOADING = "POSTS_LOADING";
+export const POST_ADDED = "POST_ADDED";
+export const ADD_POST_FAIL = "ADD_POST_FAIL";
+export const POST_EDITED = "POST_EDITED";
+export const EDIT_POST_FAIL = "EDIT_POST_FAIL";
 export const FETCHING_ERROR = "FETCHING_ERROR";
-//ERRORS
-export const CLEAR_ERRORS = "CLEAR_ERRORS";
-export const GET_ERRORS = "GET_ERRORS";
+export const CLEAR_POST_ERROR = "CLEAR_POST_ERROR";
 //AUTH
 export const USER_LOADED = "USER_LOADED";
 export const USER_LOADING = "USER_LOADING";

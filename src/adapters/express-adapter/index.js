@@ -23,7 +23,7 @@ export default async function start() {
   app.use(helmet());
   if (process.env.NODE_ENV === "development") {
     const { default: morgan } = await import("morgan");
-    app.use(morgan("combined"));
+    app.use(morgan("dev"));
   }
   // ROUTES
   app.post("/api/user", makeCallback(postUser));
