@@ -14,6 +14,7 @@ export default function makeSignUser({ authUser, token }) {
           body: {
             success: true,
             payload: {
+              id: user.id,
               name: user.name,
               email: user.email,
               memberSince: user.memberSince,

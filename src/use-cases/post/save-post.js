@@ -8,18 +8,17 @@ export default function makeSavePost({ postsDb, usersDb, Id }) {
     if (idAlreadyTaken) throw new Error("post of provided id already exists");
     const author = await usersDb.findById(post.getAuthorId());
     if (!author) throw new Error("User doesn't exist");
-    const record = await postsDb.insert({
+    const postProps = {
       id: post.getId(),
       authorId: post.getAuthorId(),
       author: author.name,
       content: post.getContent(),
+      likesCount: post.getLikesCount(),
+      likersIds: post.getLikersIds(),
       createdAt: post.getCreatedAt(),
       modifiedAt: post.getModifiedAt(),
-    });
-    return {
-      ...record,
-      authorId: undefined,
-      author: author.name,
     };
+    await postsDb.insert(postProps);
+    return postProps;
   };
 }

@@ -52,7 +52,7 @@
 }
 
 .danger {
-  @apply text-xl p-2 rounded-full bg-red-600 text-red-100 shadow-btn;
+  @apply md:text-xl px-2 py-2 rounded-full bg-red-600 text-red-100 shadow-btn;
   box-shadow: inset 0px 0px 15px 5px rgba(127, 29, 29, 0.24),
     0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
 }
@@ -83,4 +83,16 @@
 
 .textbox {
   @apply rounded resize-none block w-full p-2 bg-gray-200;
+}
+
+.like-btn {
+  @apply text-red-500 ml-auto cursor-pointer transition duration-200 ease-in-out;
+}
+
+.like-btn:hover {
+  transform: scale(1.2);
+}
+
+.dot {
+  @apply h-1 w-1 mb-0.5 inline-block bg-gray-700 rounded-full;
 }

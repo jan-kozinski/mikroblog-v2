@@ -94,4 +94,47 @@ describe("makePost", () => {
     const post = makePost(validPostData);
     expect(() => post.changeContent()).toThrow();
   });
+  it("posts' giveLike method should successfully add a like", () => {
+    const post = makePost(validPostData);
+
+    for (let i = 0; i < 5; i++) {
+      post.giveLike("userId" + i);
+      expect(post.getLikesCount()).toEqual(i + 1);
+    }
+  });
+  it("post's giveLike method should throw an error if userId is not supplied or is not a string", () => {
+    const post = makePost(validPostData);
+    expect(() => post.giveLike()).toThrow();
+    expect(() => post.giveLike([])).toThrow();
+    expect(() => post.giveLike({})).toThrow();
+    expect(() => post.giveLike(12)).toThrow();
+    expect(() => post.giveLike(NaN)).toThrow();
+    expect(() => post.giveLike(null)).toThrow();
+  });
+  it("post's giveLike method should throw an error if user already likes this post", () => {
+    const post = makePost(validPostData);
+    post.giveLike("userId");
+    expect(() => post.giveLike("userId")).toThrow();
+  });
+
+  it("posts' undoLike method should succesffully undo a like", () => {
+    const post = makePost(validPostData);
+    post.giveLike("userId");
+    post.undoLike("userId");
+    expect(post.getLikesCount()).toEqual(0);
+    expect(post.getLikersIds()).toEqual([]);
+  });
+  it("post's undoLike method should throw an error if userId is not supplied or is not a string", () => {
+    const post = makePost(validPostData);
+    expect(() => post.undoLike()).toThrow();
+    expect(() => post.undoLike([])).toThrow();
+    expect(() => post.undoLike({})).toThrow();
+    expect(() => post.undoLike(12)).toThrow();
+    expect(() => post.undoLike(NaN)).toThrow();
+    expect(() => post.undoLike(null)).toThrow();
+  });
+  it("post's undoLike method should throw an error if user does not like this post", () => {
+    const post = makePost(validPostData);
+    expect(() => post.undoLike("userId")).toThrow();
+  });
 });

@@ -7,6 +7,10 @@ import {
   POST_EDITED,
   EDIT_POST_FAIL,
   CLEAR_POST_ERROR,
+  POST_LIKED,
+  POST_LIKE_ERROR,
+  POST_UNLIKED,
+  POST_UNLIKE_ERROR,
 } from "../actions/types";
 
 const initialState = {
@@ -70,6 +74,29 @@ export default function postReducer(state = initialState, action) {
       return {
         ...state,
         error: null,
+      };
+    case POST_LIKED:
+    case POST_UNLIKED:
+      return {
+        ...state,
+        posts: state.posts.map((post) => {
+          if (post.id !== action.payload.postId) return post;
+          else
+            return {
+              ...post,
+              likesCount: action.payload.likesCount,
+              likersIds: action.payload.likersIds,
+            };
+        }),
+      };
+    case POST_LIKE_ERROR:
+    case POST_UNLIKE_ERROR:
+      return {
+        ...state,
+        error: {
+          ...action.payload,
+          origin: "LIKE_POST",
+        },
       };
     default:
       return state;

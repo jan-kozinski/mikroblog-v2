@@ -1,4 +1,3 @@
-import { expect } from "@jest/globals";
 import MockDate from "mockdate";
 import dbMockup from "../../../__test__/utils/dbMockup";
 import makeEditPost from "./edit-post.js";
@@ -20,7 +19,6 @@ describe("edit-post use case", () => {
       createdAt: new Date(),
       modifiedAt: new Date(),
     });
-    await dbMockup.findById(validPostData.id);
     dbMockup.insert.mockClear();
     dbMockup.find.mockClear();
     dbMockup.findById.mockClear();
@@ -41,7 +39,7 @@ describe("edit-post use case", () => {
         expect.objectContaining({
           id: validPostData.id,
           authorId: validPostData.authorId,
-          content: validPostData.content,
+          content: expect.any(String),
           createdAt: expect.any(Date),
           modifiedAt: expect.any(Date),
         })
@@ -84,8 +82,6 @@ describe("edit-post use case", () => {
       };
       MockDate.set(Date.now() + Math.round(Math.random() * 10000000));
       const returnValue = await editPost(newPostData);
-      console.log(returnValue);
-      console.log(new Date());
       expect(returnValue).toEqual({
         id: validPostData.id,
         authorId: validPostData.authorId,

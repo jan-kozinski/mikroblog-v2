@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import LoginForm from "../LoginForm";
 import SignupForm from "../SignupForm";
 function Userpannel() {
@@ -23,6 +23,7 @@ function Userpannel() {
       <hr className="border-blue-900 mx-4 mb-4" />
       <a
         className="user-form-switch"
+        href="#"
         onClick={() => switchForm(!loginOverRegistration)}
       >
         {loginOverRegistration

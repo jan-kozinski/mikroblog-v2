@@ -5,6 +5,8 @@ import makeAuthUser from "./user/auth-user.js";
 import makeSavePost from "./post/save-post.js";
 import makeEditPost from "./post/edit-post.js";
 import makeListPosts from "./post/list-posts.js";
+import makeGiveLike from "./post/give-like.js";
+import makeUndoLike from "./post/undo-like.js";
 import cuid from "cuid";
 import bcrypt from "bcrypt";
 
@@ -71,12 +73,22 @@ const listPosts = makeListPosts({
   dbGateway: postsDb,
 });
 
+const giveLike = makeGiveLike({
+  dbGateway: postsDb,
+});
+
+const undoLike = makeUndoLike({
+  dbGateway: postsDb,
+});
+
 const service = Object.freeze({
   saveUser,
   authUser,
   savePost,
   editPost,
   listPosts,
+  giveLike,
+  undoLike,
 });
 
 function closeDbConnections() {
@@ -85,4 +97,12 @@ function closeDbConnections() {
 }
 
 export default service;
-export { saveUser, authUser, savePost, editPost, listPosts };
+export {
+  saveUser,
+  authUser,
+  savePost,
+  editPost,
+  listPosts,
+  giveLike,
+  undoLike,
+};

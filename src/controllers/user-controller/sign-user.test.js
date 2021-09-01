@@ -43,6 +43,7 @@ describe("Sign user controller", () => {
         success: true,
         payload: {
           email: "test@test.com",
+          id: "good-looking-id",
           memberSince: expect.any(Date),
           name: "even-better-looking-name",
         },

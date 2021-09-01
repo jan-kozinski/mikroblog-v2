@@ -53,6 +53,7 @@ describe("Edit post", () => {
           isAuthenticated: true,
           user: {
             name: "test-user",
+            id: "test-user",
             email: "test@test.com",
           },
         },
@@ -115,6 +116,18 @@ describe("Edit post", () => {
 
     expect(
       await screen.queryByText("Content must be provided")
+    ).not.toBeInTheDocument();
+  });
+
+  it("Should give and remove like from a post successfully", async () => {
+    const likeBtn = await screen.findByLabelText(/Give post a like/i);
+    const likesCount = await screen.findByLabelText(/likes count/i);
+    expect(likesCount.innerHTML).toEqual("0");
+    userEvent.click(likeBtn);
+    const rmLikeBtn = await screen.findByLabelText(/Remove like/i);
+    expect(likesCount.innerHTML).toEqual("1");
+    expect(
+      await screen.queryByLabelText(/Give post a like/i)
     ).not.toBeInTheDocument();
   });
 });

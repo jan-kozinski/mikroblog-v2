@@ -1,13 +1,15 @@
 import cookieParser from "cookie-parser";
 import express from "express";
+import makeCallback from "./make-express-callback.js";
+import helmet from "helmet";
 import { postUser, signUser } from "../../controllers/user-controller/index.js";
 import {
   addPost,
   updatePost,
   getPosts,
+  likePost,
+  unlikePost,
 } from "../../controllers/post-controller/index.js";
-import makeCallback from "./make-express-callback.js";
-import helmet from "helmet";
 
 let server;
 
@@ -32,6 +34,9 @@ export default async function start() {
   app.post("/api/post", makeCallback(addPost));
   app.put("/api/post/:postId", makeCallback(updatePost));
   app.get("/api/post", makeCallback(getPosts));
+
+  app.post("/api/post/:postId/likes", makeCallback(likePost));
+  app.delete("/api/post/:postId/likes", makeCallback(unlikePost));
 
   server = app.listen(PORT, () => {
     console.log(

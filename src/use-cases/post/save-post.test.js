@@ -86,8 +86,11 @@ describe("save post use case", () => {
     const post = await savePost(validPostData);
     expect(post).toEqual({
       id: validPostData.id,
+      authorId: validPostData.authorId,
       author: `name-${validPostData.authorId}`,
       content: validPostData.content,
+      likesCount: 0,
+      likersIds: [],
       createdAt: expect.any(Date),
       modifiedAt: expect.any(Date),
     });

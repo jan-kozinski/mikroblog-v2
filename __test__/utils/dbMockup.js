@@ -35,6 +35,9 @@ const dbMockup = {
       ...original,
       ...data,
     };
+    dbMockup._data = dbMockup._data.map((d) => {
+      return d.id === original.id ? original : d;
+    });
     return Promise.resolve(original);
   }),
   _RESET_DB() {

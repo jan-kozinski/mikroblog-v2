@@ -13,6 +13,10 @@ export const handlers = [
             authorId: "not-an-actual-id",
             author: "test-user",
             content: "this is a test post",
+            likesCount: "0",
+            likersIds: [],
+            createdAt: new Date(),
+            modifiedAt: new Date(),
           },
         ],
       })
@@ -36,6 +40,8 @@ export const handlers = [
           id: "not-an-actual-id",
           author: "test-user",
           content: req.body.content,
+          likesCount: "0",
+          likersIds: [],
           createdAt: new Date(),
           modifiedAt: new Date(),
         },
@@ -63,6 +69,32 @@ export const handlers = [
           content: req.body.content,
           createdAt: new Date(Date.now() - 100000),
           modifiedAt: new Date(),
+        },
+      })
+    );
+  }),
+
+  rest.post(`${postsEndpoint}/:postId/likes`, (req, res, ctx) => {
+    return res(
+      ctx.status(201),
+      ctx.body({
+        success: true,
+        payload: {
+          likesCount: "1",
+          likersIds: ["test-user"],
+        },
+      })
+    );
+  }),
+
+  rest.delete(`${postsEndpoint}/:postId/likes`, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.body({
+        success: true,
+        payload: {
+          likesCount: "0",
+          likersIds: [],
         },
       })
     );

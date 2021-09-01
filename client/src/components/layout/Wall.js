@@ -15,7 +15,7 @@ const Wall = (props) => {
     (async () => {
       await dispatch(fetchPosts());
     })();
-  }, []);
+  }, [dispatch]);
   if (error && error.origin === "FETCHING") {
     return <>{error.message}</>;
   }
