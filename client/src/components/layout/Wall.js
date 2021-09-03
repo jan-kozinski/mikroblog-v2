@@ -4,31 +4,36 @@ import { fetchPosts } from "../../app-state/actions/post-actions";
 import LoadingPosts from "../LoadingPosts";
 import ListPosts from "../ListPosts";
 import AddPost from "../AddPost";
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const Wall = (props) => {
-  const isLoading = useSelector((state) => state.posts.loading);
+  const posts = useSelector((state) => state.posts).posts;
+  const lastPostReached = useSelector((state) => state.posts).lastPostReached;
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const error = useSelector((state) => state.posts.error);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
-    (async () => {
-      await dispatch(fetchPosts());
-    })();
+    dispatch(fetchPosts());
   }, [dispatch]);
+
   if (error && error.origin === "FETCHING") {
     return <>{error.message}</>;
   }
   return (
     <>
-      {isLoading ? (
-        <LoadingPosts />
-      ) : (
-        <>
-          {isAuthenticated && <AddPost />}
-          <ListPosts />{" "}
-        </>
-      )}
+      {!posts.length && <LoadingPosts />}
+      <InfiniteScroll
+        dataLength={posts.length}
+        next={() => dispatch(fetchPosts())}
+        hasMore={!lastPostReached}
+        loader={<LoadingPosts />}
+        endMessage={<p>You have reached the bottom.</p>}
+      >
+        {isAuthenticated && <AddPost />}
+        <ListPosts posts={posts} />
+      </InfiniteScroll>
     </>
   );
 };

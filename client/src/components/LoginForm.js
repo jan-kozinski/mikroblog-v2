@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { login } from "../app-state/actions/auth-actions";
+import {
+  login,
+  validationError,
+  clearErrors,
+} from "../app-state/actions/auth-actions";
 
 function LoginForm() {
   const error = useSelector((state) => state.auth.error);
@@ -10,6 +14,10 @@ function LoginForm() {
   const [password, setPassword] = useState("");
   const onSubmit = (e) => {
     e.preventDefault();
+    dispatch(clearErrors());
+    if (!email) return dispatch(validationError("Please provide an email"));
+    if (!password)
+      return dispatch(validationError("Please provide a password"));
     dispatch(login({ email, password }));
   };
 
@@ -41,7 +49,7 @@ function LoginForm() {
           {error.message}
         </div>
       )}
-      <button className="btn ml-auto mb-4" type="submit">
+      <button className="btn w-full my-1" type="submit">
         Sign in
       </button>
     </form>

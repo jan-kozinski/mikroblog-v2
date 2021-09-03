@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { clearErrors } from "../../app-state/actions/auth-actions";
 import LoginForm from "../LoginForm";
 import SignupForm from "../SignupForm";
 function Userpannel() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isLoading = useSelector((state) => state.auth.isLoading);
   const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
 
   const [loginOverRegistration, switchForm] = useState(true);
 
@@ -24,7 +26,10 @@ function Userpannel() {
       <a
         className="user-form-switch"
         href="#"
-        onClick={() => switchForm(!loginOverRegistration)}
+        onClick={() => {
+          dispatch(clearErrors());
+          switchForm(!loginOverRegistration);
+        }}
       >
         {loginOverRegistration
           ? "New here? Go ahead and Sign Up!"

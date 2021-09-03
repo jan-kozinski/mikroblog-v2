@@ -1,9 +1,6 @@
-import { useSelector } from "react-redux";
 import Post from "./Post";
 
-const ListPosts = () => {
-  const posts = useSelector((state) => state.posts).posts;
-
+const ListPosts = ({ posts }) => {
   return (
     <ul>
       {posts.map((post) => (

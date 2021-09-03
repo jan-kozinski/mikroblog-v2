@@ -44,7 +44,7 @@ function Post({ post }) {
         />
       </div>
 
-      {!!error && error.origin === "LIKE_POST" && (
+      {!!error && error.origin === "LIKE_POST" && error.postId === post.id && (
         <p className="danger w-max mb-2 ml-auto">{error.message}</p>
       )}
       <hr />

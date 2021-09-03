@@ -24,7 +24,7 @@ function AddPost() {
       {!!error && error.origin === "ADD_POST" && (
         <p className="danger mt-2">{error.message}</p>
       )}
-      <button className="btn ml-auto" type="submit">
+      <button className="btn ml-auto block px-2 mt-1" type="submit">
         Submit
       </button>
     </form>

@@ -3,14 +3,8 @@
 @tailwind utilities;
 
 .btn {
-  @apply bg-secondary text-center shadow-btn p-1 rounded-full px-2;
-  cursor: pointer;
+  @apply bg-secondary text-center text-white shadow-btn cursor-pointer py-1 rounded-full;
   transition: filter 0.15s ease-in-out;
-  color: #fff;
-  border: 0;
-  display: block;
-  font-size: 16px;
-  margin-top: 10px;
 }
 
 .btn:hover {

@@ -1,14 +1,33 @@
 import axios from "axios";
 import { postsEndpoint } from "../../../constants/api-endpoints";
-import { FETCHING_ERROR, GET_POSTS, POSTS_LOADING } from "../types";
+import {
+  FETCHING_ERROR,
+  GET_POSTS,
+  POSTS_LOADING,
+  LAST_POST_REACHED,
+} from "../types";
 
-export const fetchPosts = () => async (dispatch) => {
+export const fetchPosts = () => async (dispatch, getState) => {
   dispatch({
     type: POSTS_LOADING,
   });
   try {
-    const response = await axios.get(postsEndpoint);
+    const fetchedPosts = getState().posts.posts;
+    const lastPost = fetchedPosts
+      ? fetchedPosts[fetchedPosts.length - 1]
+      : null;
+    const limit = 7;
+    const response = await axios.get(
+      `${postsEndpoint}?sortby=newest&limit=${limit}${
+        lastPost ? "&before=" + lastPost.createdAt : ""
+      }`
+    );
+
     const { payload } = response.data;
+    if (payload.length < limit)
+      dispatch({
+        type: LAST_POST_REACHED,
+      });
     dispatch({
       type: GET_POSTS,
       payload,

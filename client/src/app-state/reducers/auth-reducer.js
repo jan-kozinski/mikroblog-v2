@@ -1,12 +1,13 @@
 import {
   USER_LOADING,
   USER_LOADED,
-  AUTH_ERROR,
+  VALIDATION_ERROR,
   LOGIN_SUCCESS,
   LOGIN_FAIL,
   LOGOUT_SUCCESS,
   REGISTER_SUCCESS,
   REGISTER_FAIL,
+  CLEAR_AUTH_ERROR,
 } from "../actions/types";
 
 const initialState = {
@@ -39,7 +40,7 @@ export default function authReducer(state = initialState, action) {
         isLoading: false,
         user: action.payload,
       };
-    case AUTH_ERROR:
+    case VALIDATION_ERROR:
     case LOGIN_FAIL:
     case LOGOUT_SUCCESS:
     case REGISTER_FAIL:
@@ -50,6 +51,12 @@ export default function authReducer(state = initialState, action) {
         user: null,
         error: action.payload,
       };
+    case CLEAR_AUTH_ERROR: {
+      return {
+        ...state,
+        error: null,
+      };
+    }
     default:
       return state;
   }

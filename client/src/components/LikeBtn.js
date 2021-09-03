@@ -1,9 +1,9 @@
+import { useState, useEffect, useCallback } from "react";
 import {
-  unlikePost,
-  likePost,
+  removeLike,
+  giveLike,
   clearPostError,
 } from "../app-state/actions/post-actions";
-import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faHeartBroken } from "@fortawesome/free-solid-svg-icons";
@@ -14,42 +14,43 @@ function LikeBtn({ likesCount, likersIds, postId }) {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const user = useSelector((state) => state.auth.user);
 
-  const isLiker = isAuthenticated && likersIds && likersIds.includes(user.id);
   const [icon, setIcon] = useState(heartRegular);
   const [isHandlingRequest, setIsHandlingRequest] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
 
-  useEffect(() => {
-    setIcon(isLiker ? faHeart : heartRegular);
-    // eslint-disable-next-line
-  }, [isAuthenticated]);
+  const isLiker = isAuthenticated && likersIds && likersIds.includes(user.id);
 
-  const handleLikeBtnClick = async (e) => {
+  const onClick = async () => {
     if (isHandlingRequest || !isAuthenticated) return;
 
     setIsHandlingRequest(true);
     dispatch(clearPostError());
-    if (isLiker) {
-      await dispatch(unlikePost(postId));
-      setIcon(faHeart);
-    } else {
-      await dispatch(likePost(postId));
-      setIcon(faHeartBroken);
-    }
+    await dispatch(isLiker ? removeLike(postId) : giveLike(postId));
     setTimeout(() => setIsHandlingRequest(false), 200);
   };
 
+  const changeIcon = useCallback(() => {
+    if (isHovered) {
+      setIcon(isLiker ? faHeartBroken : faHeart);
+    } else {
+      setIcon(isLiker ? faHeart : heartRegular);
+    }
+  }, [isHovered, isLiker]);
+  useEffect(() => {
+    changeIcon();
+  }, [changeIcon]);
   return (
     <>
       <FontAwesomeIcon
         onMouseEnter={() => {
           if (!isAuthenticated) return;
-          setIcon(isLiker ? faHeartBroken : faHeart);
+          setIsHovered(true);
         }}
         onMouseLeave={() => {
           if (!isAuthenticated) return;
-          setIcon(isLiker ? faHeart : heartRegular);
+          setIsHovered(false);
         }}
-        onClick={handleLikeBtnClick}
+        onClick={onClick}
         className={
           isAuthenticated ? "like-btn mt-1" : "text-red-500 ml-auto mt-1"
         }

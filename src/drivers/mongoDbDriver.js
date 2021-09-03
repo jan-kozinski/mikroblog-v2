@@ -42,9 +42,26 @@ class MongoDb {
       throw new Error("Something went wrong...");
     }
   }
-  async find(queries) {
+  async find(queries = {}, { limit, skip, after, before, byNewest } = {}) {
+    /* options: {
+      limit: number, 
+      skip: number,
+      after: string,
+      before: string,
+      byNewest: boolean 
+      }
+    */
     try {
-      const result = await this.#collection.find(queries);
+      let searchOptions = {};
+      if (byNewest === true) searchOptions.sort = [["createdAt", -1]];
+      if (typeof limit === "number") searchOptions.limit = limit;
+      if (typeof skip === "number") searchOptions.skip = skip;
+
+      if (typeof after === "string")
+        queries.createdAt = { ...queries.createdAt, $gt: new Date(after) };
+      if (typeof before === "string")
+        queries.createdAt = { ...queries.createdAt, $lt: new Date(before) };
+      const result = await this.#collection.find(queries, searchOptions);
       return (await result.toArray()).map((r) => {
         delete r._id;
         return r;

@@ -11,11 +11,13 @@ import {
   POST_LIKE_ERROR,
   POST_UNLIKED,
   POST_UNLIKE_ERROR,
+  LAST_POST_REACHED,
 } from "../actions/types";
 
 const initialState = {
   posts: [],
   loading: false,
+  lastPostReached: false,
   error: null,
 };
 
@@ -26,14 +28,13 @@ export default function postReducer(state = initialState, action) {
         ...state,
         loading: false,
         error: null,
-        posts: action.payload,
+        posts: [...state.posts, ...action.payload],
       };
     case POSTS_LOADING:
       return {
         ...state,
         loading: true,
         error: null,
-        posts: [],
       };
     case FETCHING_ERROR:
       return {
@@ -41,6 +42,11 @@ export default function postReducer(state = initialState, action) {
         loading: false,
         error: { ...action.payload, origin: "FETCHING" },
         posts: [],
+      };
+    case LAST_POST_REACHED:
+      return {
+        ...state,
+        lastPostReached: true,
       };
     case POST_ADDED:
       return {

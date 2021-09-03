@@ -2,6 +2,7 @@
 export const GET_POSTS = "GET_POSTS";
 export const POSTS_LOADING = "POSTS_LOADING";
 export const FETCHING_ERROR = "FETCHING_ERROR";
+export const LAST_POST_REACHED = "LAST_POST_REACHED";
 
 export const POST_ADDED = "POST_ADDED";
 export const ADD_POST_FAIL = "ADD_POST_FAIL";
@@ -28,3 +29,5 @@ export const LOGOUT_SUCCESS = "LOGOUT_SUCCESS";
 
 export const REGISTER_SUCCESS = "REGISTER_SUCCESS";
 export const REGISTER_FAIL = "REGISTER_FAIL";
+export const VALIDATION_ERROR = "VALIDATION_ERROR";
+export const CLEAR_AUTH_ERROR = "CLEAR_AUTH_ERROR";

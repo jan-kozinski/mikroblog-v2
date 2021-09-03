@@ -26,29 +26,33 @@ function EditPost({ isBeingEdited, setIsBeingEdited, post, errorOccured }) {
         <p className="flex justify-between">
           <button
             onClick={() => setIsBeingEdited(false)}
-            className="btn-neutral"
+            className="btn-neutral px-2 mt-1"
           >
             Cancel
           </button>
-          <button className="btn" type="submit" aria-label="Confirm changes">
+          <button
+            className="btn px-2 mt-1"
+            type="submit"
+            aria-label="Confirm changes"
+          >
             Submit
           </button>
         </p>
       </form>
     );
-
-  return (
-    <button
-      onClick={() => {
-        setContent(post.content);
-        dispatch(clearPostError());
-        setIsBeingEdited(true);
-      }}
-      className="btn"
-    >
-      EDIT O
-    </button>
-  );
+  else
+    return (
+      <button
+        onClick={() => {
+          setContent(post.content);
+          dispatch(clearPostError());
+          setIsBeingEdited(true);
+        }}
+        className="btn px-2 mt-1"
+      >
+        EDIT O
+      </button>
+    );
 }
 
 export default EditPost;
