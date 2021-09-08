@@ -1,10 +1,11 @@
-import axios from "axios";
+import useApi from "../../../hooks/useApi";
 import { postsEndpoint } from "../../../constants/api-endpoints";
 import { POST_LIKED, POST_LIKE_ERROR } from "../types";
 
-export const giveLike = (postId) => async (dispatch) => {
+export const giveLike = (postId) => async (dispatch, getState) => {
   try {
-    const response = await axios.post(`${postsEndpoint}/${postId}/likes`);
+    const apiClient = useApi({ dispatch, getState });
+    const response = await apiClient.post(`${postsEndpoint}/${postId}/likes`);
 
     const { payload } = response.data;
     dispatch({

@@ -1,12 +1,13 @@
-import axios from "axios";
+import useApi from "../../../hooks/useApi";
 import { postsEndpoint } from "../../../constants/api-endpoints";
 import { POST_EDITED, EDIT_POST_FAIL } from "../types";
 
 export const editPost =
   ({ content, postId }) =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
     try {
-      const response = await axios.put(`${postsEndpoint}/${postId}`, {
+      const apiClient = useApi({ dispatch, getState });
+      const response = await apiClient.put(`${postsEndpoint}/${postId}`, {
         content,
       });
       const { payload } = response.data;

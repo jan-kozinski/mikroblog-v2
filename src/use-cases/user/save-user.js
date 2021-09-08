@@ -19,12 +19,19 @@ export default function makeSaveUser({ dbGateway, Id, hasher }) {
       throw new Error("User of provided email already exists");
     if (nameAlreadyTaken) throw new Error("Name already taken");
 
-    return await dbGateway.insert({
+    await dbGateway.insert({
       id: user.getId(),
       name: user.getName(),
       email: user.getEmail(),
       password: await hasher.hash(user.getPassword()),
       memberSince: user.getMemberSince(),
     });
+
+    return {
+      id: user.getId(),
+      name: user.getName(),
+      email: user.getEmail(),
+      memberSince: user.getMemberSince(),
+    };
   };
 }

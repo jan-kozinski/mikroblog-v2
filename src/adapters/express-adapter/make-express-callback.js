@@ -19,7 +19,10 @@ export default function makeExpressCallback(controller) {
       }
       extractCookies(httpResponse, res);
       res.type("json");
-      res.status(httpResponse.statusCode).send(httpResponse.body);
+      res.status(httpResponse.statusCode).send({
+        ...httpResponse.body,
+        csrfToken: req.csrfToken ? req.csrfToken() : null,
+      });
     } catch (e) {
       console.error(e);
       res.status(500).send({ error: "An unkown error occurred." });

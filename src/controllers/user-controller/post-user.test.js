@@ -9,7 +9,9 @@ describe("Post user controller", () => {
       password: "doesn't matter",
     };
 
-    saveUser = jest.fn((u) => Promise.resolve(u));
+    saveUser = jest.fn((u) =>
+      Promise.resolve({ ...u, id: "an-id", memberSince: new Date() })
+    );
     postUser = makePostUser({
       saveUser,
       token: { create: jest.fn((t) => "token") },
@@ -40,6 +42,7 @@ describe("Post user controller", () => {
       body: {
         success: true,
         payload: {
+          id: "an-id",
           name: validUserData.name,
           email: validUserData.email,
           memberSince: expect.any(Date),

@@ -1,14 +1,16 @@
-import axios from "axios";
+import useApi from "../../../hooks/useApi";
 
 import { REGISTER_SUCCESS, REGISTER_FAIL } from "../types";
 
 export const register =
   ({ name, email, password }) =>
-  async (dispatch) => {
+  async (dispatch, getState) => {
+    const apiClient = useApi({ dispatch, getState });
+
     const body = JSON.stringify({ name, email, password });
 
     try {
-      const response = await axios.post("/api/user", body);
+      const response = await apiClient.post("/api/user", body);
       dispatch({
         type: REGISTER_SUCCESS,
         payload: response.data.payload,

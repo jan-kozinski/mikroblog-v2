@@ -89,7 +89,7 @@ describe("create user", () => {
     const user = await saveUser(validUserData);
     expect(user).toEqual({
       ...validUserData,
-      password: `hashed-${validUserData.password}`,
+      password: undefined,
     });
   });
   it("Given no id should generate one", async () => {

@@ -101,6 +101,7 @@ export const handlers = [
   }),
 
   rest.post(authUserEndpoint, (req, res, ctx) => {
+    req.body = JSON.parse(req.body);
     if (
       req.body.email === "test@test.com" &&
       req.body.password === "password"

@@ -8,11 +8,13 @@ import {
   REGISTER_SUCCESS,
   REGISTER_FAIL,
   CLEAR_AUTH_ERROR,
+  SET_CSRF_TOKEN,
 } from "../actions/types";
 
 const initialState = {
   isAuthenticated: false,
   isLoading: false,
+  _csrf: "",
   user: null,
   error: null,
 };
@@ -55,6 +57,12 @@ export default function authReducer(state = initialState, action) {
       return {
         ...state,
         error: null,
+      };
+    }
+    case SET_CSRF_TOKEN: {
+      return {
+        ...state,
+        _csrf: action.payload,
       };
     }
     default:

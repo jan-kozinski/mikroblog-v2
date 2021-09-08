@@ -20,9 +20,10 @@ export default function makePostUser({ saveUser, token }) {
       body: {
         success: true,
         payload: {
-          name: httpRequest.body.name,
-          email: httpRequest.body.email,
-          memberSince: new Date(),
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          memberSince: user.memberSince,
         },
       },
       cookies: { token: tok },

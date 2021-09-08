@@ -1,10 +1,12 @@
-import axios from "axios";
+import useApi from "../../../hooks/useApi";
 import { postsEndpoint } from "../../../constants/api-endpoints";
 import { POST_UNLIKED, POST_UNLIKE_ERROR } from "../types";
 
-export const removeLike = (postId) => async (dispatch) => {
+export const removeLike = (postId) => async (dispatch, getState) => {
   try {
-    const response = await axios.delete(`${postsEndpoint}/${postId}/likes`);
+    const apiClient = useApi({ dispatch, getState });
+
+    const response = await apiClient.delete(`${postsEndpoint}/${postId}/likes`);
 
     const { payload } = response.data;
     dispatch({
@@ -15,6 +17,7 @@ export const removeLike = (postId) => async (dispatch) => {
       },
     });
   } catch (error) {
+    console.error(error);
     const internalServerError =
       !error.response || !error.response.data || !error.response.data.error;
     dispatch({

@@ -34,6 +34,7 @@ describe("end to end API endpoints test", () => {
     expect(response.status).toEqual(201);
     expect(response.data.success).toBe(true);
     expect(response.data.payload).toEqual({
+      id: expect.any(String),
       email: "test@test.com",
       name: "dżony",
       memberSince: expect.any(String),

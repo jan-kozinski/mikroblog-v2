@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 
 it("Should load the posts", async () => {
   render(<Wall />);
-  screen.getByText(/loading/i);
+  screen.getByLabelText(/loading/i);
   await screen.findByText(/this is a test post/i);
 });
 

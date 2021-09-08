@@ -1,10 +1,11 @@
-import axios from "axios";
+import useApi from "../../../hooks/useApi";
 import { postsEndpoint } from "../../../constants/api-endpoints";
 import { POST_ADDED, ADD_POST_FAIL } from "../types";
 
-export const createPost = (content) => async (dispatch) => {
+export const createPost = (content) => async (dispatch, getState) => {
   try {
-    const response = await axios.post(postsEndpoint, { content });
+    const apiClient = useApi({ dispatch, getState });
+    const response = await apiClient.post(postsEndpoint, { content });
     const { payload } = response.data;
     dispatch({
       type: POST_ADDED,

@@ -1,4 +1,4 @@
-import axios from "axios";
+import useApi from "../../../hooks/useApi";
 import { postsEndpoint } from "../../../constants/api-endpoints";
 import {
   FETCHING_ERROR,
@@ -12,12 +12,14 @@ export const fetchPosts = () => async (dispatch, getState) => {
     type: POSTS_LOADING,
   });
   try {
+    const apiClient = useApi({ dispatch, getState });
+
     const fetchedPosts = getState().posts.posts;
     const lastPost = fetchedPosts
       ? fetchedPosts[fetchedPosts.length - 1]
       : null;
     const limit = 7;
-    const response = await axios.get(
+    const response = await apiClient.get(
       `${postsEndpoint}?sortby=newest&limit=${limit}${
         lastPost ? "&before=" + lastPost.createdAt : ""
       }`

@@ -2,6 +2,7 @@ import cookieParser from "cookie-parser";
 import express from "express";
 import makeCallback from "./make-express-callback.js";
 import helmet from "helmet";
+import csrf from "csurf";
 import { postUser, signUser } from "../../controllers/user-controller/index.js";
 import {
   addPost,
@@ -27,16 +28,34 @@ export default async function start() {
     const { default: morgan } = await import("morgan");
     app.use(morgan("dev"));
   }
+
+  const csrfProtection =
+    process.env.NODE_ENV === "test"
+      ? (req, res, next) => next()
+      : csrf({ cookie: true });
   // ROUTES
-  app.post("/api/user", makeCallback(postUser));
-  app.post("/api/user/auth", makeCallback(signUser));
+  app.post("/api/user", csrfProtection, makeCallback(postUser));
+  app.post("/api/user/auth", csrfProtection, makeCallback(signUser));
 
-  app.post("/api/post", makeCallback(addPost));
-  app.put("/api/post/:postId", makeCallback(updatePost));
-  app.get("/api/post", makeCallback(getPosts));
+  app.post("/api/post", csrfProtection, makeCallback(addPost));
+  app.put("/api/post/:postId", csrfProtection, makeCallback(updatePost));
+  app.get("/api/post", csrfProtection, makeCallback(getPosts));
 
-  app.post("/api/post/:postId/likes", makeCallback(likePost));
-  app.delete("/api/post/:postId/likes", makeCallback(unlikePost));
+  app.post("/api/post/:postId/likes", csrfProtection, makeCallback(likePost));
+  app.delete(
+    "/api/post/:postId/likes",
+    csrfProtection,
+    makeCallback(unlikePost)
+  );
+
+  // csrf error handler
+  app.use(function (err, req, res, next) {
+    if (err.code !== "EBADCSRFTOKEN") return next(err);
+
+    // handle CSRF token errors here
+    res.status(403);
+    res.json({ success: false, error: "Bad csrf token" });
+  });
 
   server = app.listen(PORT, () => {
     console.log(
