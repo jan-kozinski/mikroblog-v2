@@ -1,0 +1,14 @@
+name: test
+on: [push]
+jobs:
+  Run-all-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm i
+      - run: npm test
+      - run: touch src/config.env
+      - run: echo -e "PORT=5000\nJWT_SECRET=test-secret\nTOKEN_EXPIRATION=360000" > src/config.env
+      - run: npm run test:e2e
+      - run: ls -a
+      - run: cd client && npm i && npm i @testing-library/dom && CI=true npm test
