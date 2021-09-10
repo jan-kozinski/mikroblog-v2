@@ -9,8 +9,9 @@
     ]
   },
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest src --watch",
-    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest src --watch --collect-coverage",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest src",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest src --watchAll",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest src --collect-coverage",
     "test:e2e": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest __test__/e2e.test.js",
     "dev": "NODE_ENV=development nodemon src/index.js --ignore client/ --ignore **/*.test.js",
     "client": "npm start --prefix client",
