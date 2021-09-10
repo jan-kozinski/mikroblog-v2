@@ -6,7 +6,7 @@ jobs:
     strategy:
       matrix:
         node-version: [14.x]
-        redis-version: [ 5 ]
+        redis-version: [5]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
@@ -15,9 +15,9 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: "npm"
       - name: Start Redis
-      uses: supercharge/redis-github-action@1.2.0
-      with:
-        redis-version: ${{ matrix.redis-version }}
+        uses: supercharge/redis-github-action@1.2.0
+        with:
+          redis-version: ${{ matrix.redis-version }}
       - run: npm i
       - run: npm test
       - run: touch src/config.env
