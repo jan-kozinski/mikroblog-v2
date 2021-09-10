@@ -5,7 +5,11 @@ export default function makeSignUser({ authUser, token }) {
     try {
       const user = await authUser(httpRequest.body);
       if (user) {
-        const tok = token.create({ id: user.id, name: user.name });
+        const tok = await token.create({
+          ip: httpRequest.ip,
+          id: user.id,
+          name: user.name,
+        });
         return {
           headers: {
             "Content-Type": "application/json",

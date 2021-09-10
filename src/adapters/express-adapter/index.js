@@ -34,17 +34,17 @@ export default async function start() {
       ? (req, res, next) => next()
       : csrf({ cookie: true });
   // ROUTES
-  app.post("/api/user", csrfProtection, makeCallback(postUser));
-  app.post("/api/user/auth", csrfProtection, makeCallback(signUser));
+  app.post("/api/user", makeCallback(postUser));
+  app.post("/api/user/auth", makeCallback(signUser));
 
-  app.post("/api/post", csrfProtection, makeCallback(addPost));
-  app.put("/api/post/:postId", csrfProtection, makeCallback(updatePost));
-  app.get("/api/post", csrfProtection, makeCallback(getPosts));
+  app.post("/api/post", makeCallback(addPost));
+  app.put("/api/post/:postId", makeCallback(updatePost));
+  app.get("/api/post", makeCallback(getPosts));
 
-  app.post("/api/post/:postId/likes", csrfProtection, makeCallback(likePost));
+  app.post("/api/post/:postId/likes", makeCallback(likePost));
   app.delete(
     "/api/post/:postId/likes",
-    csrfProtection,
+
     makeCallback(unlikePost)
   );
 

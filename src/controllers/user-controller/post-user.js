@@ -11,7 +11,11 @@ export default function makePostUser({ saveUser, token }) {
         },
       });
     }
-    const tok = token.create({ id: user.id, name: user.name });
+    const tok = token.create({
+      ip: httpRequest.ip,
+      id: user.id,
+      name: user.name,
+    });
     return {
       headers: {
         "Content-Type": "application/json",

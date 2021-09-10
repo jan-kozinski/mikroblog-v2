@@ -92,8 +92,8 @@ const service = Object.freeze({
 });
 
 function closeDbConnections() {
-  usersDb.close;
-  postsDb.close;
+  usersDb.close();
+  postsDb.close();
 }
 
 export default service;
