@@ -6,7 +6,7 @@ export default function makeLikePost({ giveLike, token }) {
     try {
       let signedUser;
       try {
-        signedUser = requireAuth(httpRequest, token);
+        signedUser = await requireAuth(httpRequest, token);
       } catch (error) {
         return error;
       }

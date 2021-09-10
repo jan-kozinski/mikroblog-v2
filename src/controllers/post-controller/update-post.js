@@ -9,7 +9,7 @@ export default function makeUpdatePost({ editPost, token }) {
 
       let signedUser;
       try {
-        signedUser = requireAuth(httpRequest, token);
+        signedUser = await requireAuth(httpRequest, token);
       } catch (error) {
         return error;
       }

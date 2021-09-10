@@ -9,9 +9,10 @@
     ]
   },
   "scripts": {
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest src --watch",
-    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest src --watch --collect-coverage",
-    "test:e2e": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest __test__/e2e.test.js",
+    "test": "NODE_OPTIONS=--experimental-vm-modules jest src",
+    "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest src --watchAll",
+    "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest src --collect-coverage",
+    "test:e2e": "NODE_ENV=test NODE_OPTIONS=--experimental-vm-modules jest __test__/e2e.test.js --forceExit",
     "dev": "NODE_ENV=development nodemon src/index.js --ignore client/ --ignore **/*.test.js",
     "client": "npm start --prefix client",
     "build": "npm run build --prefix client",
@@ -30,7 +31,8 @@
     "helmet": "^4.6.0",
     "js-cookie": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
-    "mongodb": "^4.1.1"
+    "mongodb": "^4.1.1",
+    "redis-sessions": "^3.0.0"
   },
   "devDependencies": {
     "axios": "^0.21.1",
