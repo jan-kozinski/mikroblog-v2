@@ -9,6 +9,8 @@ export default function makeSignUser({ authUser, token }) {
           ip: httpRequest.ip,
           id: user.id,
           name: user.name,
+          email: user.email,
+          memberSince: user.memberSince.toString(),
         });
         return {
           headers: {

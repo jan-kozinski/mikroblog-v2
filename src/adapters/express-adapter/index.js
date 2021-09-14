@@ -3,7 +3,11 @@ import express from "express";
 import makeCallback from "./make-express-callback.js";
 import helmet from "helmet";
 import csrf from "csurf";
-import { postUser, signUser } from "../../controllers/user-controller/index.js";
+import {
+  postUser,
+  signUser,
+  sessionUser,
+} from "../../controllers/user-controller/index.js";
 import {
   addPost,
   updatePost,
@@ -33,9 +37,12 @@ export default async function start() {
     process.env.NODE_ENV === "test"
       ? (req, res, next) => next()
       : csrf({ cookie: true });
+  app.use(csrfProtection);
+
   // ROUTES
   app.post("/api/user", makeCallback(postUser));
   app.post("/api/user/auth", makeCallback(signUser));
+  app.post("/api/user/auth/session", makeCallback(sessionUser));
 
   app.post("/api/post", makeCallback(addPost));
   app.put("/api/post/:postId", makeCallback(updatePost));

@@ -1,18 +1,18 @@
 export default function makeExpressCallback(controller) {
   return async (req, res) => {
-    const httpRequest = {
-      body: req.body,
-      cookies: req.cookies,
-      query: req.query,
-      params: req.params,
-      method: req.method,
-      path: req.path,
-      ip: req.ip,
-      headers: {
-        "Content-Type": req.get("Content-Type"),
-      },
-    };
     try {
+      const httpRequest = {
+        body: req.body,
+        cookies: req.cookies,
+        query: req.query,
+        params: req.params,
+        method: req.method,
+        path: req.path,
+        ip: req.ip,
+        headers: {
+          "Content-Type": req.get("Content-Type"),
+        },
+      };
       const httpResponse = await controller(httpRequest);
 
       if (httpResponse.headers) {
@@ -26,7 +26,9 @@ export default function makeExpressCallback(controller) {
       });
     } catch (e) {
       console.error(e);
-      res.status(500).send({ error: "An unkown error occurred." });
+      res
+        .status(500)
+        .send({ success: false, error: "An unkown error occurred." });
     }
   };
 }

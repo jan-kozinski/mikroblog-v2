@@ -29,8 +29,8 @@ const dbMockup = {
     const index = dbMockup._data.push(u) - 1;
     return Promise.resolve(dbMockup._data[index]);
   }),
-  update: jest.fn((record, data) => {
-    let original = dbMockup.findById(record.id);
+  update: jest.fn(async (record, data) => {
+    let original = await dbMockup.findById(record.id);
     original = {
       ...original,
       ...data,

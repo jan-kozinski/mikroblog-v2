@@ -1,3 +1,4 @@
+import { authUserEndpoint } from "../../../constants/api-endpoints";
 import useApi from "../../../hooks/useApi";
 import { USER_LOADING, LOGIN_SUCCESS, LOGIN_FAIL } from "../types";
 
@@ -9,7 +10,7 @@ export const login =
 
     const body = JSON.stringify({ email, password });
     try {
-      const response = await apiClient.post("/api/user/auth", body);
+      const response = await apiClient.post(authUserEndpoint, body);
       dispatch({
         type: LOGIN_SUCCESS,
         payload: response.data.payload,

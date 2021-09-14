@@ -26,6 +26,7 @@ describe("Sign user controller", () => {
       headers: {
         "Content-Type": "application/json",
       },
+      ip: "doesn't matter",
       body: validUserData,
     };
 
@@ -63,6 +64,9 @@ describe("Sign user controller", () => {
 
     expect(token.create).toBeCalledTimes(1);
     expect(token.create).toBeCalledWith({
+      ip: "doesn't matter",
+      email: "test@test.com",
+      memberSince: expect.any(String),
       id: "good-looking-id",
       name: "even-better-looking-name",
     });

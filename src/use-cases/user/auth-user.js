@@ -1,14 +1,30 @@
+import makeUser from "../../entities/user/index.js";
+
 export default function makeAuthUser({ dbGateway, hasher }) {
   return async function authUser({ email, password }) {
     if (!email)
-      throw new Error("Please provide with an email in order to procede");
+      throw new Error("Please provide with email in order to procede");
 
     if (!password)
-      throw new Error("Please provide with a password in order to procede");
+      throw new Error("Please provide with password in order to procede");
 
-    const user = await dbGateway.findOne({ email });
+    const userRecord = await dbGateway.findOne({ email });
+    if (!userRecord) return null;
 
-    if (!user) return null;
-    return (await hasher.compare(password, user.password)) ? user : null;
+    const wrongPassword = !(await hasher.compare(
+      password,
+      userRecord.password
+    ));
+    if (wrongPassword) return null;
+
+    const userEntity = await makeUser(userRecord);
+    const userData = {
+      id: userEntity.getId(),
+      name: userEntity.getName(),
+      email: userEntity.getEmail(),
+      memberSince: userEntity.getMemberSince(),
+    };
+
+    return userData;
   };
 }

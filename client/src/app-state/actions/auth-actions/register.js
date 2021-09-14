@@ -1,5 +1,5 @@
 import useApi from "../../../hooks/useApi";
-
+import { createUserEndpoint } from "../../../constants/api-endpoints";
 import { REGISTER_SUCCESS, REGISTER_FAIL } from "../types";
 
 export const register =
@@ -10,7 +10,7 @@ export const register =
     const body = JSON.stringify({ name, email, password });
 
     try {
-      const response = await apiClient.post("/api/user", body);
+      const response = await apiClient.post(createUserEndpoint, body);
       dispatch({
         type: REGISTER_SUCCESS,
         payload: response.data.payload,

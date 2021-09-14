@@ -149,6 +149,45 @@ describe("end to end API endpoints test", () => {
     cookie = response.headers["set-cookie"][0];
     expect(/^token=;/.test(cookie)).toBe(true);
   });
+  it("POST@/api/user/auth/session Supplied with valid token should respond with the user data. Supplied with bad token or no token at all should respond with an error", async () => {
+    const userData = {
+      name: "legit",
+      email: "legit@test.com",
+      password: "legit123",
+    };
+    await axios.post("/api/user", userData);
+    let cookie = (
+      await axios.post("/api/user/auth", {
+        email: userData.email,
+        password: userData.password,
+      })
+    ).headers["set-cookie"][0];
+    let response = await axios.post(
+      "/api/user/auth/session",
+      {},
+      {
+        headers: {
+          Cookie: cookie,
+        },
+      }
+    );
+    expect(response.status).toEqual(200);
+    expect(response.data.success).toBe(true);
+    expect(response.data.payload.name).toEqual(userData.name);
+    expect(response.data.payload.email).toEqual(userData.email);
+    expect(response.data.payload.memberSince).toEqual(expect.any(String));
+    expect(response.headers["set-cookie"]).toBeDefined();
+    cookie = response.headers["set-cookie"][0];
+    expect(/^token/.test(cookie)).toBe(true);
+
+    response = await axios.post("/api/user/auth/session");
+    expect(response.status).toEqual(401);
+    expect(response.data.success).toBe(false);
+    expect(response.data.error).toBe("Session timed out");
+    expect(response.headers["set-cookie"]).toBeDefined();
+    cookie = response.headers["set-cookie"][0];
+    expect(/^token=;/.test(cookie)).toBe(true);
+  });
   it("POST@/api/post Should sucessfully create a post", async () => {
     const userData = {
       name: "legit",

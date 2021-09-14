@@ -7,7 +7,12 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
-const NECESSARY_VARS = ["JWT_SECRET", "TOKEN_EXPIRATION", "MONGO_DB_URI"];
+const NECESSARY_VARS = [
+  "TOKEN_EXPIRATION",
+  "PORT",
+  "MONGO_DB_URI",
+  "REDIS_NAMESPACE",
+];
 NECESSARY_VARS.forEach((v) => {
   if (!process.env[v]) throw new Error(`${v} is undefined`);
 });

@@ -2,21 +2,26 @@ import RedisSessions from "redis-sessions";
 import util from "util";
 const rs = new RedisSessions();
 
-const rsapp = "mikroblog-web-client";
+const rsapp = process.env.REDIS_NAMESPACE || "mikroblog-web-client";
 
-export const token = {
+export const token = Object.freeze({
   async create({ ip, ...data }) {
-    const promise = util.promisify(rs.create);
-    const { token } = await promise({
-      app: rsapp,
-      id: data.id,
-      ip,
-      ttl: 3600,
-      d: {
-        ...data,
-      },
-    });
-    return token;
+    try {
+      const promise = util.promisify(rs.create);
+      const { token } = await promise({
+        app: rsapp,
+        id: data.id,
+        ip,
+        ttl: process.env.TOKEN_EXPIRATION,
+        d: {
+          ...data,
+        },
+      });
+      return token;
+    } catch (error) {
+      console.error(error.message);
+      throw new Error("Something went wrong...");
+    }
   },
   async resolve(providedToken) {
     const promise = util.promisify(rs.get);
@@ -28,10 +33,10 @@ export const token = {
       return session.d;
     } catch (error) {
       console.error(error.message);
-      throw error;
+      throw new Error("Something went wrong...");
     }
   },
-};
+});
 
 process.on("beforeExit", () => {
   rs.quit(() => console.log("Closing redis connection..."));

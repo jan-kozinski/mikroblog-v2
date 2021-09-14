@@ -9,11 +9,13 @@ import {
   REGISTER_FAIL,
   CLEAR_AUTH_ERROR,
   SET_CSRF_TOKEN,
+  SESSION_TIMED_OUT,
+  SESSION_RETRIEVED,
 } from "../actions/types";
 
 const initialState = {
   isAuthenticated: false,
-  isLoading: false,
+  isLoading: true,
   _csrf: "",
   user: null,
   error: null,
@@ -36,6 +38,7 @@ export default function authReducer(state = initialState, action) {
       };
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
+    case SESSION_RETRIEVED:
       return {
         ...state,
         isAuthenticated: true,
@@ -52,6 +55,13 @@ export default function authReducer(state = initialState, action) {
         isLoading: false,
         user: null,
         error: action.payload,
+      };
+    case SESSION_TIMED_OUT:
+      return {
+        ...state,
+        isAuthenticated: false,
+        isLoading: false,
+        user: null,
       };
     case CLEAR_AUTH_ERROR: {
       return {

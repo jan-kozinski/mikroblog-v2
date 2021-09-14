@@ -30,12 +30,12 @@ describe("auth user use case", () => {
   });
   it("Should throw an error if given no email", async () => {
     await expect(authUser({ password: "anything" })).rejects.toThrow(
-      new Error("Please provide with an email in order to procede")
+      new Error("Please provide with email in order to procede")
     );
   });
   it("Should throw an error if given no password", async () => {
     await expect(authUser({ email: "i@am.fake" })).rejects.toThrow(
-      new Error("Please provide with a password in order to procede")
+      new Error("Please provide with password in order to procede")
     );
   });
   it("Should return null if no user of given email exists", async () => {
@@ -56,7 +56,7 @@ describe("auth user use case", () => {
     expect(hasherMock.compare).toBeCalledTimes(1);
   });
 
-  it("Should return true if provided with legit credentials", async () => {
+  it("Should return user data if provided with legit credentials", async () => {
     expect(hasherMock.compare).toBeCalledTimes(0);
     dbMockup.insert(userData);
     await expect(
@@ -64,7 +64,12 @@ describe("auth user use case", () => {
         email: "first@user.com",
         password: "verystrongpassword",
       })
-    ).toBe(userData);
+    ).toEqual({
+      id: userData.id,
+      name: userData.name,
+      email: userData.email,
+      memberSince: userData.memberSince,
+    });
     expect(hasherMock.compare).toBeCalledTimes(1);
   });
 });
