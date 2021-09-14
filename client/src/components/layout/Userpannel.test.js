@@ -4,7 +4,13 @@ import userEvent from "@testing-library/user-event";
 
 describe("Signin user in", () => {
   beforeEach(() => {
-    render(<Userpannel />);
+    render(<Userpannel />, {
+      preloadedState: {
+        auth: {
+          isLoading: false,
+        },
+      },
+    });
   });
 
   it("Should successfully login the user", async () => {
@@ -37,7 +43,13 @@ describe("Signin user in", () => {
     await screen.findByRole(/alert/i);
 
     cleanup();
-    render(<Userpannel />);
+    render(<Userpannel />, {
+      preloadedState: {
+        auth: {
+          isLoading: false,
+        },
+      },
+    });
     emailInput = screen.getByLabelText("E-mail");
     passwordInput = screen.getByLabelText("Password");
     await userEvent.type(emailInput, "test@test.com", {
@@ -49,7 +61,13 @@ describe("Signin user in", () => {
     await screen.findByRole(/alert/i);
 
     cleanup();
-    render(<Userpannel />);
+    render(<Userpannel />, {
+      preloadedState: {
+        auth: {
+          isLoading: false,
+        },
+      },
+    });
     emailInput = screen.getByLabelText("E-mail");
     passwordInput = screen.getByLabelText("Password");
     await userEvent.type(emailInput, "test@test.com", {

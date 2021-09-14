@@ -127,4 +127,13 @@ export const handlers = [
       );
     }
   }),
+  rest.post(authUserEndpoint + "/session", (req, res, ctx) => {
+    return res(
+      ctx.status(401),
+      ctx.body({
+        success: false,
+        error: "Session timed out",
+      })
+    );
+  }),
 ];
