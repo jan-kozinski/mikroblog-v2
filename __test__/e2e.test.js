@@ -130,7 +130,7 @@ describe("end to end API endpoints test", () => {
     expect(response.status).toEqual(400);
     expect(response.data.success).toBe(false);
     expect(response.data.error).toBe(
-      "Please provide with an email in order to procede"
+      "Please provide with email in order to procede"
     );
     expect(response.headers["set-cookie"]).toBeDefined();
     let cookie = response.headers["set-cookie"][0];
@@ -143,7 +143,7 @@ describe("end to end API endpoints test", () => {
     expect(response.status).toEqual(400);
     expect(response.data.success).toBe(false);
     expect(response.data.error).toBe(
-      "Please provide with a password in order to procede"
+      "Please provide with password in order to procede"
     );
     expect(response.headers["set-cookie"]).toBeDefined();
     cookie = response.headers["set-cookie"][0];
