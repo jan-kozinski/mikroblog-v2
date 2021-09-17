@@ -54,6 +54,8 @@ describe("makePost", () => {
         getId: expect.any(Function),
         getAuthorId: expect.any(Function),
         getContent: expect.any(Function),
+        getLikesCount: expect.any(Function),
+        getLikersIds: expect.any(Function),
         getCreatedAt: expect.any(Function),
         getModifiedAt: expect.any(Function),
       })
