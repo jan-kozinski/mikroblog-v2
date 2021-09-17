@@ -67,6 +67,7 @@ describe("save post use case", () => {
         expect.objectContaining({
           id: post.id,
           authorId: post.authorId,
+          author: `name-${post.authorId}`,
           content: post.content,
           createdAt: expect.any(Date),
           modifiedAt: expect.any(Date),

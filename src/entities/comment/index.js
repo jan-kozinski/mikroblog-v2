@@ -9,9 +9,9 @@ export default function makeComment({
   createdAt = new Date(),
   modifiedAt = createdAt,
 } = {}) {
-  if (!id) throw new Error("Post id must be provided");
-  if (typeof id !== "string") throw new Error("Post id must be a string");
-  if (id.trim().length < 1) throw new Error("Post id must be provided");
+  if (!id) throw new Error("Comment id must be provided");
+  if (typeof id !== "string") throw new Error("Comment id must be a string");
+  if (id.trim().length < 1) throw new Error("Comment id must be provided");
 
   if (!authorId) throw new Error("Author id must be provided");
   if (typeof authorId !== "string")
@@ -20,12 +20,12 @@ export default function makeComment({
 
   if (!content) throw new Error("Content must be provided");
   if (typeof content !== "string")
-    throw new Error("Post content must be a string");
+    throw new Error("Comment content must be a string");
   if (content.trim().length < 1) throw new Error("Content must be provided");
 
   if (!originalPostId) throw new Error("Original post id must be provided");
   if (typeof originalPostId !== "string")
-    throw new Error("Original post id must Original post a string");
+    throw new Error("Original post id must be a string");
   if (originalPostId.trim().length < 1)
     throw new Error("Original post id must be provided");
 
@@ -44,7 +44,7 @@ export default function makeComment({
       if (typeof userId !== "string")
         throw new Error("User id must be a string");
       if (likersIds.includes(userId))
-        throw new Error("User already likes this post");
+        throw new Error("User already likes this comment");
 
       likersIds.push(userId);
       likesCount++;
@@ -58,7 +58,7 @@ export default function makeComment({
       if (typeof userId !== "string")
         throw new Error("User id must be a string");
       if (!likersIds.includes(userId))
-        throw new Error("User does not like this post");
+        throw new Error("User does not like this comment");
 
       likersIds = likersIds.filter((l) => l !== userId);
       likesCount--;

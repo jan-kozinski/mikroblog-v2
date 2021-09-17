@@ -2,7 +2,7 @@ import makePost from "../../entities/post/index.js";
 
 export default function makeSavePost({ postsDb, usersDb, Id }) {
   return async function savePost(postData) {
-    if (!postData.id) postData.id = Id.genId();
+    postData.id = postData.id || Id.genId();
     const post = makePost(postData);
     const idAlreadyTaken = !!(await postsDb.findById(post.getId()));
     if (idAlreadyTaken) throw new Error("post of provided id already exists");
