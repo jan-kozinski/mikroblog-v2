@@ -55,7 +55,7 @@ describe("Add comment controller", () => {
       headers: {
         "Content-Type": "application/json",
       },
-      statusCode: 404,
+      statusCode: 400,
       body: {
         success: false,
         error: expect.any(String),
