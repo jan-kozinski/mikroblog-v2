@@ -1,12 +1,15 @@
 import respondWithError from "../send-error.js";
 
-export default function makeGetPosts({ listPosts }) {
-  return async function getPost({ query: queries }) {
+export default function makeGetComments({ listComments }) {
+  return async function getComments(httpRequest) {
+    const queries = httpRequest.query;
+    const { originalPostId } = httpRequest.params;
+
     const limit = parseIntOrUndefined(queries.limit);
     const skip = parseIntOrUndefined(queries.skip);
 
     try {
-      const posts = await listPosts({
+      const comments = await listComments(originalPostId, {
         limit,
         skip,
         after: queries.after,
@@ -21,7 +24,7 @@ export default function makeGetPosts({ listPosts }) {
         statusCode: 200,
         body: {
           success: true,
-          payload: posts,
+          payload: comments,
         },
       };
     } catch (error) {

@@ -3,13 +3,13 @@ import requireAuth from "../requireAuth.js";
 
 export default function makeAddPost({ savePost, token }) {
   return async function addPost(httpRequest) {
+    let signedUser;
     try {
-      let signedUser;
-      try {
-        signedUser = await requireAuth(httpRequest, token);
-      } catch (error) {
-        return error;
-      }
+      signedUser = await requireAuth(httpRequest, token);
+    } catch (error) {
+      return error;
+    }
+    try {
       const post = await savePost({
         ...httpRequest.body,
         authorId: signedUser.id,
@@ -21,15 +21,7 @@ export default function makeAddPost({ savePost, token }) {
         statusCode: 201,
         body: {
           success: true,
-          payload: {
-            id: post.id,
-            author: post.author,
-            content: post.content,
-            likesCount: post.likesCount,
-            likersIds: post.likersIds,
-            createdAt: post.createdAt,
-            modifiedAt: post.modifiedAt,
-          },
+          payload: post,
         },
       };
     } catch (error) {

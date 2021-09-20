@@ -1,7 +1,7 @@
 import dbMockup from "../../../__test__/utils/dbMockup";
 import makeListPosts from "./list-posts";
 
-describe("list all users", () => {
+describe("list all posts", () => {
   let listPosts;
   beforeAll(() => {
     listPosts = makeListPosts({ dbGateway: dbMockup });
@@ -12,7 +12,7 @@ describe("list all users", () => {
     dbMockup.find.mockClear();
     dbMockup.findById.mockClear();
   });
-  it("Should return users ", async () => {
+  it("Should return posts ", async () => {
     let posts = [];
     for (let i = 0; i < 5; i++) {
       let post = {

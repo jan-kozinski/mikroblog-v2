@@ -3,14 +3,13 @@ import requireAuth from "../requireAuth.js";
 
 export default function makeUnlikePost({ undoLike, token }) {
   return async function ulikePost(httpRequest) {
+    let signedUser;
     try {
-      let signedUser;
-      try {
-        signedUser = await requireAuth(httpRequest, token);
-      } catch (error) {
-        return error;
-      }
-
+      signedUser = await requireAuth(httpRequest, token);
+    } catch (error) {
+      return error;
+    }
+    try {
       const data = await undoLike({
         postId: httpRequest.params.postId,
         userId: signedUser.id,

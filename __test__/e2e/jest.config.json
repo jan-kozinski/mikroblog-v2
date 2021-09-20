@@ -1,0 +1,3 @@
+{
+  "setupFilesAfterEnv": ["./setupE2eTests.js"]
+}

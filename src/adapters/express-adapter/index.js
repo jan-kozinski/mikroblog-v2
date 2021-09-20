@@ -15,10 +15,14 @@ import {
   likePost,
   unlikePost,
 } from "../../controllers/post-controller/index.js";
+import {
+  addComment,
+  getComments,
+} from "../../controllers/comment-controller/index.js";
 
 let server;
 
-export default async function start() {
+export default async function start(callback) {
   const app = express();
 
   // CONFIG
@@ -55,6 +59,9 @@ export default async function start() {
     makeCallback(unlikePost)
   );
 
+  app.post("/api/comment/:originalPostId", makeCallback(addComment));
+  app.get("/api/comment/:originalPostId", makeCallback(getComments));
+
   // csrf error handler
   app.use(function (err, req, res, next) {
     if (err.code !== "EBADCSRFTOKEN") return next(err);
@@ -68,7 +75,9 @@ export default async function start() {
     console.log(
       `Srever is listening on port ${PORT} in ${process.env.NODE_ENV} mode`
     );
+    if (callback) callback();
   });
+  return server;
 }
 
 export { server };

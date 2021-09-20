@@ -31,7 +31,7 @@ describe("Add post controller", () => {
     token.resolve.mockClear();
   });
 
-  it("Should respond with an error if request dosen't contain a cookie with JWT token", async () => {
+  it("Should respond with an error if request dosen't contain a cookie with auth token", async () => {
     const request = {
       headers: {
         "Content-Type": "application/json",
@@ -59,7 +59,7 @@ describe("Add post controller", () => {
     expect(actual).toEqual(expected);
     expect(savePost).toBeCalledTimes(0);
   });
-  it("Should respond with an error if request contains a cookie with invalid JWT token", async () => {
+  it("Should respond with an error if request contains a cookie with invalid auth token", async () => {
     const request = {
       headers: {
         "Content-Type": "application/json",

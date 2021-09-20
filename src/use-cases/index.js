@@ -1,14 +1,20 @@
 import { inMemoryDb } from "../drivers/index.js";
 import { MongoDb } from "../drivers/index.js";
+
+import cuid from "cuid";
+import bcrypt from "bcrypt";
+
 import makeSaveUser from "./user/save-user.js";
 import makeAuthUser from "./user/auth-user.js";
+
 import makeSavePost from "./post/save-post.js";
 import makeEditPost from "./post/edit-post.js";
 import makeListPosts from "./post/list-posts.js";
 import makeGiveLike from "./post/give-like.js";
 import makeUndoLike from "./post/undo-like.js";
-import cuid from "cuid";
-import bcrypt from "bcrypt";
+
+import makeSaveComment from "./comments/save-comment.js";
+import makeListCommsByPost from "./comments/list-by-post.js";
 
 const hasher = {
   hash: async (password, saltRounds = 10) => {
@@ -20,13 +26,15 @@ const hasher = {
   },
 };
 
-let usersDb, postsDb;
+let usersDb, postsDb, commentsDb;
 
 if (process.env.NODE_ENV !== "test") {
   usersDb = new MongoDb("users");
+  commentsDb = new MongoDb("comments");
   postsDb = new MongoDb("posts");
   await usersDb.connect();
   await postsDb.connect();
+  await commentsDb.connect();
 
   process.on("uncaughtException", () => {
     closeDbConnections();
@@ -48,23 +56,29 @@ if (process.env.NODE_ENV !== "test") {
     process.exit();
   });
 } else {
-  console.log(process.env.NODE_ENV);
   usersDb = new inMemoryDb();
+  commentsDb = new inMemoryDb();
   postsDb = new inMemoryDb();
 }
 
+const Id = { genId: () => cuid() };
+
+//---USER-SERVICE---
+
 const saveUser = makeSaveUser({
   dbGateway: usersDb,
-  Id: { genId: () => cuid() },
+  Id,
   hasher,
 });
 
 const authUser = makeAuthUser({ dbGateway: usersDb, hasher });
 
+//---POST-SERVICE---
+
 const savePost = makeSavePost({
   postsDb,
   usersDb,
-  Id: { genId: () => cuid() },
+  Id,
 });
 
 const editPost = makeEditPost({ dbGateway: postsDb });
@@ -81,6 +95,22 @@ const undoLike = makeUndoLike({
   dbGateway: postsDb,
 });
 
+//---COMMENT-SERVICE---
+
+const saveComment = makeSaveComment({
+  commentsDb,
+  postsDb,
+  usersDb,
+  Id,
+});
+const listCommsByPost = makeListCommsByPost({ dbGateway: commentsDb });
+
+function closeDbConnections() {
+  usersDb.close();
+  postsDb.close();
+  commentsDb.close();
+}
+
 const service = Object.freeze({
   saveUser,
   authUser,
@@ -89,12 +119,9 @@ const service = Object.freeze({
   listPosts,
   giveLike,
   undoLike,
+  saveComment,
+  listCommsByPost,
 });
-
-function closeDbConnections() {
-  usersDb.close();
-  postsDb.close();
-}
 
 export default service;
 export {
@@ -105,4 +132,6 @@ export {
   listPosts,
   giveLike,
   undoLike,
+  saveComment,
+  listCommsByPost,
 };

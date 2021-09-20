@@ -3,17 +3,16 @@ import requireAuth from "../requireAuth.js";
 
 export default function makeUpdatePost({ editPost, token }) {
   return async function updatePost(httpRequest) {
+    if (!httpRequest.params || !httpRequest.params.postId)
+      return respondWithError(404, "Post not found");
+
+    let signedUser;
     try {
-      if (!httpRequest.params || !httpRequest.params.postId)
-        return respondWithError(404, "Post not found");
-
-      let signedUser;
-      try {
-        signedUser = await requireAuth(httpRequest, token);
-      } catch (error) {
-        return error;
-      }
-
+      signedUser = await requireAuth(httpRequest, token);
+    } catch (error) {
+      return error;
+    }
+    try {
       const post = await editPost({
         ...httpRequest.body,
         authorId: signedUser.id,
