@@ -1,39 +1,27 @@
+import sanitizeQueries from "../sanitize-queries.js";
 import respondWithError from "../send-error.js";
 
 export default function makeGetComments({ listComments }) {
   return async function getComments(httpRequest) {
-    const queries = httpRequest.query;
+    const queries = sanitizeQueries(httpRequest.query);
     const { originalPostId } = httpRequest.params;
 
-    const limit = parseIntOrUndefined(queries.limit);
-    const skip = parseIntOrUndefined(queries.skip);
-
     try {
-      const comments = await listComments(originalPostId, {
-        limit,
-        skip,
-        after: queries.after,
-        before: queries.before,
-        byNewest: queries.sortby === "newest",
-      });
-
+      const comments = await listComments(originalPostId, queries);
+      const body = {
+        success: true,
+        payload: comments,
+      };
+      if (comments.totalCount) body.totalCount = comments.totalCount;
       return {
         headers: {
           "Content-Type": "application/json",
         },
         statusCode: 200,
-        body: {
-          success: true,
-          payload: comments,
-        },
+        body,
       };
     } catch (error) {
       respondWithError(500, "Something went wrong...");
     }
   };
-}
-
-function parseIntOrUndefined(num) {
-  if (Object.is(+num, NaN)) return undefined;
-  else return +num;
 }

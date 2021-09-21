@@ -59,7 +59,14 @@ describe("list all comments", () => {
       await dbMockup.insert(comment);
     }
 
-    const returnedPosts = await listComments(originalPostId);
-    expect(returnedPosts).toEqual(comms);
+    const returnedComms = await listComments(originalPostId);
+    expect(returnedComms).toEqual(comms);
+  });
+  it("Should ask the DB to lookup for comments of many posts if supplied originalPostId is an array", async () => {
+    await listComments([originalPostId, "any other Id"]);
+    expect(dbMockup.find.mock.calls[0]).toEqual([
+      { originalPostId: [originalPostId, "any other Id"] },
+      { matchAny: ["originalPostId"] },
+    ]);
   });
 });

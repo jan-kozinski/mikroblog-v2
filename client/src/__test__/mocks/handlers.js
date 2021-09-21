@@ -1,5 +1,9 @@
 import { rest } from "msw";
-import { authUserEndpoint, postsEndpoint } from "../../constants/api-endpoints";
+import {
+  authUserEndpoint,
+  commentsEndpoint,
+  postsEndpoint,
+} from "../../constants/api-endpoints";
 
 export const handlers = [
   rest.get(postsEndpoint, (req, res, ctx) => {
@@ -133,6 +137,27 @@ export const handlers = [
       ctx.body({
         success: false,
         error: "Session timed out",
+      })
+    );
+  }),
+  rest.get(commentsEndpoint + "/:originalPostId", (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.body({
+        success: true,
+        payload: [
+          {
+            id: "dasdsadasd",
+            authorId: "not-an-actual-id",
+            originalPostId: req.params.originalPostId,
+            author: "test-user",
+            content: "this is a test comment",
+            likesCount: "0",
+            likersIds: [],
+            createdAt: new Date(),
+            modifiedAt: new Date(),
+          },
+        ],
       })
     );
   }),

@@ -1,16 +1,15 @@
 import { useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+
 import DeletePost from "./DeletePost";
 import EditPost from "./EditPost";
-import { useState, useEffect } from "react";
-import LikeBtn from "./LikeBtn";
-import useTimestamp from "../hooks/useTimestamp";
+import ListComments from "./ListComments";
+import PostHeadline from "./PostHeadline";
 
 function Post({ post }) {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const user = useSelector((state) => state.auth.user);
   const error = useSelector((state) => state.posts.error);
-  const postAge = useTimestamp(post.createdAt);
-  const lastEditAge = useTimestamp(post.modifiedAt);
   const [isBeingEdited, setIsBeingEdited] = useState(false);
 
   const isAuthor = isAuthenticated && user.name === post.author;
@@ -23,31 +22,7 @@ function Post({ post }) {
 
   return (
     <li className="post">
-      <div className="flex">
-        <h4>
-          <span className="font-bold text-secondary">{post.author}</span>
-        </h4>
-        <span className="ml-12 font-thin italic text-gray-700">
-          <span className="dot mr-1.5" />
-          {postAge}
-          {post.createdAt !== post.modifiedAt && (
-            <>
-              <span className="dot mx-1.5" />
-              {`last edit: ${lastEditAge}`}
-            </>
-          )}
-        </span>
-        <LikeBtn
-          likesCount={post.likesCount}
-          likersIds={post.likersIds}
-          postId={post.id}
-        />
-      </div>
-
-      {!!error && error.origin === "LIKE_POST" && error.postId === post.id && (
-        <p className="danger w-max mb-2 ml-auto">{error.message}</p>
-      )}
-      <hr />
+      <PostHeadline post={post} />
 
       {!isBeingEdited && <p>{post.content}</p>}
 
@@ -61,6 +36,12 @@ function Post({ post }) {
             errorOccured={editPostError}
           />
         </div>
+      )}
+      {!!post.comments && (
+        <ListComments
+          comments={post.comments}
+          commentsTotal={post.commentsTotal}
+        />
       )}
     </li>
   );

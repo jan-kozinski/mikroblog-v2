@@ -1,18 +1,31 @@
+import sanitizeQueries from "../sanitize-queries.js";
 import respondWithError from "../send-error.js";
 
-export default function makeGetPosts({ listPosts }) {
+export default function makeGetPosts({ listPosts, listComments }) {
   return async function getPost({ query: queries }) {
-    const limit = parseIntOrUndefined(queries.limit);
-    const skip = parseIntOrUndefined(queries.skip);
+    queries = sanitizeQueries(queries);
 
     try {
-      const posts = await listPosts({
-        limit,
-        skip,
-        after: queries.after,
-        before: queries.before,
-        byNewest: queries.sortby === "newest",
-      });
+      const posts = await listPosts(queries);
+
+      // Function makes a separate query for each of the posts.
+      // Probably could be done with one good query.
+      for (let i in posts) {
+        const post = posts[i];
+        const bestComments = await listComments(post.id, {
+          limit: 2,
+          byLikesCount: true,
+          returnTotal: true,
+        });
+        if (!bestComments) {
+          post.commentsTotal = 0;
+          post.comments = [];
+        } else {
+          post.commentsTotal = bestComments.totalCount;
+          delete bestComments.totalCount;
+          post.comments = bestComments;
+        }
+      }
 
       return {
         headers: {
@@ -25,12 +38,8 @@ export default function makeGetPosts({ listPosts }) {
         },
       };
     } catch (error) {
-      respondWithError(500, "Something went wrong...");
+      console.error(error);
+      return respondWithError(500, "Something went wrong...");
     }
   };
-}
-
-function parseIntOrUndefined(num) {
-  if (Object.is(+num, NaN)) return undefined;
-  else return +num;
 }

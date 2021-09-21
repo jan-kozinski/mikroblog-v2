@@ -1,6 +1,7 @@
 import {
   savePost,
   listPosts,
+  listCommsByPost,
   editPost,
   giveLike,
   undoLike,
@@ -14,7 +15,7 @@ import { token } from "../../drivers/redis-sessions.js";
 
 const addPost = makeAddPost({ savePost, token });
 const updatePost = makeUpdatePost({ editPost, token });
-const getPosts = makeGetPosts({ listPosts });
+const getPosts = makeGetPosts({ listPosts, listComments: listCommsByPost });
 const likePost = makeLikePost({ giveLike, token });
 const unlikePost = makeUnlikePost({ undoLike, token });
 

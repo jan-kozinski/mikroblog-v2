@@ -6,7 +6,7 @@ import ListPosts from "../ListPosts";
 import AddPost from "../AddPost";
 import InfiniteScroll from "react-infinite-scroll-component";
 
-const Wall = (props) => {
+const Wall = () => {
   const posts = useSelector((state) => state.posts).posts;
   const lastPostReached = useSelector((state) => state.posts).lastPostReached;
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);

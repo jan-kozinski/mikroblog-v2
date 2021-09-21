@@ -42,18 +42,36 @@ class MongoDb {
       throw new Error("Something went wrong...");
     }
   }
-  async find(queries = {}, { limit, skip, after, before, byNewest } = {}) {
+  async find(
+    queries = {},
+    {
+      limit,
+      skip,
+      after,
+      before,
+      byNewest,
+      byLikesCount,
+      returnTotal,
+      matchAny,
+    } = {}
+  ) {
     /* options: {
       limit: number, 
       skip: number,
       after: string,
       before: string,
-      byNewest: boolean 
+      byNewest: boolean, 
+      byLikesCount: boolean,
+      returnTotal: boolean, 
+      matchAny: boolean
       }
     */
     try {
       let searchOptions = {};
+
       if (byNewest === true) searchOptions.sort = [["createdAt", -1]];
+      if (byLikesCount === true) searchOptions.sort = [["likesCount", -1]];
+
       if (typeof limit === "number") searchOptions.limit = limit;
       if (typeof skip === "number") searchOptions.skip = skip;
 
@@ -61,11 +79,25 @@ class MongoDb {
         queries.createdAt = { ...queries.createdAt, $gt: new Date(after) };
       if (typeof before === "string")
         queries.createdAt = { ...queries.createdAt, $lt: new Date(before) };
-      const result = await this.#collection.find(queries, searchOptions);
-      return (await result.toArray()).map((r) => {
+
+      if (Array.isArray(matchAny)) {
+        for (let i in matchAny) {
+          const field = matchAny[i];
+          queries[field] = { $in: queries[field] };
+        }
+      }
+
+      const cursor = await this.#collection.find(queries, searchOptions);
+      const result = (await cursor.toArray()).map((r) => {
         delete r._id;
         return r;
       });
+
+      if (returnTotal === true) {
+        const totalCount = await this.#collection.find(queries).count();
+        result.totalCount = totalCount;
+      }
+      return result;
     } catch (error) {
       console.error(error);
       throw new Error("Something went wrong...");

@@ -15,14 +15,10 @@ export const fetchPosts = () => async (dispatch, getState) => {
     const apiClient = useApi({ dispatch, getState });
 
     const fetchedPosts = getState().posts.posts;
-    const lastPost = fetchedPosts
-      ? fetchedPosts[fetchedPosts.length - 1]
-      : null;
     const limit = 7;
+    const sortBy = "newest";
     const response = await apiClient.get(
-      `${postsEndpoint}?sortby=newest&limit=${limit}${
-        lastPost ? "&before=" + lastPost.createdAt : ""
-      }`
+      `${postsEndpoint}?sortby=${sortBy}&limit=${limit}&skip=${fetchedPosts.length}`
     );
 
     const { payload } = response.data;
