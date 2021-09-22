@@ -63,7 +63,7 @@ class MongoDb {
       byNewest: boolean, 
       byLikesCount: boolean,
       returnTotal: boolean, 
-      matchAny: boolean
+      matchAny: Array[namefield: string]
       }
     */
     try {
@@ -103,13 +103,13 @@ class MongoDb {
       throw new Error("Something went wrong...");
     }
   }
-  async insert(record) {
+  async insert(data) {
     try {
-      const result = await this.#collection.insertOne({
-        ...record,
-        _id: record.id,
+      await this.#collection.insertOne({
+        ...data,
+        _id: data.id,
       });
-      return record;
+      return data;
     } catch (error) {
       console.error(error);
       throw new Error("Something went wrong...");

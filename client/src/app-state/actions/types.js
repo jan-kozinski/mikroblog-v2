@@ -17,6 +17,10 @@ export const POST_LIKE_ERROR = "POST_LIKE_ERROR";
 
 export const POST_UNLIKED = "POST_UNLIKED";
 export const POST_UNLIKE_ERROR = "POST_UNLIKE_ERROR";
+
+//COMMENTS
+export const GET_COMMENTS = "GET_COMMENTS";
+export const COMM_FETCH_ERROR = "COMM_FETCH_ERROR";
 //AUTH
 export const USER_LOADED = "USER_LOADED";
 export const USER_LOADING = "USER_LOADING";

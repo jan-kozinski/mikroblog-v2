@@ -12,6 +12,7 @@ import {
   POST_UNLIKED,
   POST_UNLIKE_ERROR,
   LAST_POST_REACHED,
+  GET_COMMENTS,
 } from "../actions/types";
 
 const initialState = {
@@ -103,6 +104,18 @@ export default function postReducer(state = initialState, action) {
           ...action.payload,
           origin: "LIKE_POST",
         },
+      };
+    case GET_COMMENTS:
+      return {
+        ...state,
+        posts: state.posts.map((post) => {
+          if (post.id !== action.payload.postId) return post;
+          else
+            return {
+              ...post,
+              comments: action.payload.comments,
+            };
+        }),
       };
     default:
       return state;

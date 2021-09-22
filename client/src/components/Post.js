@@ -41,6 +41,7 @@ function Post({ post }) {
         <ListComments
           comments={post.comments}
           commentsTotal={post.commentsTotal}
+          originalPostId={post.id}
         />
       )}
     </li>
