@@ -1,6 +1,7 @@
 import useApi from "../../../hooks/useApi";
 import { postsEndpoint } from "../../../constants/api-endpoints";
 import { POST_UNLIKED, POST_UNLIKE_ERROR } from "../types";
+import dispatchError from "../dispatch-error";
 
 export const removeLike = (postId) => async (dispatch, getState) => {
   try {
@@ -17,17 +18,6 @@ export const removeLike = (postId) => async (dispatch, getState) => {
       },
     });
   } catch (error) {
-    console.error(error);
-    const internalServerError =
-      !error.response || !error.response.data || !error.response.data.error;
-    dispatch({
-      type: POST_UNLIKE_ERROR,
-      payload: {
-        postId,
-        message: internalServerError
-          ? "Something went wrong..."
-          : error.response.data.error,
-      },
-    });
+    dispatchError(error, POST_UNLIKE_ERROR, dispatch, { postId });
   }
 };

@@ -152,4 +152,45 @@ describe("Sign user controller", () => {
 
     expect(token.create).toBeCalledTimes(0);
   });
+  it("Should respond with error if session creation encounters an error", async () => {
+    const authUser = jest.fn(() => ({
+      id: "good-looking-id",
+      name: "even-better-looking-name",
+      email: "test@test.com",
+      memberSince: new Date(),
+    }));
+    const tokenErr = {
+      create: jest.fn(
+        () =>
+          new Promise(() => {
+            throw new Error("Can't create session");
+          })
+      ),
+    };
+    const signUser = makeSignUser({ authUser, token: tokenErr });
+    const request = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      ip: "doesn't matter",
+      body: validUserData,
+    };
+
+    const actual = await signUser(request);
+
+    const expected = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      statusCode: 500,
+      body: {
+        success: false,
+        error: expect.any(String),
+      },
+      cookies: {
+        token: "",
+      },
+    };
+    expect(actual).toEqual(expected);
+  });
 });

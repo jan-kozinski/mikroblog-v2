@@ -1,6 +1,7 @@
 import useApi from "../../../hooks/useApi";
 import { postsEndpoint } from "../../../constants/api-endpoints";
 import { POST_LIKED, POST_LIKE_ERROR } from "../types";
+import dispatchError from "../dispatch-error";
 
 export const giveLike = (postId) => async (dispatch, getState) => {
   try {
@@ -16,16 +17,6 @@ export const giveLike = (postId) => async (dispatch, getState) => {
       },
     });
   } catch (error) {
-    const internalServerError =
-      !error.response || !error.response.data || !error.response.data.error;
-    dispatch({
-      type: POST_LIKE_ERROR,
-      payload: {
-        postId,
-        message: internalServerError
-          ? "Something went wrong..."
-          : error.response.data.error,
-      },
-    });
+    dispatchError(error, POST_LIKE_ERROR, dispatch, { postId });
   }
 };

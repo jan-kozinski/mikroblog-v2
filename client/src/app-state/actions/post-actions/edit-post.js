@@ -1,6 +1,7 @@
 import useApi from "../../../hooks/useApi";
 import { postsEndpoint } from "../../../constants/api-endpoints";
 import { POST_EDITED, EDIT_POST_FAIL } from "../types";
+import dispatchError from "../dispatch-error";
 
 export const editPost =
   ({ content, postId }) =>
@@ -19,16 +20,6 @@ export const editPost =
         },
       });
     } catch (error) {
-      const internalServerError =
-        !error.response || !error.response.data || !error.response.data.error;
-      dispatch({
-        type: EDIT_POST_FAIL,
-        payload: {
-          postId,
-          message: internalServerError
-            ? "Something went wrong..."
-            : error.response.data.error,
-        },
-      });
+      dispatchError(error, EDIT_POST_FAIL, dispatch);
     }
   };

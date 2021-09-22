@@ -14,7 +14,7 @@ describe("Post user controller", () => {
     );
     postUser = makePostUser({
       saveUser,
-      token: { create: jest.fn((t) => "token") },
+      token: { create: jest.fn((t) => Promise.resolve("token")) },
     });
   });
 
@@ -95,6 +95,45 @@ describe("Post user controller", () => {
         token: "",
       },
     };
+    expect(actual).toEqual(expected);
+  });
+  it("Should respond with error if session creation encounters an error", async () => {
+    const tokenErr = {
+      create: jest.fn(
+        () =>
+          new Promise(() => {
+            throw new Error("Can't create session");
+          })
+      ),
+    };
+    const request = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: validUserData,
+    };
+
+    const postUserErr = makePostUser({
+      saveUser,
+      token: tokenErr,
+    });
+
+    const actual = await postUserErr(request);
+
+    const expected = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      statusCode: 500,
+      body: {
+        success: false,
+        error: expect.any(String),
+      },
+      cookies: {
+        token: "",
+      },
+    };
+
     expect(actual).toEqual(expected);
   });
 });

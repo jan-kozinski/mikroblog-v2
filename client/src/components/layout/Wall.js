@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "../../app-state/actions/post-actions";
-import LoadingPosts from "../LoadingPosts";
+import Loading from "../Loading";
 import ListPosts from "../ListPosts";
 import AddPost from "../AddPost";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -23,12 +23,12 @@ const Wall = () => {
   }
   return (
     <>
-      {!posts.length && <LoadingPosts />}
+      {!posts.length && <Loading />}
       <InfiniteScroll
         dataLength={posts.length}
         next={() => dispatch(fetchPosts())}
         hasMore={!lastPostReached}
-        loader={<LoadingPosts />}
+        loader={<Loading />}
         endMessage={<p>You have reached the bottom.</p>}
       >
         {isAuthenticated && <AddPost />}

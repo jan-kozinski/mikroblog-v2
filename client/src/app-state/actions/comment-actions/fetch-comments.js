@@ -1,6 +1,7 @@
 import useApi from "../../../hooks/useApi";
 import { commentsEndpoint } from "../../../constants/api-endpoints";
 import { COMM_FETCH_ERROR, GET_COMMENTS } from "../types";
+import dispatchError from "../dispatch-error";
 
 export const fetchComments = (originalPostId) => async (dispatch, getState) => {
   try {
@@ -18,15 +19,6 @@ export const fetchComments = (originalPostId) => async (dispatch, getState) => {
       },
     });
   } catch (error) {
-    const internalServerError =
-      !error.response || !error.response.data || !error.response.data.error;
-    dispatch({
-      type: COMM_FETCH_ERROR,
-      payload: {
-        message: internalServerError
-          ? "Something went wrong..."
-          : error.response.data.error,
-      },
-    });
+    dispatchError(error, COMM_FETCH_ERROR, dispatch);
   }
 };

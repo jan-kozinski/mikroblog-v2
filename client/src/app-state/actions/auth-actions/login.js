@@ -1,5 +1,6 @@
 import { authUserEndpoint } from "../../../constants/api-endpoints";
 import useApi from "../../../hooks/useApi";
+import dispatchError from "../dispatch-error";
 import { USER_LOADING, LOGIN_SUCCESS, LOGIN_FAIL } from "../types";
 
 export const login =
@@ -16,15 +17,6 @@ export const login =
         payload: response.data.payload,
       });
     } catch (error) {
-      const internalServerError =
-        !error.response || !error.response.data || !error.response.data.error;
-      dispatch({
-        type: LOGIN_FAIL,
-        payload: {
-          message: internalServerError
-            ? "Something went wrong..."
-            : error.response.data.error,
-        },
-      });
+      dispatchError(error, LOGIN_FAIL, dispatch);
     }
   };

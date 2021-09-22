@@ -1,6 +1,7 @@
 import useApi from "../../../hooks/useApi";
 import { postsEndpoint } from "../../../constants/api-endpoints";
 import { POST_ADDED, ADD_POST_FAIL } from "../types";
+import dispatchError from "../dispatch-error";
 
 export const createPost = (content) => async (dispatch, getState) => {
   try {
@@ -12,15 +13,6 @@ export const createPost = (content) => async (dispatch, getState) => {
       payload,
     });
   } catch (error) {
-    const internalServerError =
-      !error.response || !error.response.data || !error.response.data.error;
-    dispatch({
-      type: ADD_POST_FAIL,
-      payload: {
-        message: internalServerError
-          ? "Something went wrong..."
-          : error.response.data.error,
-      },
-    });
+    dispatchError(error, ADD_POST_FAIL, dispatch);
   }
 };

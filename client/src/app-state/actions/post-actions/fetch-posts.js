@@ -6,6 +6,7 @@ import {
   POSTS_LOADING,
   LAST_POST_REACHED,
 } from "../types";
+import dispatchError from "../dispatch-error";
 
 export const fetchPosts = () => async (dispatch, getState) => {
   dispatch({
@@ -31,15 +32,6 @@ export const fetchPosts = () => async (dispatch, getState) => {
       payload,
     });
   } catch (error) {
-    const internalServerError =
-      !error.response || !error.response.data || !error.response.data.error;
-    dispatch({
-      type: FETCHING_ERROR,
-      payload: {
-        message: internalServerError
-          ? "Something went wrong..."
-          : error.response.data.error,
-      },
-    });
+    dispatchError(error, FETCHING_ERROR, dispatch);
   }
 };
