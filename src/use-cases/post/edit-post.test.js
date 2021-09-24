@@ -71,7 +71,7 @@ describe("edit-post use case", () => {
         content: validPostData.content,
         authorId: "not-an-actual-author",
       })
-    ).rejects.toThrow(new Error("User not allowed to edit this post"));
+    ).rejects.toThrow();
   });
   it("Should return saved post data", async () => {
     for (let i = 0; i < 5; i++) {

@@ -18,10 +18,7 @@ export default function makeComment({
     throw new Error("Author id must be a string");
   if (authorId.trim().length < 1) throw new Error("Author id must be provided");
 
-  if (!content) throw new Error("Content must be provided");
-  if (typeof content !== "string")
-    throw new Error("Comment content must be a string");
-  if (content.trim().length < 1) throw new Error("Content must be provided");
+  validateContent(content);
 
   if (!originalPostId) throw new Error("Original post id must be provided");
   if (typeof originalPostId !== "string")
@@ -74,9 +71,17 @@ export default function makeComment({
         throw new Error("Can not update the content of deleted comment");
       if (!newContent) throw new Error("Content must be provided");
       if (newContent === content) return content;
+      validateContent(newContent);
       content = newContent;
       modifiedAt = new Date();
       return content;
     },
   });
+}
+
+function validateContent(content) {
+  if (!content) throw new Error("Content must be provided");
+  if (typeof content !== "string")
+    throw new Error("Comment content must be a string");
+  if (content.trim().length < 1) throw new Error("Content must be provided");
 }

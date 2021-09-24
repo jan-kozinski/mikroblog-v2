@@ -96,6 +96,15 @@ describe("makePost", () => {
     const post = makePost(validPostData);
     expect(() => post.changeContent()).toThrow();
   });
+
+  it("comment's changeContent method should throw an error if new content is not a string or is empty", () => {
+    const badInputs = [[], ["post"], 0, 69, NaN, null, "", " "];
+    for (let i of badInputs) {
+      const post = makePost(validPostData);
+      expect(() => post.changeContent(badInputs[i])).toThrow();
+    }
+  });
+
   it("posts' giveLike method should successfully add a like", () => {
     const post = makePost(validPostData);
 

@@ -245,3 +245,49 @@ it("PUT@/api/post/:postId Should respond with an error if a user tries to update
 
   expect(response.data.error).toEqual("User not allowed to edit this post");
 });
+
+it("PUT@/api/post/:postId Should respond with an error if provided content is invalid", async () => {
+  const userData = {
+    name: "legit",
+    email: "legit@test.com",
+    password: "legit123",
+  };
+  await axios.post("/api/user", userData);
+
+  const cookie = (
+    await axios.post("/api/user/auth", {
+      email: userData.email,
+      password: userData.password,
+    })
+  ).headers["set-cookie"][0];
+
+  await axios.post(
+    "/api/post",
+    {
+      content: "blah blah blah",
+    },
+    {
+      headers: {
+        Cookie: cookie,
+      },
+    }
+  );
+  console.log("----------1");
+  const posts = (await axios.get("/api/post")).data.payload;
+  console.log(posts[0]);
+  console.log("----------2");
+  const response = await axios.put(
+    `/api/post/${posts[0].id}`,
+    {
+      content: [],
+    },
+    {
+      headers: {
+        Cookie: cookie,
+      },
+    }
+  );
+  expect(response.status).toEqual(400);
+  expect(response.data.success).toBe(false);
+  expect(response.data.error).toEqual(expect.any(String));
+});

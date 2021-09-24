@@ -5,7 +5,7 @@ import dispatchError from "../dispatch-error";
 
 export const createComment =
   ({ originalPostId, content } = {}) =>
-  async (dispatch, getSTate) => {
+  async (dispatch, getState) => {
     try {
       const apiClient = useApi({ dispatch, getState });
       const response = await apiClient.post(

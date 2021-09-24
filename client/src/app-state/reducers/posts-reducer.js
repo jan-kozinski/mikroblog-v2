@@ -13,6 +13,9 @@ import {
   POST_UNLIKE_ERROR,
   LAST_POST_REACHED,
   GET_COMMENTS,
+  COMM_FETCH_ERROR,
+  ADD_COMM_ERROR,
+  ADD_COMMENT,
 } from "../actions/types";
 
 const initialState = {
@@ -117,6 +120,28 @@ export default function postReducer(state = initialState, action) {
             };
         }),
       };
+    case COMM_FETCH_ERROR:
+    case ADD_COMM_ERROR:
+      return {
+        ...state,
+        error: {
+          ...action.payload,
+          origin: "COMM",
+        },
+      };
+    case ADD_COMMENT: {
+      return {
+        ...state,
+        posts: state.posts.map((post) => {
+          if (post.id !== action.payload.postId) return post;
+          else
+            return {
+              ...post,
+              comments: [...post.comments, action.payload.data],
+            };
+        }),
+      };
+    }
     default:
       return state;
   }

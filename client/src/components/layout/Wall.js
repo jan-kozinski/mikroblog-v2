@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchPosts } from "../../app-state/actions/post-actions";
 import Loading from "../Loading";
-import ListPosts from "../ListPosts";
-import AddPost from "../AddPost";
+import ListPosts from "../post/ListPosts";
+import AddPost from "../post/AddPost";
 import InfiniteScroll from "react-infinite-scroll-component";
 
 const Wall = () => {

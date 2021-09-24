@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchComments } from "../app-state/actions/comment-actions/fetch-comments";
-import LoadingPosts from "./Loading";
-import Post from "./Post";
+import AddComment from "./AddComment";
+import Loading from "./Loading";
+import Post from "./post/Post";
 
 function ListComments({ comments, commentsTotal, originalPostId }) {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [hasOpenModal, setHasOpenModal] = useState(false);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   return (
     <>
@@ -19,28 +21,45 @@ function ListComments({ comments, commentsTotal, originalPostId }) {
       )}
 
       {isLoading ? (
-        <LoadingPosts />
+        <Loading />
       ) : (
-        <div className="flex justify-around">
-          {isAuthenticated && (
-            <p className="btn w-64 px-8 max-w-2/5">
-              <span className="sm:mx-2 sm:font-bold">+</span> Add comment
-            </p>
-          )}
+        <div
+          className={`flex justify-around ${hasOpenModal ? "flex-col" : ""}`}
+        >
+          {isAuthenticated &&
+            (hasOpenModal ? (
+              <AddComment
+                originalPostId={originalPostId}
+                closeModal={() => setHasOpenModal(false)}
+              />
+            ) : (
+              <button
+                className="btn w-64 px-8 max-w-2/5"
+                onClick={() => setHasOpenModal(true)}
+                aria-label="Add a comment"
+              >
+                <span className="sm:mx-2 sm:font-bold">+</span> Add comment
+              </button>
+            ))}
 
           {comments.length < commentsTotal && (
-            <p
-              className="btn-neutral w-64 max-w-2/5 self-stretch flex justify-items-center items-center"
+            <button
+              className={`btn-neutral w-64 max-w-2/5 ${
+                hasOpenModal
+                  ? "mx-auto"
+                  : "self-stretch flex justify-items-center items-center"
+              }`}
               onClick={async () => {
                 setIsLoading(true);
                 await dispatch(fetchComments(originalPostId));
                 setIsLoading(false);
               }}
+              aria-label="Load more comments"
             >
               <span className="m-auto">
                 ▼ More comments ({commentsTotal - comments.length})
               </span>
-            </p>
+            </button>
           )}
         </div>
       )}

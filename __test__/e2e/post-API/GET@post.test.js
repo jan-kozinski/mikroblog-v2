@@ -36,6 +36,7 @@ it("GET@/api/post Should list all posts", async () => {
       modifiedAt: expect.any(String),
       likesCount: 0,
       likersIds: [],
+      comments: [],
       content: "blah blah blah",
     }),
   ]);

@@ -16,10 +16,7 @@ export default function makePost({
     throw new Error("Author id must be a string");
   if (authorId.trim().length < 1) throw new Error("Author id must be provided");
 
-  if (!content) throw new Error("Content must be provided");
-  if (typeof content !== "string")
-    throw new Error("Post content must be a string");
-  if (content.trim().length < 1) throw new Error("Content must be provided");
+  validateContent(content);
 
   if (typeof likesCount !== "number")
     throw new Error("Likes count must be a number");
@@ -69,9 +66,17 @@ export default function makePost({
     changeContent: (newContent) => {
       if (!newContent) throw new Error("Content must be provided");
       if (newContent === content) return content;
+      validateContent(newContent);
       content = newContent;
       modifiedAt = new Date();
       return content;
     },
   });
+}
+
+function validateContent(content) {
+  if (!content) throw new Error("Content must be provided");
+  if (typeof content !== "string")
+    throw new Error("Post content must be a string");
+  if (content.trim().length < 1) throw new Error("Content must be provided");
 }

@@ -13,8 +13,8 @@ export const handlers = [
         success: true,
         payload: [
           {
-            id: "dasdsadasd",
-            authorId: "not-an-actual-id",
+            id: `id-${Math.round(Math.random() * 1000)}`,
+            authorId: `id-${Math.round(Math.random() * 1000)}`,
             author: "test-user",
             content: "this is a test post",
             likesCount: "0",
@@ -41,7 +41,7 @@ export const handlers = [
       ctx.body({
         success: true,
         payload: {
-          id: "not-an-actual-id",
+          id: `id-${Math.round(Math.random() * 1000)}`,
           author: "test-user",
           content: req.body.content,
           likesCount: "0",
@@ -148,7 +148,7 @@ export const handlers = [
         payload: [
           {
             id: "dasdsadasd",
-            authorId: "not-an-actual-id",
+            authorId: `id-${Math.round(Math.random() * 1000)}`,
             originalPostId: req.params.originalPostId,
             author: "test-user",
             content: "this is a test comment",
@@ -158,6 +158,32 @@ export const handlers = [
             modifiedAt: new Date(),
           },
         ],
+      })
+    );
+  }),
+  rest.post(commentsEndpoint + "/:originalPostId", (req, res, ctx) => {
+    if (!req.body.content)
+      return res(
+        ctx.status(400),
+        ctx.body({
+          success: false,
+          error: "Content must be provided",
+        })
+      );
+    return res(
+      ctx.status(201),
+      ctx.body({
+        success: true,
+        payload: {
+          id: `id-${Math.round(Math.random() * 1000)}`,
+          originalPostId: req.params.originalPostId,
+          author: "test-user",
+          content: req.body.content,
+          likesCount: "0",
+          likersIds: [],
+          createdAt: new Date(),
+          modifiedAt: new Date(),
+        },
       })
     );
   }),

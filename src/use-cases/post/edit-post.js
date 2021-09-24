@@ -2,7 +2,14 @@ import makePost from "../../entities/post/index.js";
 
 export default function makeEditPost({ dbGateway }) {
   return async function editPost(postData) {
-    let record = await dbGateway.findById(postData.id);
+    let record;
+    try {
+      record = await dbGateway.findById(postData.id);
+    } catch (error) {
+      console.error(error);
+      throw new Error("Something went wrong...");
+    }
+
     if (!record) throw new Error("Post not found");
     const post = makePost(record);
     if (postData.authorId !== post.getAuthorId())
@@ -17,12 +24,16 @@ export default function makeEditPost({ dbGateway }) {
       };
 
     post.changeContent(postData.content);
-
-    return await dbGateway.update(record, {
-      id: post.getId(),
-      content: post.getContent(),
-      createdAt: post.getCreatedAt(),
-      modifiedAt: post.getModifiedAt(),
-    });
+    try {
+      return await dbGateway.update(record, {
+        id: post.getId(),
+        content: post.getContent(),
+        createdAt: post.getCreatedAt(),
+        modifiedAt: post.getModifiedAt(),
+      });
+    } catch (error) {
+      console.error(error);
+      throw new Error("Something went wrong...");
+    }
   };
 }

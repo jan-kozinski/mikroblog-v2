@@ -15,6 +15,7 @@ import makeUndoLike from "./post/undo-like.js";
 
 import makeSaveComment from "./comments/save-comment.js";
 import makeListCommsByPost from "./comments/list-by-post.js";
+import makeEditComment from "./comments/edit-comment.js";
 
 const hasher = {
   hash: async (password, saltRounds = 10) => {
@@ -104,6 +105,7 @@ const saveComment = makeSaveComment({
   Id,
 });
 const listCommsByPost = makeListCommsByPost({ dbGateway: commentsDb });
+const editComment = makeEditComment({ dbGateway: commentsDb });
 
 function closeDbConnections() {
   usersDb.close();
@@ -121,6 +123,7 @@ const service = Object.freeze({
   undoLike,
   saveComment,
   listCommsByPost,
+  editComment,
 });
 
 export default service;
@@ -134,4 +137,5 @@ export {
   undoLike,
   saveComment,
   listCommsByPost,
+  editComment,
 };

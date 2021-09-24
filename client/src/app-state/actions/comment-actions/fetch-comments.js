@@ -19,6 +19,8 @@ export const fetchComments = (originalPostId) => async (dispatch, getState) => {
       },
     });
   } catch (error) {
-    dispatchError(error, COMM_FETCH_ERROR, dispatch);
+    dispatchError(error, COMM_FETCH_ERROR, dispatch, {
+      postId: originalPostId,
+    });
   }
 };

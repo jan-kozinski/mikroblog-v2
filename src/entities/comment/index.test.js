@@ -41,7 +41,17 @@ describe("makeComment", () => {
     expect(() => makeComment(comment)).toThrow();
   });
   it("Should throw an error if provided content is not a string or is empty", () => {
-    const invalidContents = [1, Math.random(), [], {}, "    "];
+    const invalidContents = [
+      0,
+      1,
+      NaN,
+      null,
+      Math.random(),
+      [],
+      {},
+      "",
+      "    ",
+    ];
     invalidContents.forEach((c) => {
       let comment = { ...validCommentData, content: c };
       expect(() => makeComment(comment)).toThrow();
@@ -121,6 +131,14 @@ describe("makeComment", () => {
   it("comment's changeContent method should throw an error if new content is not supplied", () => {
     const comment = makeComment(validCommentData);
     expect(() => comment.changeContent()).toThrow();
+  });
+
+  it("comment's changeContent method should throw an error if new content is not a string or is empty", () => {
+    const badInputs = [[], ["comment"], 0, 69, NaN, null, "", " "];
+    for (let i of badInputs) {
+      const comment = makeComment(validCommentData);
+      expect(() => comment.changeContent(badInputs[i])).toThrow();
+    }
   });
   it("comment's changeContent method should throw an error if the comment is deleted", () => {
     const comment = makeComment(validCommentData);

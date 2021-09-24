@@ -35,8 +35,8 @@ export default function makeUpdatePost({ editPost, token }) {
     } catch (error) {
       let status = 400;
       if (error.message === "Post not found") status = 404;
-      else if (error.message == "User not allowed to edit this post")
-        status = 403;
+      if (error.message === "User not allowed to edit this post") status = 403;
+      if (error.message === "Something went wrong...") status = 500;
       return respondWithError(status, error.message);
     }
   };

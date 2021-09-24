@@ -38,7 +38,6 @@ describe("Update post controller", () => {
         "Content-Type": "application/json",
       },
       body: {
-        authorId: validPostData.authorId,
         content: validPostData.content,
       },
     };
@@ -60,7 +59,7 @@ describe("Update post controller", () => {
     expect(actual).toEqual(expected);
     expect(editPost).toBeCalledTimes(0);
   });
-  it("Should respond with an error if request dosen't contain a cookie with JWT token", async () => {
+  it("Should respond with an error if request doesn't contain a cookie with auth token", async () => {
     const request = {
       headers: {
         "Content-Type": "application/json",
@@ -69,7 +68,6 @@ describe("Update post controller", () => {
         postId: postId,
       },
       body: {
-        authorId: validPostData.authorId,
         content: validPostData.content,
       },
     };
@@ -91,7 +89,7 @@ describe("Update post controller", () => {
     expect(actual).toEqual(expected);
     expect(editPost).toBeCalledTimes(0);
   });
-  it("Should respond with an error if request contains a cookie with invalid JWT token", async () => {
+  it("Should respond with an error if request contains a cookie with invalid auth token", async () => {
     const request = {
       headers: {
         "Content-Type": "application/json",
@@ -100,7 +98,6 @@ describe("Update post controller", () => {
         postId: postId,
       },
       body: {
-        authorId: validPostData.authorId,
         content: validPostData.content,
       },
       cookies: {
@@ -211,6 +208,100 @@ describe("Update post controller", () => {
         error: errorMsg,
       },
     };
+    expect(actual).toEqual(expected);
+  });
+  it("If error occurs, should respond with correct status code", async () => {
+    const request = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      params: {
+        postId,
+      },
+      body: {
+        content: validPostData.content,
+      },
+      cookies: {
+        token: "legit",
+      },
+    };
+
+    let editPostErr = jest.fn(
+      (p) =>
+        new Promise(() => {
+          throw new Error("Something went wrong...");
+        })
+    );
+    let updatePostErr = makeUpdatePost({
+      editPost: editPostErr,
+      token,
+    });
+
+    let actual = await updatePostErr(request);
+
+    let expected = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      statusCode: 500,
+      body: {
+        success: false,
+        error: "Something went wrong...",
+      },
+    };
+
+    expect(actual).toEqual(expected);
+
+    editPostErr = jest.fn(
+      (p) =>
+        new Promise(() => {
+          throw new Error("Post not found");
+        })
+    );
+    updatePostErr = makeUpdatePost({
+      editPost: editPostErr,
+      token,
+    });
+
+    actual = await updatePostErr(request);
+
+    expected = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      statusCode: 404,
+      body: {
+        success: false,
+        error: "Post not found",
+      },
+    };
+
+    expect(actual).toEqual(expected);
+
+    editPostErr = jest.fn(
+      (p) =>
+        new Promise(() => {
+          throw new Error("User not allowed to edit this post");
+        })
+    );
+    updatePostErr = makeUpdatePost({
+      editPost: editPostErr,
+      token,
+    });
+
+    actual = await updatePostErr(request);
+
+    expected = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      statusCode: 403,
+      body: {
+        success: false,
+        error: "User not allowed to edit this post",
+      },
+    };
+
     expect(actual).toEqual(expected);
   });
 });

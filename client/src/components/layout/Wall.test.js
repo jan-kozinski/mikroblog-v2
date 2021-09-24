@@ -109,7 +109,6 @@ describe("Edit post", () => {
     expect(textArea).not.toBeInTheDocument();
     expect(submitBtn).not.toBeInTheDocument();
     userEvent.click(await screen.findByText(/Edit O/i));
-    screen.debug();
     expect(await screen.findByLabelText("Edit post")).toHaveValue(
       "this is a test post"
     );
@@ -124,7 +123,7 @@ describe("Edit post", () => {
     const likesCount = await screen.findByLabelText(/likes count/i);
     expect(likesCount.innerHTML).toEqual("0");
     userEvent.click(likeBtn);
-    const rmLikeBtn = await screen.findByLabelText(/Remove like/i);
+    await screen.findByLabelText(/Remove like/i);
     expect(likesCount.innerHTML).toEqual("1");
     expect(
       await screen.queryByLabelText(/Give post a like/i)

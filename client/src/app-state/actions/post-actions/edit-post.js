@@ -20,6 +20,6 @@ export const editPost =
         },
       });
     } catch (error) {
-      dispatchError(error, EDIT_POST_FAIL, dispatch);
+      dispatchError(error, EDIT_POST_FAIL, dispatch, { postId });
     }
   };
