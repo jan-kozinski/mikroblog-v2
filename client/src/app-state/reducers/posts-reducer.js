@@ -16,6 +16,8 @@ import {
   COMM_FETCH_ERROR,
   ADD_COMM_ERROR,
   ADD_COMMENT,
+  COMM_EDITED,
+  EDIT_COMM_ERROR,
 } from "../actions/types";
 
 const initialState = {
@@ -122,6 +124,7 @@ export default function postReducer(state = initialState, action) {
       };
     case COMM_FETCH_ERROR:
     case ADD_COMM_ERROR:
+    case EDIT_COMM_ERROR:
       return {
         ...state,
         error: {
@@ -140,6 +143,18 @@ export default function postReducer(state = initialState, action) {
               comments: [...post.comments, action.payload.data],
             };
         }),
+      };
+    }
+    case COMM_EDITED: {
+      return {
+        ...state,
+        posts: state.posts.map((post) => ({
+          ...post,
+          comments: post.comments.map((comm) => {
+            if (comm.id !== action.commentId) return comm;
+            else return { ...comm, ...action.payload };
+          }),
+        })),
       };
     }
     default:

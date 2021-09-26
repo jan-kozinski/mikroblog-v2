@@ -165,7 +165,6 @@ it("Should respond with an error if provided content is invalid", async () => {
       },
     }
   );
-  console.log(response.data);
   expect(response.status).toEqual(400);
   expect(response.data.success).toBe(false);
   expect(response.data.error).toEqual(expect.any(String));

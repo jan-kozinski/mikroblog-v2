@@ -204,7 +204,6 @@ it("PUT@/api/comment/:commentId Should respond with an error if provided content
       },
     }
   );
-  console.log(response.data);
   expect(response.status).toEqual(400);
   expect(response.data.success).toBe(false);
   expect(response.data.error).toEqual(expect.any(String));

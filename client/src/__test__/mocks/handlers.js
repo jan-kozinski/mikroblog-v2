@@ -19,6 +19,8 @@ export const handlers = [
             content: "this is a test post",
             likesCount: "0",
             likersIds: [],
+            comments: [],
+            commentsTotal: 0,
             createdAt: new Date(),
             modifiedAt: new Date(),
           },
@@ -182,6 +184,29 @@ export const handlers = [
           likesCount: "0",
           likersIds: [],
           createdAt: new Date(),
+          modifiedAt: new Date(),
+        },
+      })
+    );
+  }),
+  rest.put(`${commentsEndpoint}/:commentId`, (req, res, ctx) => {
+    if (!req.body.content)
+      return res(
+        ctx.status(400),
+        ctx.body({
+          success: false,
+          error: "Content must be provided",
+        })
+      );
+
+    return res(
+      ctx.status(201),
+      ctx.body({
+        success: true,
+        payload: {
+          id: req.params.commentId,
+          content: req.body.content,
+          createdAt: new Date(Date.now() - 100000),
           modifiedAt: new Date(),
         },
       })

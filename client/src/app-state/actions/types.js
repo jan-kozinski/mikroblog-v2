@@ -24,6 +24,10 @@ export const COMM_FETCH_ERROR = "COMM_FETCH_ERROR";
 
 export const ADD_COMMENT = "ADD_COMMENT";
 export const ADD_COMM_ERROR = "ADD_COMM_ERROR";
+
+export const COMM_EDITED = "COMM_EDITED";
+export const EDIT_COMM_ERROR = "EDIT_COMM_ERROR";
+
 //AUTH
 export const USER_LOADED = "USER_LOADED";
 export const USER_LOADING = "USER_LOADING";

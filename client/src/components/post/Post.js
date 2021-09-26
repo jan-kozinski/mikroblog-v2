@@ -6,7 +6,7 @@ import EditPost from "./EditPost";
 import ListComments from "../ListComments";
 import PostHeadline from "./PostHeadline";
 
-function Post({ post }) {
+function Post({ post, isComment }) {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const user = useSelector((state) => state.auth.user);
   const error = useSelector((state) => state.posts.error);
@@ -34,6 +34,7 @@ function Post({ post }) {
             setIsBeingEdited={setIsBeingEdited}
             post={post}
             errorOccured={editPostError}
+            isComment={isComment}
           />
         </div>
       )}

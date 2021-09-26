@@ -25,10 +25,7 @@ it("PUT@/api/post/:postId Should successfully update a post", async () => {
       },
     }
   );
-  console.log("----------1");
   const posts = (await axios.get("/api/post")).data.payload;
-  console.log(posts[0]);
-  console.log("----------2");
   const response = await axios.put(
     `/api/post/${posts[0].id}`,
     {
@@ -272,10 +269,8 @@ it("PUT@/api/post/:postId Should respond with an error if provided content is in
       },
     }
   );
-  console.log("----------1");
+
   const posts = (await axios.get("/api/post")).data.payload;
-  console.log(posts[0]);
-  console.log("----------2");
   const response = await axios.put(
     `/api/post/${posts[0].id}`,
     {

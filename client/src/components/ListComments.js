@@ -15,7 +15,7 @@ function ListComments({ comments, commentsTotal, originalPostId }) {
       {comments.length > 0 && (
         <ul className="px-4 my-2 rounded-bl-lg rounded-tr-lg border-2">
           {comments.map((comm) => (
-            <Post key={comm.id} post={comm} />
+            <Post key={comm.id} post={comm} isComment />
           ))}
         </ul>
       )}
