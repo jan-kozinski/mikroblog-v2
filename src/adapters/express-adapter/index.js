@@ -19,6 +19,7 @@ import {
   addComment,
   getComments,
   updateComment,
+  deleteComment,
 } from "../../controllers/comment-controller/index.js";
 
 let server;
@@ -62,7 +63,9 @@ export default async function start(callback) {
 
   app.post("/api/comment/:originalPostId", makeCallback(addComment));
   app.get("/api/comment/:originalPostId", makeCallback(getComments));
+
   app.put("/api/comment/:commentId", makeCallback(updateComment));
+  app.delete("/api/comment/:commentId", makeCallback(deleteComment));
 
   // csrf error handler
   app.use(function (err, req, res, next) {

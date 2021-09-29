@@ -61,7 +61,7 @@ export default function makeComment({
       likesCount--;
       return likesCount;
     },
-    delete: () => {
+    markDeleted: () => {
       isDeleted = true;
       content = "This comment has been deleted";
       return content;

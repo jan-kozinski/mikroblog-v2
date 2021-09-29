@@ -104,7 +104,7 @@ describe("makeComment", () => {
 
   it("Should succesfully delete a comment", () => {
     const comment = makeComment(validCommentData);
-    comment.delete();
+    comment.markDeleted();
     expect(comment.isDeleted()).toBe(true);
     expect(comment.getContent()).not.toEqual(validCommentData.content);
   });
@@ -142,7 +142,7 @@ describe("makeComment", () => {
   });
   it("comment's changeContent method should throw an error if the comment is deleted", () => {
     const comment = makeComment(validCommentData);
-    comment.delete();
+    comment.markDeleted();
     expect(() => comment.changeContent("new content")).toThrow();
   });
   it("comments' giveLike method should successfully add a like", () => {
@@ -170,7 +170,7 @@ describe("makeComment", () => {
 
   it("comment's giveLike method should throw an error if the comment is deleted", () => {
     const comment = makeComment(validCommentData);
-    comment.delete();
+    comment.markDeleted();
     expect(() => comment.giveLike("userId")).toThrow();
   });
 
@@ -198,7 +198,7 @@ describe("makeComment", () => {
   it("comment's undoLike method should throw an error if the comment is deleted", () => {
     const comment = makeComment(validCommentData);
     comment.giveLike("userId");
-    comment.delete();
+    comment.markDeleted();
     expect(() => comment.undoLike("userId")).toThrow();
   });
 });

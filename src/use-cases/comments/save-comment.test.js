@@ -75,6 +75,7 @@ describe("save comment use case", () => {
           likersIds: [],
           createdAt: expect.any(Date),
           modifiedAt: expect.any(Date),
+          isDeleted: false,
         })
       );
     }
@@ -108,6 +109,7 @@ describe("save comment use case", () => {
       likersIds: [],
       createdAt: expect.any(Date),
       modifiedAt: expect.any(Date),
+      isDeleted: false,
     });
   });
 

@@ -26,6 +26,7 @@ export default function makeSaveComment({ commentsDb, usersDb, postsDb, Id }) {
       likersIds: comment.getLikersIds(),
       createdAt: comment.getCreatedAt(),
       modifiedAt: comment.getModifiedAt(),
+      isDeleted: comment.isDeleted(),
     };
     await commentsDb.insert(commentProps);
     return commentProps;

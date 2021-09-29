@@ -115,6 +115,14 @@ class MongoDb {
       throw new Error("Something went wrong...");
     }
   }
+  async deleteById(id) {
+    try {
+      return await this.#collection.deleteOne({ _id: id });
+    } catch (error) {
+      console.error(error);
+      throw new Error("Something went wrong...");
+    }
+  }
   async update(record, data) {
     try {
       const original = (

@@ -30,7 +30,11 @@ const dbMockup = {
     return Promise.resolve(dbMockup._data[index]);
   }),
   update: jest.fn(async (record, data) => {
-    let original = await dbMockup.findById(record.id);
+    let original = null;
+    for (let u of dbMockup._data) {
+      if (u.id === record.id) original = u;
+    }
+
     original = {
       ...original,
       ...data,
