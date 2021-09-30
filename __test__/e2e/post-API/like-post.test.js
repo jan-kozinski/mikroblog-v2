@@ -1,6 +1,6 @@
 import axios from "axios";
 
-it("POST@/api/post/:postId/likes Should successfully add a like and respond with an error if user already likes a post", async () => {
+it("POST@/api/post/:postId/likes Should successfully add a like and respond with an error if user already likes this post", async () => {
   let userData = {
     name: "legit",
     email: "legit@test.com",
@@ -73,7 +73,7 @@ it("POST@/api/post/:postId/likes Should successfully add a like and respond with
   expect(response.data.error).toBe("User already likes this post");
 });
 
-it("DELETE@/api/post/:postId/likes Should successfully remove a like and respond with an error if user does not like a post", async () => {
+it("DELETE@/api/post/:postId/likes Should successfully remove a like and respond with an error if user does not like this post", async () => {
   let userData = {
     name: "legit",
     email: "legit@test.com",

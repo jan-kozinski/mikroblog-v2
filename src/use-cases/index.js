@@ -40,19 +40,17 @@ if (process.env.NODE_ENV !== "test") {
   await postsDb.connect();
   await commentsDb.connect();
 
-  process.on("uncaughtException", () => {
-    closeDbConnections();
-    process.exit();
+  process.on("uncaughtException", (err, origin) => {
+    console.error("ERR:", err, "ORIGIN:", origin);
+    process.exit(1);
   });
 
   process.on("SIGINT", () => {
-    closeDbConnections();
-    process.exit();
+    process.exit(0);
   });
 
   process.on("SIGTERM", () => {
-    closeDbConnections();
-    process.exit();
+    process.exit(0);
   });
 
   process.on("exit", () => {

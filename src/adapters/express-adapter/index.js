@@ -20,9 +20,9 @@ import {
   getComments,
   updateComment,
   deleteComment,
+  likeComment,
   unlikeComment,
 } from "../../controllers/comment-controller/index.js";
-import { likeComment } from "../../use-cases/index.js";
 
 let server;
 

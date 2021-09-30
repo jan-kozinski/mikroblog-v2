@@ -4,7 +4,7 @@ export default function makeLikeComment({ dbGateway }) {
   return async function likeComment({ commentId, userId }) {
     let record = await dbGateway.findById(commentId);
 
-    if (!record) throw new Error("-------Comment not found");
+    if (!record) throw new Error("Comment not found");
 
     const comment = makeComment({
       id: record.id,

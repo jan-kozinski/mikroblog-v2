@@ -128,4 +128,71 @@ describe("Unlike comment controller", () => {
     expect(token.resolve).toBeCalledTimes(1);
     expect(token.resolve).toBeCalledWith(request.cookies.token);
   });
+  it("If error occurs, should respond with correct status code", async () => {
+    const commentId = `ID-${Math.round(Math.random() * 100)}`;
+    const request = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      params: {
+        commentId,
+      },
+
+      cookies: {
+        token: "legit",
+      },
+    };
+
+    let undoLikeErr = jest.fn(
+      (p) =>
+        new Promise(() => {
+          throw new Error("Something went wrong...");
+        })
+    );
+    let unlikeCommentErr = makeUnlikeComment({
+      undoLike: undoLikeErr,
+      token,
+    });
+
+    let actual = await unlikeCommentErr(request);
+
+    let expected = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      statusCode: 500,
+      body: {
+        success: false,
+        error: "Something went wrong...",
+      },
+    };
+
+    expect(actual).toEqual(expected);
+
+    undoLikeErr = jest.fn(
+      (p) =>
+        new Promise(() => {
+          throw new Error("Comment not found");
+        })
+    );
+    unlikeCommentErr = makeUnlikeComment({
+      undoLike: undoLikeErr,
+      token,
+    });
+
+    actual = await unlikeCommentErr(request);
+
+    expected = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      statusCode: 404,
+      body: {
+        success: false,
+        error: "Comment not found",
+      },
+    };
+
+    expect(actual).toEqual(expected);
+  });
 });

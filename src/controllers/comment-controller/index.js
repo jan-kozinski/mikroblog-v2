@@ -18,7 +18,7 @@ const addComment = makeAddComment({ saveComment, token });
 const getComments = makeGetComments({ listComments: listCommsByPost });
 const updateComment = makeUpdateComment({ editComment, token });
 const deleteComment = makeDeleteComment({ removeComment, token });
-const likeComment = makeLikeComment();
+const likeComment = makeLikeComment({ giveLike, token });
 const unlikeComment = makeUnlikeComment({ undoLike, token });
 
 const commentController = Object.freeze({

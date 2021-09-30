@@ -29,7 +29,11 @@ export default function makeUnlikeComment({ undoLike, token }) {
         },
       };
     } catch (error) {
-      return respondWithError(400, error.message);
+      let status = 400;
+      if (error.message === "Comment not found") status = 404;
+      if (error.message === "Something went wrong...") status = 500;
+
+      return respondWithError(status, error.message);
     }
   };
 }

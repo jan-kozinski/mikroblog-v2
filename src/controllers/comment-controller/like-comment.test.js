@@ -127,4 +127,72 @@ describe("Like comment controller", () => {
     expect(token.resolve).toBeCalledTimes(1);
     expect(token.resolve).toBeCalledWith(request.cookies.token);
   });
+
+  it("If error occurs, should respond with correct status code", async () => {
+    const commentId = `ID-${Math.round(Math.random() * 100)}`;
+    const request = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      params: {
+        commentId,
+      },
+
+      cookies: {
+        token: "legit",
+      },
+    };
+
+    let giveLikeErr = jest.fn(
+      (p) =>
+        new Promise(() => {
+          throw new Error("Something went wrong...");
+        })
+    );
+    let likeCommentErr = makeLikeComment({
+      giveLike: giveLikeErr,
+      token,
+    });
+
+    let actual = await likeCommentErr(request);
+
+    let expected = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      statusCode: 500,
+      body: {
+        success: false,
+        error: "Something went wrong...",
+      },
+    };
+
+    expect(actual).toEqual(expected);
+
+    giveLikeErr = jest.fn(
+      (p) =>
+        new Promise(() => {
+          throw new Error("Comment not found");
+        })
+    );
+    likeCommentErr = makeLikeComment({
+      giveLike: giveLikeErr,
+      token,
+    });
+
+    actual = await likeCommentErr(request);
+
+    expected = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      statusCode: 404,
+      body: {
+        success: false,
+        error: "Comment not found",
+      },
+    };
+
+    expect(actual).toEqual(expected);
+  });
 });
