@@ -3,8 +3,8 @@ import {
   listPosts,
   listCommsByPost,
   editPost,
-  giveLike,
-  undoLike,
+  likePost as giveLike,
+  undoLike as undoLike,
 } from "../../use-cases/index.js";
 import makeAddPost from "./add-post.js";
 import makeUpdatePost from "./update-post.js";

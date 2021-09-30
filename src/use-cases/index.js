@@ -10,13 +10,15 @@ import makeAuthUser from "./user/auth-user.js";
 import makeSavePost from "./post/save-post.js";
 import makeEditPost from "./post/edit-post.js";
 import makeListPosts from "./post/list-posts.js";
-import makeGiveLike from "./post/give-like.js";
-import makeUndoLike from "./post/undo-like.js";
+import makeLikePost from "./post/give-like.js";
+import makeUndoPostLike from "./post/undo-like.js";
 
 import makeSaveComment from "./comments/save-comment.js";
 import makeListCommsByPost from "./comments/list-by-post.js";
 import makeEditComment from "./comments/edit-comment.js";
 import makeRemoveComment from "./comments/remove-comment.js";
+import makeLikeComment from "./comments/like-comment.js";
+import makeUndoCommentLike from "./comments/undo-like.js";
 
 const hasher = {
   hash: async (password, saltRounds = 10) => {
@@ -89,11 +91,11 @@ const listPosts = makeListPosts({
   dbGateway: postsDb,
 });
 
-const giveLike = makeGiveLike({
+const likePost = makeLikePost({
   dbGateway: postsDb,
 });
 
-const undoLike = makeUndoLike({
+const undoLike = makeUndoPostLike({
   dbGateway: postsDb,
 });
 
@@ -108,6 +110,8 @@ const saveComment = makeSaveComment({
 const listCommsByPost = makeListCommsByPost({ dbGateway: commentsDb });
 const editComment = makeEditComment({ dbGateway: commentsDb });
 const removeComment = makeRemoveComment({ dbGateway: commentsDb });
+const likeComment = makeLikeComment({ dbGateway: commentsDb });
+const undoCommentLike = makeUndoCommentLike({ dbGateway: commentsDb });
 
 function closeDbConnections() {
   usersDb.close();
@@ -121,12 +125,14 @@ const service = Object.freeze({
   savePost,
   editPost,
   listPosts,
-  giveLike,
+  likePost,
   undoLike,
   saveComment,
   listCommsByPost,
   editComment,
   removeComment,
+  likeComment,
+  undoCommentLike,
 });
 
 export default service;
@@ -136,10 +142,12 @@ export {
   savePost,
   editPost,
   listPosts,
-  giveLike,
+  likePost,
   undoLike,
   saveComment,
   listCommsByPost,
   editComment,
   removeComment,
+  likeComment,
+  undoCommentLike,
 };

@@ -5,8 +5,8 @@ const dbMockup = {
   findById: jest.fn((id) => {
     for (let u of dbMockup._data) {
       if (u.id === id) return Promise.resolve(u);
-      else return Promise.resolve(null);
     }
+    return Promise.resolve(null);
   }),
   find: jest.fn((queries) => {
     let usersToReturn = dbMockup._data;

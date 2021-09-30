@@ -1,6 +1,6 @@
 import dbMockup from "../../../__test__/utils/dbMockup";
 import makeGiveLike from "./give-like.js";
-describe("give-like use case", () => {
+describe("post give-like use case", () => {
   let validPostData, giveLike;
   beforeAll(() => {
     validPostData = {
@@ -25,7 +25,7 @@ describe("give-like use case", () => {
     dbMockup.findById.mockClear();
     dbMockup.update.mockClear();
   });
-  it("Should successfully leave a like", async () => {
+  it("Should successfully give a like", async () => {
     expect(dbMockup.update).toBeCalledTimes(0);
 
     for (let i = 0; i < 5; i++) {
@@ -51,7 +51,7 @@ describe("give-like use case", () => {
       );
     }
   });
-  it("Should return saved post data", async () => {
+  it("Should return post data", async () => {
     for (let i = 0; i < 5; i++) {
       let user = `user-${i}-${Math.round(Math.random() * 10)}`;
       const returnValue = await giveLike({
@@ -68,5 +68,15 @@ describe("give-like use case", () => {
         modifiedAt: expect.any(Date),
       });
     }
+  });
+
+  it("Should throw an error if comment is not found", async () => {
+    expect(
+      async () =>
+        await undoLike({
+          postId: "non-existing-comm-id",
+          userId: "doesn't matter",
+        })
+    ).rejects.toThrow();
   });
 });

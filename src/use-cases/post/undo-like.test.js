@@ -1,6 +1,6 @@
 import dbMockup from "../../../__test__/utils/dbMockup";
 import makeUndoLike from "./undo-like.js";
-describe("undo-like use case", () => {
+describe("post undo-like use case", () => {
   let validPostData, undoLike;
   beforeAll(() => {
     validPostData = {
@@ -62,5 +62,15 @@ describe("undo-like use case", () => {
       createdAt: expect.any(Date),
       modifiedAt: expect.any(Date),
     });
+  });
+
+  it("Should throw an error if comment is not found", async () => {
+    expect(
+      async () =>
+        await undoLike({
+          postId: "non-existing-comm-id",
+          userId: "doesn't matter",
+        })
+    ).rejects.toThrow();
   });
 });

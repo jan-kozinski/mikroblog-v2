@@ -1,7 +1,7 @@
 import respondWithError from "../send-error.js";
 import requireAuth from "../requireAuth.js";
 
-export default function makeUnlikePost({ undoLike, token }) {
+export default function makeUnlikeComment({ undoLike, token }) {
   return async function unlikePost(httpRequest) {
     let signedUser;
     try {
@@ -9,9 +9,10 @@ export default function makeUnlikePost({ undoLike, token }) {
     } catch (error) {
       return error;
     }
+
     try {
       const data = await undoLike({
-        postId: httpRequest.params.postId,
+        commentId: httpRequest.params.commentId,
         userId: signedUser.id,
       });
       return {
