@@ -21,14 +21,20 @@ function Post({ post, isComment }) {
   }, [editPostError]);
 
   return (
-    <li className="post">
-      <PostHeadline post={post} />
+    <li className={`post ${post.isDeleted ? "deleted-content" : ""}`}>
+      <PostHeadline post={post} isComment={isComment} />
 
       {!isBeingEdited && <p>{post.content}</p>}
 
       {isAuthor && (
         <div className={isBeingEdited ? "" : "flex justify-between"}>
-          {!isBeingEdited && <DeletePost />}
+          {!isBeingEdited && (
+            <DeletePost
+              postId={post.id}
+              isComment={isComment}
+              className={post.isDeleted ? "invisible" : ""}
+            />
+          )}
           <EditPost
             isBeingEdited={isBeingEdited}
             setIsBeingEdited={setIsBeingEdited}

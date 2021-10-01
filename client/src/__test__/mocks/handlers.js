@@ -48,6 +48,8 @@ export const handlers = [
           content: req.body.content,
           likesCount: "0",
           likersIds: [],
+          comments: [],
+          commentsTotal: 0,
           createdAt: new Date(),
           modifiedAt: new Date(),
         },
@@ -208,6 +210,43 @@ export const handlers = [
           content: req.body.content,
           createdAt: new Date(Date.now() - 100000),
           modifiedAt: new Date(),
+        },
+      })
+    );
+  }),
+  rest.post(`${commentsEndpoint}/:commentId/likes`, (req, res, ctx) => {
+    return res(
+      ctx.status(201),
+      ctx.body({
+        success: true,
+        payload: {
+          likesCount: "1",
+          likersIds: ["test-user"],
+        },
+      })
+    );
+  }),
+
+  rest.delete(`${commentsEndpoint}/:commentId/likes`, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.body({
+        success: true,
+        payload: {
+          likesCount: "0",
+          likersIds: [],
+        },
+      })
+    );
+  }),
+  rest.delete(`${commentsEndpoint}/:commentId`, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.body({
+        success: true,
+        payload: {
+          isDeleted: "true",
+          content: "deleted",
         },
       })
     );

@@ -1,5 +1,6 @@
 import {
   FETCHING_ERROR,
+  LAST_POST_REACHED,
   GET_POSTS,
   POSTS_LOADING,
   POST_ADDED,
@@ -11,13 +12,17 @@ import {
   POST_LIKE_ERROR,
   POST_UNLIKED,
   POST_UNLIKE_ERROR,
-  LAST_POST_REACHED,
   GET_COMMENTS,
   COMM_FETCH_ERROR,
   ADD_COMM_ERROR,
   ADD_COMMENT,
   COMM_EDITED,
   EDIT_COMM_ERROR,
+  COMM_DELETED,
+  COMM_DELETE_ERROR,
+  COMM_LIKED,
+  COMM_LIKE_ERROR,
+  COMM_UNLIKED,
 } from "../actions/types";
 
 const initialState = {
@@ -65,6 +70,9 @@ export default function postReducer(state = initialState, action) {
         error: { ...action.payload, origin: "ADD_POST" },
       };
     case POST_EDITED:
+    case POST_LIKED:
+    case POST_UNLIKED:
+    case GET_COMMENTS:
       return {
         ...state,
         posts: state.posts.map((post) => {
@@ -72,8 +80,7 @@ export default function postReducer(state = initialState, action) {
           else
             return {
               ...post,
-              content: action.payload.content,
-              modifiedAt: action.payload.modifiedAt,
+              ...action.payload,
             };
         }),
       };
@@ -87,20 +94,7 @@ export default function postReducer(state = initialState, action) {
         ...state,
         error: null,
       };
-    case POST_LIKED:
-    case POST_UNLIKED:
-      return {
-        ...state,
-        posts: state.posts.map((post) => {
-          if (post.id !== action.payload.postId) return post;
-          else
-            return {
-              ...post,
-              likesCount: action.payload.likesCount,
-              likersIds: action.payload.likersIds,
-            };
-        }),
-      };
+
     case POST_LIKE_ERROR:
     case POST_UNLIKE_ERROR:
       return {
@@ -110,21 +104,11 @@ export default function postReducer(state = initialState, action) {
           origin: "LIKE_POST",
         },
       };
-    case GET_COMMENTS:
-      return {
-        ...state,
-        posts: state.posts.map((post) => {
-          if (post.id !== action.payload.postId) return post;
-          else
-            return {
-              ...post,
-              comments: action.payload.comments,
-            };
-        }),
-      };
     case COMM_FETCH_ERROR:
     case ADD_COMM_ERROR:
     case EDIT_COMM_ERROR:
+    case COMM_DELETE_ERROR:
+    case COMM_LIKE_ERROR:
       return {
         ...state,
         error: {
@@ -145,7 +129,10 @@ export default function postReducer(state = initialState, action) {
         }),
       };
     }
-    case COMM_EDITED: {
+    case COMM_EDITED:
+    case COMM_DELETED:
+    case COMM_LIKED:
+    case COMM_UNLIKED: {
       return {
         ...state,
         posts: state.posts.map((post) => ({

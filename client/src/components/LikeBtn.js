@@ -4,12 +4,18 @@ import {
   giveLike,
   clearPostError,
 } from "../app-state/actions/post-actions";
+
+import {
+  likeComment,
+  removeLikeFromComm,
+} from "../app-state/actions/comment-actions";
+
 import { useDispatch, useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faHeart, faHeartBroken } from "@fortawesome/free-solid-svg-icons";
 import { faHeart as heartRegular } from "@fortawesome/free-regular-svg-icons";
 
-function LikeBtn({ likesCount, likersIds, postId }) {
+function LikeBtn({ likesCount, likersIds, postId, isComment }) {
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const user = useSelector((state) => state.auth.user);
@@ -24,8 +30,13 @@ function LikeBtn({ likesCount, likersIds, postId }) {
     if (isHandlingRequest || !isAuthenticated) return;
 
     setIsHandlingRequest(true);
-    dispatch(clearPostError());
-    await dispatch(isLiker ? removeLike(postId) : giveLike(postId));
+    if (isComment) {
+      dispatch(isLiker ? removeLikeFromComm(postId) : likeComment(postId));
+    } else {
+      dispatch(clearPostError());
+      await dispatch(isLiker ? removeLike(postId) : giveLike(postId));
+    }
+
     setTimeout(() => setIsHandlingRequest(false), 200);
   };
 
@@ -54,10 +65,17 @@ function LikeBtn({ likesCount, likersIds, postId }) {
         className={
           isAuthenticated ? "like-btn mt-1" : "text-red-500 ml-auto mt-1"
         }
-        aria-label={isLiker ? "Remove like" : "Give post a like"}
+        aria-label={
+          isLiker
+            ? "Remove like"
+            : `Give ${isComment ? "comment" : "post"} a like`
+        }
         icon={icon}
       />
-      <span aria-label="Post's likes counts" className="text-red-500 ml-1">
+      <span
+        aria-label={`${isComment ? "Comment" : "Post"}'s likes count`}
+        className="text-red-500 ml-1"
+      >
         {likesCount}
       </span>
     </>

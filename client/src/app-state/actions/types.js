@@ -28,6 +28,13 @@ export const ADD_COMM_ERROR = "ADD_COMM_ERROR";
 export const COMM_EDITED = "COMM_EDITED";
 export const EDIT_COMM_ERROR = "EDIT_COMM_ERROR";
 
+export const COMM_LIKED = "COMM_LIKED";
+export const COMM_LIKE_ERROR = "COMM_LIKE_ERROR";
+export const COMM_UNLIKED = "COMM_UNLIKED";
+
+export const COMM_DELETED = "COMM_DELETED";
+export const COMM_DELETE_ERROR = "COMM_DELETE_ERROR";
+
 //AUTH
 export const USER_LOADED = "USER_LOADED";
 export const USER_LOADING = "USER_LOADING";

@@ -1,11 +1,21 @@
+import { useCallback } from "react";
 import { useSelector } from "react-redux";
 import useTimestamp from "../../hooks/useTimestamp";
 import LikeBtn from "../LikeBtn";
 
-function PostHeadline({ post }) {
+function PostHeadline({ post, isComment }) {
   const postAge = useTimestamp(post.createdAt);
   const lastEditAge = useTimestamp(post.modifiedAt);
   const error = useSelector((state) => state.posts.error);
+
+  const shouldDisplayError = useCallback(() => {
+    if (isComment) {
+      return !!error && error.origin === "COMM" && error.commentId === post.id;
+    } else
+      return (
+        !!error && error.origin === "LIKE_POST" && error.postId === post.id
+      );
+  }, [isComment, error]);
 
   return (
     <>
@@ -27,12 +37,13 @@ function PostHeadline({ post }) {
           likesCount={post.likesCount}
           likersIds={post.likersIds}
           postId={post.id}
+          isComment={isComment}
         />
       </div>
-      {!!error && error.origin === "LIKE_POST" && error.postId === post.id && (
+      {shouldDisplayError() && (
         <p className="danger w-max mb-2 ml-auto">{error.message}</p>
       )}
-      <hr />{" "}
+      <hr />
     </>
   );
 }
