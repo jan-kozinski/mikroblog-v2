@@ -119,6 +119,8 @@ describe("Add post controller", () => {
           content: validPostData.content,
           createdAt,
           modifiedAt,
+          comments: [],
+          commentsTotal: 0,
         },
       },
     };
