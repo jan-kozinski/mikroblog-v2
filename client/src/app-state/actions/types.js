@@ -10,6 +10,9 @@ export const ADD_POST_FAIL = "ADD_POST_FAIL";
 export const POST_EDITED = "POST_EDITED";
 export const EDIT_POST_FAIL = "EDIT_POST_FAIL";
 
+export const POST_DELETED = "POST_DELETED";
+export const DELETE_POST_FAIL = "DELETE_POST_FAIL";
+
 export const CLEAR_POST_ERROR = "CLEAR_POST_ERROR";
 
 export const POST_LIKED = "POST_LIKED";

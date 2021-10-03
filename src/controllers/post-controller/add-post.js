@@ -14,6 +14,8 @@ export default function makeAddPost({ savePost, token }) {
         ...httpRequest.body,
         authorId: signedUser.id,
       });
+      post.commentsTotal = 0;
+      post.comments = [];
       return {
         headers: {
           "Content-Type": "application/json",

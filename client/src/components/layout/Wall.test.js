@@ -1,5 +1,9 @@
 import Wall from "./Wall";
-import { render, screen } from "../../__test__/test-utils";
+import {
+  render,
+  screen,
+  waitForElementToBeRemoved,
+} from "../../__test__/test-utils";
 import userEvent from "@testing-library/user-event";
 
 it("Should load the posts", async () => {
@@ -128,5 +132,25 @@ describe("Edit post", () => {
     expect(
       await screen.queryByLabelText(/Give post a like/i)
     ).not.toBeInTheDocument();
+  });
+});
+
+describe("Delete post", () => {
+  it("Delete buttuon should hide the deleted post", async () => {
+    render(<Wall />, {
+      preloadedState: {
+        auth: {
+          isAuthenticated: true,
+          user: {
+            name: "test-user",
+            email: "test@test.com",
+          },
+        },
+      },
+    });
+    const deleteBtn = await screen.findByLabelText(/Delete post/i);
+    const post = await screen.findByText(/this is a test post/i);
+    userEvent.click(deleteBtn);
+    await waitForElementToBeRemoved(post);
   });
 });

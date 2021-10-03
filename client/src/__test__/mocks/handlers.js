@@ -82,6 +82,15 @@ export const handlers = [
     );
   }),
 
+  rest.delete(`${postsEndpoint}/:postId`, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.body({
+        success: true,
+      })
+    );
+  }),
+
   rest.post(`${postsEndpoint}/:postId/likes`, (req, res, ctx) => {
     return res(
       ctx.status(201),

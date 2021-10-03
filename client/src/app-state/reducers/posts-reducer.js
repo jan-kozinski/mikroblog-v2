@@ -12,6 +12,8 @@ import {
   POST_LIKE_ERROR,
   POST_UNLIKED,
   POST_UNLIKE_ERROR,
+  POST_DELETED,
+  DELETE_POST_FAIL,
   GET_COMMENTS,
   COMM_FETCH_ERROR,
   ADD_COMM_ERROR,
@@ -85,10 +87,17 @@ export default function postReducer(state = initialState, action) {
         }),
       };
     case EDIT_POST_FAIL:
+    case DELETE_POST_FAIL:
       return {
         ...state,
         error: { ...action.payload, origin: "EDIT_POST" },
       };
+    case POST_DELETED: {
+      return {
+        ...state,
+        posts: state.posts.filter((p) => p.id !== action.payload.postId),
+      };
+    }
     case CLEAR_POST_ERROR:
       return {
         ...state,
