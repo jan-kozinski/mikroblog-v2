@@ -183,8 +183,8 @@ describe("Update post controller", () => {
     const request = {
       headers: {
         "Content-Type": "application/json",
-        body: { content: validPostData.content },
       },
+      body: { content: validPostData.content },
       params: {
         postId: postId,
       },

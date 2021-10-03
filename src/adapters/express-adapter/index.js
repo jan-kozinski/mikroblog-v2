@@ -14,6 +14,7 @@ import {
   getPosts,
   likePost,
   unlikePost,
+  deletePost,
 } from "../../controllers/post-controller/index.js";
 import {
   addComment,
@@ -55,13 +56,10 @@ export default async function start(callback) {
   app.post("/api/post", makeCallback(addPost));
   app.put("/api/post/:postId", makeCallback(updatePost));
   app.get("/api/post", makeCallback(getPosts));
+  app.delete("/api/post/:postId", makeCallback(deletePost));
 
   app.post("/api/post/:postId/likes", makeCallback(likePost));
-  app.delete(
-    "/api/post/:postId/likes",
-
-    makeCallback(unlikePost)
-  );
+  app.delete("/api/post/:postId/likes", makeCallback(unlikePost));
 
   app.post("/api/comment/:originalPostId", makeCallback(addComment));
   app.get("/api/comment/:originalPostId", makeCallback(getComments));

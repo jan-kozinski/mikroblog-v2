@@ -20,7 +20,7 @@ class inMemoryDb {
         return u[q] === queries[q];
       });
     }
-    return !!recordsToReturn.length ? recordsToReturn : null;
+    return !!recordsToReturn.length ? recordsToReturn : [];
   }
   insert(record) {
     const index = this.#data.push(record) - 1;
@@ -41,6 +41,19 @@ class inMemoryDb {
       ...data,
     };
     return Promise.resolve(original);
+  }
+  deleteById(id) {
+    let originalLength = this.#data.length;
+    this.#data = this.#data.filter((rec) => rec.id !== id);
+    if (originalLength === this.#data.length)
+      throw new Error("Entity not found");
+    return Promise.resolve();
+  }
+  deleteMany() {
+    console.error(
+      "inMemoryDb's interface doesn't implement deleteMany method yet, but mocks it up instead!!!"
+    );
+    return Promise.resolve();
   }
 }
 

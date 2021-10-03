@@ -12,6 +12,7 @@ import makeEditPost from "./post/edit-post.js";
 import makeListPosts from "./post/list-posts.js";
 import makeLikePost from "./post/give-like.js";
 import makeUndoPostLike from "./post/undo-like.js";
+import makeRemovePost from "./post/remove-post.js";
 
 import makeSaveComment from "./comments/save-comment.js";
 import makeListCommsByPost from "./comments/list-by-post.js";
@@ -97,6 +98,7 @@ const undoLike = makeUndoPostLike({
   dbGateway: postsDb,
 });
 
+const removePost = makeRemovePost({ postsDb, commentsDb });
 //---COMMENT-SERVICE---
 
 const saveComment = makeSaveComment({
@@ -125,6 +127,7 @@ const service = Object.freeze({
   listPosts,
   likePost,
   undoLike,
+  removePost,
   saveComment,
   listCommsByPost,
   editComment,
@@ -142,6 +145,7 @@ export {
   listPosts,
   likePost,
   undoLike,
+  removePost,
   saveComment,
   listCommsByPost,
   editComment,

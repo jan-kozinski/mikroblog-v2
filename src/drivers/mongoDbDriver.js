@@ -117,7 +117,16 @@ class MongoDb {
   }
   async deleteById(id) {
     try {
-      return await this.#collection.deleteOne({ _id: id });
+      const result = await this.#collection.deleteOne({ _id: id });
+      if (result.deletedCount < 1) throw new Error("Entity not found");
+    } catch (error) {
+      console.error(error);
+      throw new Error("Something went wrong...");
+    }
+  }
+  async deleteMany(queries = {}) {
+    try {
+      return await this.#collection.deleteMany(queries);
     } catch (error) {
       console.error(error);
       throw new Error("Something went wrong...");

@@ -44,6 +44,19 @@ const dbMockup = {
     });
     return Promise.resolve(original);
   }),
+  deleteById: jest.fn((id) => {
+    let originalLength = dbMockup._data.length;
+    dbMockup._data = dbMockup._data.filter((rec) => rec.id !== id);
+    if (originalLength === dbMockup._data.length)
+      throw new Error("Entity not found");
+    return Promise.resolve();
+  }),
+  deleteMany: jest.fn(() => {
+    console.error(
+      "inMemoryDb's interface doesn't implement deleteMany method yet, but mocks it up instead!!!"
+    );
+    return Promise.resolve();
+  }),
   _RESET_DB() {
     this._data = [];
   },
