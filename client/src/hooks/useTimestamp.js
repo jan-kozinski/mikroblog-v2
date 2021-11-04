@@ -37,13 +37,12 @@ function useTimestamp(timestamp) {
       "Oct",
       "Dec",
     ];
-    age = `${date.getDate()} ${date.get} ${MONTHS[date.getMonth()]}`;
+    age = `${date.getDate()} ${MONTHS[date.getMonth()]}`;
   }
 
   if (ageInHours >= 24 * 365) {
     age = `${ageInHours / 24 / 365} y`;
   }
-
   return age;
 }
 
