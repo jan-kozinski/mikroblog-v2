@@ -1,29 +1,11 @@
 import cookieParser from "cookie-parser";
 import express from "express";
-import makeCallback from "./make-express-callback.js";
+import router from "./routes.js";
 import helmet from "helmet";
 import csrf from "csurf";
-import {
-  postUser,
-  signUser,
-  sessionUser,
-} from "../../controllers/user-controller/index.js";
-import {
-  addPost,
-  updatePost,
-  getPosts,
-  likePost,
-  unlikePost,
-  deletePost,
-} from "../../controllers/post-controller/index.js";
-import {
-  addComment,
-  getComments,
-  updateComment,
-  deleteComment,
-  likeComment,
-  unlikeComment,
-} from "../../controllers/comment-controller/index.js";
+import http from "http";
+import cors from "cors";
+import { Server as Socketio } from "socket.io";
 
 let server;
 
@@ -37,6 +19,7 @@ export default async function start(callback) {
   app.use(express.json());
   app.use(cookieParser());
   app.use(helmet());
+  app.use(cors());
   if (process.env.NODE_ENV === "development") {
     const { default: morgan } = await import("morgan");
     app.use(morgan("dev"));
@@ -48,38 +31,38 @@ export default async function start(callback) {
       : csrf({ cookie: true });
   app.use(csrfProtection);
 
-  // ROUTES
-  app.post("/api/user", makeCallback(postUser));
-  app.post("/api/user/auth", makeCallback(signUser));
-  app.post("/api/user/auth/session", makeCallback(sessionUser));
-
-  app.post("/api/post", makeCallback(addPost));
-  app.put("/api/post/:postId", makeCallback(updatePost));
-  app.get("/api/post", makeCallback(getPosts));
-  app.delete("/api/post/:postId", makeCallback(deletePost));
-
-  app.post("/api/post/:postId/likes", makeCallback(likePost));
-  app.delete("/api/post/:postId/likes", makeCallback(unlikePost));
-
-  app.post("/api/comment/:originalPostId", makeCallback(addComment));
-  app.get("/api/comment/:originalPostId", makeCallback(getComments));
-
-  app.put("/api/comment/:commentId", makeCallback(updateComment));
-  app.delete("/api/comment/:commentId", makeCallback(deleteComment));
-
-  app.post("/api/comment/:commentId/likes", makeCallback(likeComment));
-  app.delete("/api/comment/:commentId/likes", makeCallback(unlikeComment));
-
   // csrf error handler
   app.use(function (err, req, res, next) {
-    if (err.code !== "EBADCSRFTOKEN") return next(err);
-
-    // handle CSRF token errors here
-    res.status(403);
-    res.json({ success: false, error: "Bad csrf token" });
+    if (err.code === "EBADCSRFTOKEN") {
+      res.status(403);
+      res.json({ success: false, error: "Bad csrf token" });
+    } else return next(err);
   });
 
-  server = app.listen(PORT, () => {
+  app.use("/api", router);
+
+  //WEB SOCKETS
+  server = http.createServer(app);
+  const io = new Socketio(server, {
+    cors: { origin: process.env.CLIENT_DOMAIN },
+  });
+
+  let connectedSockets = [];
+
+  io.on("connection", (socket) => {
+    console.log("new ws connection: ", socket.id);
+    socket.on("authorised-user-connected", (payload) => {
+      console.log("authorised-user-connected ", payload.name);
+      connectedSockets.push({ socket: socket.id, name: payload.name });
+    });
+    socket.on("new-post-added", () => socket.broadcast.emit("new-post-added"));
+
+    socket.on("disconnect", (reason) => {
+      console.log("ws connection closed");
+    });
+  });
+
+  server = server.listen(PORT, () => {
     console.log(
       `Srever is listening on port ${PORT} in ${process.env.NODE_ENV} mode`
     );

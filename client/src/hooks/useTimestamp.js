@@ -23,7 +23,7 @@ function useTimestamp(timestamp) {
   }
 
   if (ageInHours >= 24 * 7 * 4 && ageInHours < 24 * 365) {
-    const date = new Date(ageInSeconds);
+    const date = new Date(timestamp);
     const MONTHS = [
       "Jan",
       "Feb",
@@ -41,7 +41,7 @@ function useTimestamp(timestamp) {
   }
 
   if (ageInHours >= 24 * 365) {
-    age = `${ageInHours / 24 / 365} y`;
+    age = `${Math.round(ageInHours / 24 / 365)} y`;
   }
   return age;
 }
