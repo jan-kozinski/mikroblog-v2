@@ -1,5 +1,4 @@
 import React from "react";
-import Footer from "./Footer";
 import Header from "./Header";
 import Userpannel from "./Userpannel";
 
@@ -17,7 +16,6 @@ function Wrapper({ children }) {
         </main>
         <div id="offset" className="xl:w-1/6 sm:w-0" />
       </div>
-      <Footer />
     </>
   );
 }

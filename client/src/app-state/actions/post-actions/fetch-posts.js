@@ -8,30 +8,36 @@ import {
 } from "../types";
 import dispatchError from "../dispatch-error";
 
-export const fetchPosts = () => async (dispatch, getState) => {
-  dispatch({
-    type: POSTS_LOADING,
-  });
-  try {
-    const apiClient = useApi({ dispatch, getState });
-
-    const fetchedPosts = getState().posts.posts;
-    const limit = 7;
-    const sortBy = "newest";
-    const response = await apiClient.get(
-      `${postsEndpoint}?sortby=${sortBy}&limit=${limit}&skip=${fetchedPosts.length}`
-    );
-
-    const { payload } = response.data;
-    if (payload.length < limit)
-      dispatch({
-        type: LAST_POST_REACHED,
-      });
+export const fetchPosts =
+  ({ sortBy = "newest", limit = "7" } = {}) =>
+  async (dispatch, getState) => {
     dispatch({
-      type: GET_POSTS,
-      payload,
+      type: POSTS_LOADING,
     });
-  } catch (error) {
-    dispatchError(error, FETCHING_ERROR, dispatch);
-  }
-};
+    try {
+      const apiClient = useApi({ dispatch, getState });
+
+      const fetchedPosts = getState().posts.posts;
+
+      let query = `sortby=${sortBy}&limit=${limit}`;
+
+      if (sortBy === "newest" && fetchedPosts.length > 0) {
+        const lastPost = fetchedPosts[fetchedPosts.length - 1];
+        query += `&before=${lastPost.createdAt}`;
+      } else query += `&skip=${fetchedPosts.length}`;
+
+      const response = await apiClient.get(`${postsEndpoint}?${query}`);
+
+      const { payload } = response.data;
+      if (payload.length < limit)
+        dispatch({
+          type: LAST_POST_REACHED,
+        });
+      dispatch({
+        type: GET_POSTS,
+        payload,
+      });
+    } catch (error) {
+      dispatchError(error, FETCHING_ERROR, dispatch);
+    }
+  };

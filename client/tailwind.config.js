@@ -6,6 +6,7 @@ module.exports = {
       colors: {
         primary: "#2a4365",
         secondary: "#ff5500",
+        neutral: "#6b7280",
       },
       maxWidth: {
         "1/5": "20%",

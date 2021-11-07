@@ -6,15 +6,18 @@ import {
 } from "../app-state/actions/socket-actions";
 function WebSocketWrapper({ children }) {
   const isLoading = useSelector(
-    (state) => !state.auth.loading && !state.posts.loading
+    (state) => state.auth.loading || state.posts.loading
+  );
+  const authorizedUser = useSelector((state) =>
+    state.auth.user ? state.auth.user.name : null
   );
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(connectToSocket());
+    if (!isLoading) dispatch(connectToSocket(authorizedUser));
     return () => {
       dispatch(disconnectFromSocket());
     };
-  }, [isLoading]);
+  }, [isLoading, authorizedUser]);
   return <>{children}</>;
 }
 
