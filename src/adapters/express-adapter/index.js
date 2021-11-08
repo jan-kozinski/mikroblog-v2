@@ -42,33 +42,43 @@ export default async function start(callback) {
   app.use("/api", router);
 
   //WEB SOCKETS
-  server = http.createServer(app);
-  const io = new Socketio(server, {
-    cors: { origin: process.env.CLIENT_DOMAIN },
-  });
-
-  let connectedSockets = [];
-
-  io.on("connection", (socket) => {
-    console.log("new ws connection: ", socket.id);
-    socket.on("authorised-user-connected", (payload) => {
-      console.log("authorised-user-connected ", payload.name);
-      connectedSockets.push({ socket: socket.id, name: payload.name });
+  if (process.env.NODE_ENV !== "test") {
+    server = http.createServer(app);
+    const io = new Socketio(server, {
+      cors: { origin: process.env.CLIENT_DOMAIN },
     });
-    socket.on("new-post-added", () => socket.broadcast.emit("new-post-added"));
 
-    socket.on("disconnect", (reason) => {
-      console.log("ws connection closed");
+    let connectedSockets = [];
+
+    io.on("connection", (socket) => {
+      console.log("new ws connection: ", socket.id);
+      socket.on("authorised-user-connected", (payload) => {
+        console.log("authorised-user-connected ", payload.name);
+        connectedSockets.push({ socket: socket.id, name: payload.name });
+      });
+      socket.on("new-post-added", () =>
+        socket.broadcast.emit("new-post-added")
+      );
+
+      socket.on("disconnect", (reason) => {
+        console.log("ws connection closed");
+      });
     });
-  });
-
-  server = server.listen(PORT, () => {
-    console.log(
-      `Srever is listening on port ${PORT} in ${process.env.NODE_ENV} mode`
-    );
-    if (callback) callback();
-  });
-  return server;
+    server.listen(PORT, () => {
+      console.log(
+        `Srever is listening on port ${PORT} in ${process.env.NODE_ENV} mode`
+      );
+      if (callback) callback();
+    });
+  } else {
+    server = app.listen(PORT, () => {
+      console.log(
+        `Srever is listening on port ${PORT} in ${process.env.NODE_ENV} mode`
+      );
+      if (callback) callback();
+    });
+    return server;
+  }
 }
 
 export { server };
