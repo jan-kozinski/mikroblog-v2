@@ -51,18 +51,12 @@ export default async function start(callback) {
     let connectedSockets = [];
 
     io.on("connection", (socket) => {
-      console.log("new ws connection: ", socket.id);
       socket.on("authorised-user-connected", (payload) => {
-        console.log("authorised-user-connected ", payload.name);
         connectedSockets.push({ socket: socket.id, name: payload.name });
       });
       socket.on("new-post-added", () =>
         socket.broadcast.emit("new-post-added")
       );
-
-      socket.on("disconnect", (reason) => {
-        console.log("ws connection closed");
-      });
     });
     server.listen(PORT, () => {
       console.log(
