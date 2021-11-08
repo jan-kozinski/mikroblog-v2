@@ -1,32 +1,50 @@
-import React from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faAngleUp } from "@fortawesome/free-solid-svg-icons";
+import { useSelector, useDispatch } from "react-redux";
+import { useScrollPosition } from "@n8tb1t/use-scroll-position";
+import { useState } from "react";
+import { fetchOnlyLatestPosts } from "../../app-state/actions/post-actions";
 
 function ScrollToTop() {
+  const postsAddedSinceLastFetch = useSelector(
+    (state) => state.posts.postsAddedSinceLastFetch
+  );
+  const dispatch = useDispatch();
+  const [shouldBeVisible, setShouldBeVisible] = useState(false);
+
+  useScrollPosition(({ prevProps, currPos }) => {
+    setShouldBeVisible(currPos.y < -400);
+  });
+
+  const scrollUpAndFetch = () => {
+    window.scroll(0, 0);
+    if (postsAddedSinceLastFetch) dispatch(fetchOnlyLatestPosts());
+  };
+
   return (
     <div
-      style={
-        notificationRef.current
-          ? {
-              transform: `translate(${
-                notificationRef.current.offsetWidth * 1.02
-              }px,0)`,
-              bottom: "3vh",
-            }
-          : {
-              display: "none",
-            }
-      }
-      className="bg-white rounded-lg text-neutral fixed md:text-6xl lg:text-8xl md:h-16 lg:h-24 md:w-16 lg:w-24 sm:hidden md:block"
+      className="scroll-top-btn lg:left-2/3 xl:left-5/6 md:right-4 bottom-8"
+      style={{
+        opacity: +shouldBeVisible,
+      }}
+      onClick={() => scrollUpAndFetch()}
     >
-      <span
-        style={{
-          right: "10%",
-          top: "5%",
-        }}
-        className="text-sm text-white absolute bg-red-500 px-2 rounded-full"
-      >
-        {postsAddedSinceLastFetch}
-      </span>
-      <FontAwesomeIcon icon={faAngleUp} />
+      {postsAddedSinceLastFetch > 0 && (
+        <span
+          style={{
+            right: "10%",
+            top: "5%",
+          }}
+          className="text-sm text-white absolute bg-red-500 px-2 rounded-full"
+        >
+          {postsAddedSinceLastFetch}
+        </span>
+      )}
+      <FontAwesomeIcon
+        style={{ width: "100%" }}
+        className="h-full text-center"
+        icon={faAngleUp}
+      />
     </div>
   );
 }
