@@ -12,6 +12,7 @@ const NECESSARY_VARS = [
   "PORT",
   "MONGO_DB_URI",
   "REDIS_NAMESPACE",
+  "CLIENT_DOMAIN",
 ];
 NECESSARY_VARS.forEach((v) => {
   if (!process.env[v]) throw new Error(`${v} is undefined`);

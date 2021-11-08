@@ -5,6 +5,7 @@ import Loading from "../Loading";
 import ListPosts from "../post/ListPosts";
 import AddPost from "../post/AddPost";
 import InfiniteScroll from "react-infinite-scroll-component";
+import NewPostNotifier from "../post/NewPostNotifier";
 
 const Wall = () => {
   const posts = useSelector((state) => state.posts).posts;
@@ -32,6 +33,7 @@ const Wall = () => {
         endMessage={<p>You have reached the bottom.</p>}
       >
         {isAuthenticated && <AddPost />}
+        <NewPostNotifier />
         <ListPosts posts={posts} />
       </InfiniteScroll>
     </>

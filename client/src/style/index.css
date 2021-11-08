@@ -87,6 +87,13 @@
   transform: scale(1.2);
 }
 
+.scroll-top-btn {
+  @apply bg-white rounded-lg text-neutral fixed transition-opacity
+   sm:hidden 
+   md:h-16 md:w-16 md:block 
+   lg:h-24 lg:w-24;
+}
+
 .dot {
   @apply h-1 w-1 mb-0.5 inline-block bg-gray-700 rounded-full;
 }

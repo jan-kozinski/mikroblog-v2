@@ -15,6 +15,7 @@ import {
   POST_DELETED,
   DELETE_POST_FAIL,
   GET_COMMENTS,
+  GET_POSTS_ADDED_SINCE_LAST_FETCH,
   COMM_FETCH_ERROR,
   ADD_COMM_ERROR,
   ADD_COMMENT,
@@ -25,13 +26,15 @@ import {
   COMM_LIKED,
   COMM_LIKE_ERROR,
   COMM_UNLIKED,
+  SOCKET_RECEIVED_NEW_POST_INFO,
 } from "../actions/types";
 
 const initialState = {
   posts: [],
-  loading: false,
+  loading: true,
   lastPostReached: false,
   error: null,
+  postsAddedSinceLastFetch: 0,
 };
 
 export default function postReducer(state = initialState, action) {
@@ -43,6 +46,15 @@ export default function postReducer(state = initialState, action) {
         error: null,
         posts: [...state.posts, ...action.payload],
       };
+    case GET_POSTS_ADDED_SINCE_LAST_FETCH: {
+      return {
+        ...state,
+        loading: false,
+        error: null,
+        postsAddedSinceLastFetch: 0,
+        posts: [...action.payload, ...state.posts],
+      };
+    }
     case POSTS_LOADING:
       return {
         ...state,
@@ -153,6 +165,11 @@ export default function postReducer(state = initialState, action) {
         })),
       };
     }
+    case SOCKET_RECEIVED_NEW_POST_INFO:
+      return {
+        ...state,
+        postsAddedSinceLastFetch: state.postsAddedSinceLastFetch + 1,
+      };
     default:
       return state;
   }

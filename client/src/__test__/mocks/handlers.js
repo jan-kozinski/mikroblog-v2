@@ -7,6 +7,29 @@ import {
 
 export const handlers = [
   rest.get(postsEndpoint, (req, res, ctx) => {
+    const calledWithAfterQuery = !!req.url.searchParams.getAll("after").length;
+    if (calledWithAfterQuery)
+      return res(
+        ctx.status(200),
+        ctx.body({
+          success: true,
+          payload: [
+            {
+              id: `id-${Math.round(Math.random() * 1000)}`,
+              authorId: `id-${Math.round(Math.random() * 1000)}`,
+              author: "test-user",
+              content: "api called with &after query",
+              likesCount: "0",
+              likersIds: [],
+              comments: [],
+              commentsTotal: 0,
+              createdAt: new Date(),
+              modifiedAt: new Date(),
+            },
+          ],
+        })
+      );
+
     return res(
       ctx.status(200),
       ctx.body({
