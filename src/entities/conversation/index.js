@@ -35,10 +35,10 @@ class Conversation {
         if (!msg instanceof Message)
           throw new Error("Message should be of type Message");
       });
-      this.#id = id;
-      this.#membersIds = membersIds;
-      this.#messages = messages;
     }
+    this.#id = id;
+    this.#membersIds = membersIds;
+    this.#messages = messages;
   }
 
   getId() {
@@ -56,6 +56,7 @@ class Conversation {
   addMessage(msg) {
     if (!(msg instanceof Message))
       throw new Error("Message should be of type Message");
-    this.#messages.push(msg);
+    this.#messages = [...this.#messages, msg];
+    return this.#messages;
   }
 }
