@@ -94,6 +94,40 @@ describe("Create  conversation controller", () => {
     expect(token.resolve).toBeCalledTimes(1);
     expect(token.resolve).toBeCalledWith(request.cookies.token);
   });
+
+  it("Should respond with an error if request body doesn't contain members ids", async () => {
+    const request = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: {},
+      cookies: {
+        token: "legit",
+      },
+    };
+
+    expect(saveConversation).toBeCalledTimes(0);
+    expect(token.resolve).toBeCalledTimes(0);
+    const actual = await createConv(request);
+
+    expect(saveConversation).toBeCalledTimes(0);
+
+    const expected = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      statusCode: 400,
+      body: {
+        success: false,
+        error: expect.any(String),
+      },
+    };
+
+    expect(actual).toEqual(expected);
+
+    expect(token.resolve).toBeCalledTimes(1);
+    expect(token.resolve).toBeCalledWith(request.cookies.token);
+  });
   it("Should respond with an error if conversation members ids doesn't include the request sender's id", async () => {
     const request = {
       headers: {

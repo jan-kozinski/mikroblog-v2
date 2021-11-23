@@ -1,4 +1,4 @@
-import { Message } from "../message";
+import { Message } from "../message/index.js";
 
 export default function makeConversation({
   id,

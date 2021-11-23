@@ -28,7 +28,7 @@ describe("add message use case", () => {
     addMessage = makeAddMessage({
       conversationsDb: dbMockup,
       usersDb,
-      Id: genId,
+      Id: { genId },
     });
   });
 
@@ -80,6 +80,12 @@ describe("add message use case", () => {
     expect(updatedConv.messages).toEqual(
       expect.arrayContaining([expect.any(Message)])
     );
+  });
+
+  it("Given no id should generate one", async () => {
+    expect(genId).toBeCalledTimes(0);
+    await addMessage({ ...validMsgData, id: undefined });
+    expect(genId).toBeCalledTimes(1);
   });
 });
 

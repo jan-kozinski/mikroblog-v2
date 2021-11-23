@@ -9,6 +9,8 @@ export default function makeCreateConv({ saveConversation, token }) {
     } catch (error) {
       return error;
     }
+    if (!httpRequest.body || !httpRequest.body.membersIds)
+      return respondWithError(400, "Please provide conversation members ids");
 
     const { membersIds } = httpRequest.body;
     if (!membersIds.includes(signedUser.id))

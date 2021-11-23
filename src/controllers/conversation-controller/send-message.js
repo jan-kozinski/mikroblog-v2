@@ -1,5 +1,5 @@
-import respondWithError from "../send-error";
-import requireAuth from "../requireAuth";
+import respondWithError from "../send-error.js";
+import requireAuth from "../requireAuth.js";
 
 export default function makeSendMsg({ addMessage, token }) {
   return async function sendMsg(httpRequest) {

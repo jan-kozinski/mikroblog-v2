@@ -13,7 +13,7 @@ import makeGetPosts from "./get-posts.js";
 import makeLikePost from "./like-post.js";
 import makeUnlikePost from "./unlike-post.js";
 import makeDeletePost from "./delete-post.js";
-import { token } from "../../drivers/redis-sessions.js";
+import { token } from "../../drivers/index.js";
 
 const addPost = makeAddPost({ savePost, token });
 const updatePost = makeUpdatePost({ editPost, token });

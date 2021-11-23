@@ -21,6 +21,10 @@ import {
   likeComment,
   unlikeComment,
 } from "../../controllers/comment-controller/index.js";
+import {
+  sendMsg,
+  createConv,
+} from "../../controllers/conversation-controller/index.js";
 
 const router = express.Router();
 
@@ -44,6 +48,9 @@ router.delete("/comment/:commentId", makeCallback(deleteComment));
 
 router.post("/comment/:commentId/likes", makeCallback(likeComment));
 router.delete("/comment/:commentId/likes", makeCallback(unlikeComment));
+
+router.post("/conversation", makeCallback(createConv));
+router.post("/conversation/:conversationId", makeCallback(sendMsg));
 
 export default router;
 export { router };
