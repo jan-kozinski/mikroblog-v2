@@ -77,7 +77,7 @@ describe("edit-comment use case", () => {
         originalPostId: validCommData.originalPostId,
         content: `content-${i}-${genRandomInt()}`,
       };
-      MockDate.set(Date.now() + genRandomInt() * 1000000);
+      MockDate.set(Date.now() + genRandomInt(1000000, 1000000));
       const returnValue = await editComm(newCommData);
       expect(returnValue).toEqual({
         id: validCommData.id,
@@ -92,6 +92,6 @@ describe("edit-comment use case", () => {
   });
 });
 
-function genRandomInt() {
-  return Math.round(Math.random() * 10);
+function genRandomInt(max = 1000, min = 1) {
+  return Math.round(Math.random() * max + min);
 }
