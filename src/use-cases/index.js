@@ -22,6 +22,7 @@ import makeLikeComment from "./comments/like-comment.js";
 import makeUndoCommentLike from "./comments/undo-like.js";
 
 import makeSaveConversation from "./conversation/save-conversation.js";
+import makeListUserConvs from "./conversation/list-user-conversations.js";
 import makeAddMessage from "./conversation/add-message.js";
 
 const hasher = {
@@ -130,6 +131,7 @@ function closeDbConnections() {
 
 const saveConversation = makeSaveConversation({ conversationsDb, usersDb, Id });
 const addMessage = makeAddMessage({ conversationsDb, usersDb, Id });
+const listUserConvs = makeListUserConvs({ dbGateway: conversationsDb, Id });
 
 const service = Object.freeze({
   //USER
@@ -152,6 +154,7 @@ const service = Object.freeze({
   //CONVERSATION
   saveConversation,
   addMessage,
+  listUserConvs,
 });
 
 export default service;
@@ -176,4 +179,5 @@ export {
   //CONVERSATION
   saveConversation,
   addMessage,
+  listUserConvs,
 };

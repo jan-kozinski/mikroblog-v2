@@ -78,8 +78,22 @@ describe("add message use case", () => {
       expect.arrayContaining([validMsgData.authorId])
     );
     expect(updatedConv.messages).toEqual(
-      expect.arrayContaining([expect.any(Message)])
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: expect.any(String),
+          authorId: expect.any(String),
+          conversationId: expect.any(String),
+          text: expect.any(String),
+          createdAt: expect.any(Date),
+          modifiedAt: expect.any(Date),
+        }),
+      ])
     );
+  });
+
+  it("Should return new message data", async () => {
+    const actual = await addMessage(validMsgData);
+    expect(actual).toEqual(validMsgData);
   });
 
   it("Given no id should generate one", async () => {

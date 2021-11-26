@@ -19,5 +19,7 @@ export default function makeAddMessage({ conversationsDb, usersDb, Id }) {
       membersIds: conversation.getMembersIds(),
       messages: conversation.getMessages(),
     });
+    const msgs = conversation.getMessages();
+    return msgs[msgs.length - 1];
   };
 }

@@ -9,17 +9,16 @@ export default function makeCreateConv({ saveConversation, token }) {
     } catch (error) {
       return error;
     }
-    if (!httpRequest.body || !httpRequest.body.membersIds)
-      return respondWithError(400, "Please provide conversation members ids");
-
-    const { membersIds } = httpRequest.body;
-    if (!membersIds.includes(signedUser.id))
-      return respondWithError(
-        400,
-        "User is not allowed to create a conversation that doesn't include him"
-      );
 
     try {
+      sanitizeBody(httpRequest.body);
+
+      const { membersIds } = httpRequest.body;
+      if (!membersIds.includes(signedUser.id))
+        throw new Error(
+          "User is not allowed to create a conversation that doesn't include him"
+        );
+
       const conversation = await saveConversation({
         membersIds: httpRequest.body.membersIds,
         messages: [],
@@ -38,4 +37,9 @@ export default function makeCreateConv({ saveConversation, token }) {
       return respondWithError(400, error.message);
     }
   };
+}
+
+function sanitizeBody(body) {
+  if (!body || !body.membersIds || !(body.membersIds instanceof Array))
+    throw new Error("Please provide conversation members ids");
 }

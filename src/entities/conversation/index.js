@@ -56,7 +56,17 @@ class Conversation {
   addMessage(msg) {
     if (!(msg instanceof Message))
       throw new Error("Message should be of type Message");
-    this.#messages = [...this.#messages, msg];
+    this.#messages = [
+      ...this.#messages,
+      {
+        id: msg.getId(),
+        authorId: msg.getAuthorId(),
+        conversationId: msg.getConversationId(),
+        createdAt: msg.getCreatedAt(),
+        modifiedAt: msg.getModifiedAt(),
+        text: msg.getText(),
+      },
+    ];
     return this.#messages;
   }
 }

@@ -1,5 +1,5 @@
 import { jest } from "@jest/globals";
-import makeCreateConv from "./create-conversation";
+import makeCreateConv from "./create-conv";
 import { randomBytes } from "crypto";
 
 describe("Create  conversation controller", () => {
@@ -51,6 +51,51 @@ describe("Create  conversation controller", () => {
     };
 
     expect(actual).toEqual(expected);
+    expect(saveConversation).toBeCalledTimes(0);
+  });
+
+  it("Should respond with an error if provided membersIds are not an array", async () => {
+    const badInputs = [
+      {},
+      { field: "key" },
+      "",
+      "  ",
+      "abcd",
+      0,
+      null,
+      NaN,
+      21,
+    ];
+    expect(saveConversation).toBeCalledTimes(0);
+    for (let i of badInputs) {
+      const request = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: {
+          membersIds: i,
+        },
+        cookies: {
+          token: "legit",
+        },
+      };
+
+      const actual = await createConv(request);
+
+      const expected = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        statusCode: 400,
+        body: {
+          success: false,
+          error: expect.any(String),
+        },
+      };
+
+      expect(actual).toEqual(expected);
+    }
+
     expect(saveConversation).toBeCalledTimes(0);
   });
 

@@ -6,7 +6,7 @@ describe("edit-comment use case", () => {
   beforeAll(() => {
     validCommData = {
       id: "1",
-      originalPostId: `post-${genRandomInt()}-id`,
+      originalPostId: `post-${randomInt()}-id`,
       authorId: "user1",
       content: "some string",
     };
@@ -34,7 +34,7 @@ describe("edit-comment use case", () => {
         authorId: validCommData.authorId,
         originalPostId: validCommData.originalPostId,
         id: validCommData.id,
-        content: `content-${i}-${genRandomInt()}`,
+        content: `content-${i}-${randomInt()}`,
       };
       await editComm(comm);
       expect(dbMockup.update).toBeCalledTimes(i + 1);
@@ -55,7 +55,7 @@ describe("edit-comment use case", () => {
   });
   it("Should not call the DB if new content does not differ from the old one", async () => {
     expect(dbMockup.update).toBeCalledTimes(0);
-    MockDate.set(Date.now() + genRandomInt() * 1000000);
+    MockDate.set(Date.now() + randomInt() * 1000000);
     const returnedValue = await editComm(validCommData);
     expect(returnedValue.modifiedAt).toEqual(returnedValue.createdAt);
     expect(dbMockup.update).toBeCalledTimes(0);
@@ -75,9 +75,9 @@ describe("edit-comment use case", () => {
         authorId: validCommData.authorId,
         id: validCommData.id,
         originalPostId: validCommData.originalPostId,
-        content: `content-${i}-${genRandomInt()}`,
+        content: `content-${i}-${randomInt()}`,
       };
-      MockDate.set(Date.now() + genRandomInt(1000000, 1000000));
+      MockDate.set(Date.now() + randomInt(1000000, 1000000));
       const returnValue = await editComm(newCommData);
       expect(returnValue).toEqual({
         id: validCommData.id,
@@ -92,6 +92,6 @@ describe("edit-comment use case", () => {
   });
 });
 
-function genRandomInt(max = 1000, min = 1) {
+function randomInt(max = 1000, min = 1) {
   return Math.round(Math.random() * max + min);
 }

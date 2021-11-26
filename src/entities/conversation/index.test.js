@@ -84,21 +84,22 @@ describe("makeConversation", () => {
   });
 
   it("Add message should add a message to messages array", () => {
-    const message = new Message({
+    const messageData = {
       id: `msg-id-${randomInt()}`,
       authorId: `author-id-${randomInt()}`,
       conversationId: `conv-id-${randomInt()}`,
       text: `text-${randomInt()}-about-${randomInt()}`,
       createdAt: new Date(),
       modifiedAt: new Date(),
-    });
+    };
+    const message = new Message(messageData);
 
     const conv = makeConversation(validConvData);
     const initialMsgs = [...conv.getMessages()];
     conv.addMessage(message);
     const finalMsgs = [...conv.getMessages()];
     expect(finalMsgs.length).toEqual(initialMsgs.length + 1);
-    expect(finalMsgs[finalMsgs.length - 1]).toEqual(message);
+    expect(finalMsgs[finalMsgs.length - 1]).toEqual(messageData);
   });
 
   it("Add message should throw an error if message is not of type Message", () => {

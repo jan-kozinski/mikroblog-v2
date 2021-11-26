@@ -24,6 +24,7 @@ import {
 import {
   sendMsg,
   createConv,
+  getUserConvs,
 } from "../../controllers/conversation-controller/index.js";
 
 const router = express.Router();
@@ -50,6 +51,7 @@ router.post("/comment/:commentId/likes", makeCallback(likeComment));
 router.delete("/comment/:commentId/likes", makeCallback(unlikeComment));
 
 router.post("/conversation", makeCallback(createConv));
+router.get("/conversation", makeCallback(getUserConvs));
 router.post("/conversation/:conversationId", makeCallback(sendMsg));
 
 export default router;

@@ -14,7 +14,7 @@ export default function makeSendMsg({ addMessage, token }) {
     }
 
     try {
-      const comment = await addMessage({
+      const message = await addMessage({
         ...httpRequest.body,
         conversationId: httpRequest.params.conversationId,
         authorId: signedUser.id,
@@ -27,7 +27,7 @@ export default function makeSendMsg({ addMessage, token }) {
         statusCode: 201,
         body: {
           success: true,
-          payload: comment,
+          payload: message,
         },
       };
     } catch (error) {
