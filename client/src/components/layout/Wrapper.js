@@ -1,7 +1,7 @@
 import React from "react";
 import ScrollToTop from "../post/ScrollToTop";
 import Header from "./Header";
-import Userpannel from "./Userpannel";
+import Userpanel from "./Userpanel";
 
 function Wrapper({ children }) {
   return (
@@ -12,7 +12,7 @@ function Wrapper({ children }) {
        lg:flex-row-reverse min-h-screen bg-gray-200"
       >
         <div className="lg:w-1/3 md:w-4/5 md:mx-auto sm:w-full">
-          <Userpannel />
+          <Userpanel />
         </div>
 
         <main className="xl:w-1/2 lg:w-2/3 md:w-4/5 md:mx-auto sm:w-full">

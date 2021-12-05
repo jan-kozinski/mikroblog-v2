@@ -4,13 +4,14 @@ import {
   clearErrors,
   loadUserSession,
 } from "../../app-state/actions/auth-actions";
+import { Link } from "react-router-dom";
 import LoginForm from "../LoginForm";
 import SignupForm from "../SignupForm";
+import UserDashboard from "./UserDashboard";
 function Userpannel() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const isLoading = useSelector((state) => state.auth.isLoading);
   const _csrf = useSelector((state) => state.auth._csrf);
-  const user = useSelector((state) => state.auth.user);
   const isFirstRender = useRef(true);
   const dispatch = useDispatch();
 
@@ -24,7 +25,7 @@ function Userpannel() {
     }
   }, [_csrf]);
 
-  if (isAuthenticated) return <div>Welcome {user.name}!</div>;
+  if (isAuthenticated) return <UserDashboard />;
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -36,9 +37,9 @@ function Userpannel() {
       {loginOverRegistration ? <LoginForm /> : <SignupForm />}
 
       <hr className="border-blue-900 mx-4 mb-4" />
-      <a
+      <Link
         className="user-form-switch"
-        href="#"
+        to="#"
         onClick={() => {
           dispatch(clearErrors());
           switchForm(!loginOverRegistration);
@@ -47,7 +48,7 @@ function Userpannel() {
         {loginOverRegistration
           ? "New here? Go ahead and Sign Up!"
           : "Already have an account? Sign in now!"}
-      </a>
+      </Link>
     </div>
   );
 }

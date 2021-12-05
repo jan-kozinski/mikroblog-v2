@@ -1,22 +1,40 @@
 export default function makeMessage({
   id,
   authorId,
+  author,
   conversationId,
   text,
   createdAt = new Date(),
   modifiedAt = createdAt,
 } = {}) {
-  return new Message(id, authorId, conversationId, text, createdAt, modifiedAt);
+  return new Message(
+    id,
+    authorId,
+    author,
+    conversationId,
+    text,
+    createdAt,
+    modifiedAt
+  );
 }
 
 export class Message {
   #id;
   #authorId;
+  #author;
   #conversationId;
   #text;
   #createdAt;
   #modifiedAt;
-  constructor(id, authorId, conversationId, text, createdAt, modifiedAt) {
+  constructor(
+    id,
+    authorId,
+    author,
+    conversationId,
+    text,
+    createdAt,
+    modifiedAt
+  ) {
     if (!id) throw new Error("Message id must be provided");
     if (typeof id !== "string") throw new Error("Message id must be a string");
     if (id.trim().length < 1) throw new Error("Message id must be provided");
@@ -26,6 +44,12 @@ export class Message {
       throw new Error("Author id must be a string");
     if (authorId.trim().length < 1)
       throw new Error("Author id must be provided");
+
+    if (!author) throw new Error("Author name must be provided");
+    if (typeof author !== "string")
+      throw new Error("Author name must be a string");
+    if (author.trim().length < 1)
+      throw new Error("Author name must be provided");
 
     if (!conversationId) throw new Error("Conversation id must be provided");
     if (typeof conversationId !== "string")
@@ -50,6 +74,7 @@ export class Message {
 
     this.#id = id;
     this.#authorId = authorId;
+    this.#author = author;
     this.#conversationId = conversationId;
     this.#text = text;
     this.#createdAt = createdAt;
@@ -61,6 +86,9 @@ export class Message {
   }
   getAuthorId() {
     return this.#authorId;
+  }
+  getAuthorName() {
+    return this.#author;
   }
   getConversationId() {
     return this.#conversationId;

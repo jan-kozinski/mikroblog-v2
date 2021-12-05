@@ -65,6 +65,18 @@
   @apply cursor-pointer underline text-yellow-800 hover:text-primary h-8 select-none px-4;
 }
 
+.user-panel-tile {
+  @apply bg-primary text-center shadow-btn py-4 cursor-pointer text-white block;
+  transition: filter 0.3s ease-in-out;
+  border: 0;
+  display: block;
+  font-size: 16px;
+}
+
+.user-panel-tile:hover {
+  filter: brightness(120%);
+}
+
 .faced-down-triangle {
   margin-left: auto;
   margin-right: 5%;

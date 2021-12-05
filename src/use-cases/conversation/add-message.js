@@ -5,8 +5,9 @@ export default function makeAddMessage({ conversationsDb, usersDb, Id }) {
   return async function addMessage(msgData) {
     msgData.id = msgData.id || Id.genId();
 
+    const author = await usersDb.findById(msgData.authorId);
+    msgData.author = author.name;
     const message = makeMessage(msgData);
-    const author = await usersDb.findById(message.getAuthorId());
     if (!author) throw new Error("User not found");
     const convRecord = await conversationsDb.findById(
       message.getConversationId()

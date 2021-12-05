@@ -1,10 +1,10 @@
-import Userpannel from "./Userpannel";
+import Userpanel from "./Userpanel";
 import { cleanup, render, screen } from "../../__test__/test-utils";
 import userEvent from "@testing-library/user-event";
 
 describe("Signin user in", () => {
   beforeEach(() => {
-    render(<Userpannel />, {
+    render(<Userpanel />, {
       preloadedState: {
         auth: {
           isLoading: false,
@@ -43,7 +43,7 @@ describe("Signin user in", () => {
     await screen.findByRole(/alert/i);
 
     cleanup();
-    render(<Userpannel />, {
+    render(<Userpanel />, {
       preloadedState: {
         auth: {
           isLoading: false,
@@ -61,7 +61,7 @@ describe("Signin user in", () => {
     await screen.findByRole(/alert/i);
 
     cleanup();
-    render(<Userpannel />, {
+    render(<Userpanel />, {
       preloadedState: {
         auth: {
           isLoading: false,

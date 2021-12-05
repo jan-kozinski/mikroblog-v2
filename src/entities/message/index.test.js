@@ -7,6 +7,7 @@ describe("makeMessage", () => {
     validMsgData = {
       id: `msg-id-${randomInt()}`,
       authorId: `author-id-${randomInt()}`,
+      author: `author-name-${randomInt()}`,
       conversationId: `conv-id-${randomInt()}`,
       text: `text-${randomInt()}-about-${randomInt()}`,
       createdAt: new Date(),
@@ -34,6 +35,18 @@ describe("makeMessage", () => {
     const invalidIds = [1, Math.random(), [], {}, "    "];
     invalidIds.forEach((id) => {
       let msg = { ...validMsgData, authorId: id };
+      expect(() => makeMessage(msg)).toThrow();
+    });
+  });
+
+  it("Should throw an error if no author name is provided", () => {
+    const msg = { ...validMsgData, author: undefined };
+    expect(() => makeMessage(msg)).toThrow();
+  });
+  it("Should throw an error if provided author name is not a string or is empty", () => {
+    const invalidIds = [1, Math.random(), [], {}, "    "];
+    invalidIds.forEach((id) => {
+      let msg = { ...validMsgData, author: id };
       expect(() => makeMessage(msg)).toThrow();
     });
   });

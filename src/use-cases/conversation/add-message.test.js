@@ -7,6 +7,7 @@ describe("add message use case", () => {
   beforeAll(() => {
     validMsgData = {
       id: `msg-id-${randomInt()}`,
+      author: `author-name-${randomInt()}`,
       authorId: `author-id-${randomInt()}`,
       conversationId: `conv-id-${randomInt()}`,
       text: `text-number-${randomInt()}`,
@@ -81,7 +82,7 @@ describe("add message use case", () => {
       expect.arrayContaining([
         expect.objectContaining({
           id: expect.any(String),
-          authorId: expect.any(String),
+          author: expect.any(String),
           conversationId: expect.any(String),
           text: expect.any(String),
           createdAt: expect.any(Date),
@@ -93,7 +94,7 @@ describe("add message use case", () => {
 
   it("Should return new message data", async () => {
     const actual = await addMessage(validMsgData);
-    expect(actual).toEqual(validMsgData);
+    expect(actual).toEqual({ ...validMsgData, authorId: undefined });
   });
 
   it("Given no id should generate one", async () => {

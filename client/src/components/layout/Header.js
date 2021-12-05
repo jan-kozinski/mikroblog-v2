@@ -1,4 +1,5 @@
 import logo from "../../assets/logo.png";
+import { Link } from "react-router-dom";
 function Header() {
   return (
     <nav className="w-auto bg-primary ">
@@ -11,7 +12,7 @@ function Header() {
       "
         >
           <img className="h-16 px-2" src={logo} alt="logo"></img>
-          <a href="/">Mikroblog</a>
+          <Link to="/">Mikroblog</Link>
         </h1>
       </header>
     </nav>

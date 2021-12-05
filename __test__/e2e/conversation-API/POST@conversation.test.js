@@ -44,7 +44,7 @@ describe("POST@/api/conversation", () => {
     expect(response.data.success).toBe(true);
     const expectedBody = expect.objectContaining({
       id: expect.any(String),
-      membersIds: [creatorId, recipientId],
+      members: expect.arrayContaining([expect.any(String), expect.any(String)]),
       messages: [],
     });
 

@@ -1,12 +1,7 @@
 import axios from "axios";
 
 describe("GET@/api/conversation", () => {
-  let conversationId,
-    creatorId,
-    cookie,
-    recipientId,
-    otherCreatorId,
-    otherCookie;
+  let conversationId, creatorId, cookie, recipientId;
   beforeAll(async () => {
     const creatorData = {
       name: "legit",

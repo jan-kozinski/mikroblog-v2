@@ -11,15 +11,24 @@ export default function makeSaveConversation({ conversationsDb, usersDb, Id }) {
     if (idAlreadyTaken)
       throw new Error("Comment with provided id already exists");
 
+    const members = [];
+
     for (let id of convData.membersIds) {
       const member = await usersDb.findById(id);
+      members.push(member.name);
       if (!member) throw new Error("User not found");
     }
 
-    return await conversationsDb.insert({
+    const record = await conversationsDb.insert({
       id: conversation.getId(),
       membersIds: conversation.getMembersIds(),
+      members,
       messages: conversation.getMessages(),
     });
+    return {
+      id: record.id,
+      members,
+      messages: record.messages,
+    };
   };
 }

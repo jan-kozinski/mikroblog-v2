@@ -87,6 +87,7 @@ describe("makeConversation", () => {
     const messageData = {
       id: `msg-id-${randomInt()}`,
       authorId: `author-id-${randomInt()}`,
+      author: `author-name-${randomInt()}`,
       conversationId: `conv-id-${randomInt()}`,
       text: `text-${randomInt()}-about-${randomInt()}`,
       createdAt: new Date(),
@@ -99,7 +100,10 @@ describe("makeConversation", () => {
     conv.addMessage(message);
     const finalMsgs = [...conv.getMessages()];
     expect(finalMsgs.length).toEqual(initialMsgs.length + 1);
-    expect(finalMsgs[finalMsgs.length - 1]).toEqual(messageData);
+    expect(finalMsgs[finalMsgs.length - 1]).toEqual({
+      ...messageData,
+      authorId: undefined,
+    });
   });
 
   it("Add message should throw an error if message is not of type Message", () => {

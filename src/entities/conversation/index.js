@@ -5,14 +5,14 @@ export default function makeConversation({
   membersIds = [],
   messages = [],
 } = {}) {
-  return new Conversation(id, membersIds, messages);
+  return new Conversation({ id, membersIds, messages });
 }
 
 class Conversation {
   #id;
   #membersIds;
   #messages;
-  constructor(id, membersIds, messages) {
+  constructor({ id, membersIds, messages } = {}) {
     if (!id) throw new Error("Conversation id must be provided");
     if (typeof id !== "string")
       throw new Error("Conversation id must be a string");
@@ -60,7 +60,7 @@ class Conversation {
       ...this.#messages,
       {
         id: msg.getId(),
-        authorId: msg.getAuthorId(),
+        author: msg.getAuthorName(),
         conversationId: msg.getConversationId(),
         createdAt: msg.getCreatedAt(),
         modifiedAt: msg.getModifiedAt(),

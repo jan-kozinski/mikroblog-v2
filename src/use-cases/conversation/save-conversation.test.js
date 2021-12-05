@@ -47,11 +47,18 @@ describe("save conversation use case", () => {
           `legit-id-1-${i}-${genRandomInt()}`,
           `legit-id-2-${i}-${genRandomInt()}`,
         ],
+
         messages: [],
       };
       await saveConversation(conv);
       expect(dbMockup.insert).toBeCalledTimes(i + 1);
-      expect(dbMockup.insert.mock.calls[i][0]).toEqual(conv);
+      expect(dbMockup.insert.mock.calls[i][0]).toEqual({
+        ...conv,
+        members: expect.arrayContaining([
+          expect.stringContaining("name-"),
+          expect.stringContaining("name-"),
+        ]),
+      });
     }
   });
 
@@ -78,7 +85,10 @@ describe("save conversation use case", () => {
     const conv = await saveConversation(validConvData);
     expect(conv).toEqual({
       id: validConvData.id,
-      membersIds: validConvData.membersIds,
+      members: expect.arrayContaining([
+        expect.stringContaining("name-"),
+        expect.stringContaining("name-"),
+      ]),
       messages: validConvData.messages,
     });
   });
