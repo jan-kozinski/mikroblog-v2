@@ -24,6 +24,7 @@ import makeUndoCommentLike from "./comments/undo-like.js";
 import makeSaveConversation from "./conversation/save-conversation.js";
 import makeListUserConvs from "./conversation/list-user-conversations.js";
 import makeAddMessage from "./conversation/add-message.js";
+import makeSearchUsersByName from "./user/search-users-by-name.js";
 
 const hasher = {
   hash: async (password, saltRounds = 10) => {
@@ -82,6 +83,7 @@ const saveUser = makeSaveUser({
 });
 
 const authUser = makeAuthUser({ dbGateway: usersDb, hasher });
+const searchUsers = makeSearchUsersByName({ dbGateway: usersDb });
 
 //---POST-SERVICE---
 
@@ -137,6 +139,7 @@ const service = Object.freeze({
   //USER
   saveUser,
   authUser,
+  searchUsers,
   //POST
   savePost,
   editPost,
@@ -162,6 +165,7 @@ export {
   //USER
   saveUser,
   authUser,
+  searchUsers,
   //POST
   savePost,
   editPost,

@@ -4,9 +4,13 @@ import { fetchConversations } from "../../app-state/actions/chat-actions/fetch-c
 import CreateConversation from "./CreateConversation";
 import ListConversations from "./ListConversations";
 import Chat from "./Chat";
+import Loading from "../Loading";
 import { Switch, Route } from "react-router-dom";
 function Inbox() {
   const dispatch = useDispatch();
+  const isLoading = useSelector(
+    (state) => state.chat.loading || state.auth.isLoading
+  );
   const chats = useSelector((state) => state.chat.conversations);
   useEffect(() => {
     dispatch(fetchConversations());
@@ -29,13 +33,21 @@ function Inbox() {
           <CreateConversation className="row-start-1 row-end-3 col-start-2 col-end-4" />
         </Route>
         <Route path="/inbox/c/:chatId">
-          <Chat
-            className="row-start-1 row-end-3 col-start-2 col-end-4"
-            chats={chats}
-          />
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <Chat
+              className="row-start-1 row-end-3 col-start-2 col-end-4"
+              chats={chats}
+            />
+          )}
         </Route>
       </Switch>
-      <ListConversations chats={chats} className="row-start-1 row-end-3" />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <ListConversations chats={chats} className="row-start-1 row-end-3" />
+      )}
     </div>
   );
 }

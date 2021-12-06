@@ -4,6 +4,7 @@ import {
   postUser,
   signUser,
   sessionUser,
+  getUsers,
 } from "../../controllers/user-controller/index.js";
 import {
   addPost,
@@ -30,6 +31,7 @@ import {
 const router = express.Router();
 
 router.post("/user", makeCallback(postUser));
+router.get("/user", makeCallback(getUsers));
 router.post("/user/auth", makeCallback(signUser));
 router.post("/user/auth/session", makeCallback(sessionUser));
 
