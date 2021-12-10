@@ -8,24 +8,28 @@ export default function useSearch({ url, query, options = {} }) {
   const source = CancelToken.source();
   const isHandlingReq = useRef(false);
   useEffect(() => {
-    source.cancel();
-    isHandlingReq.current = true;
-    const timeout = setTimeout(() => {
-      isHandlingReq = false;
-    }, 100);
-    if (!isHandlingReq) {
-      const {
-        data: { payload },
-      } = await axios.get(`${url}?${query}=${searchValue}`, {
-        cancelToken: source.token,
-      });
-      setResult(payload);
-    }
+    let timeout;
+    const searchApi = async () => {
+      if (!searchValue) return setResult(null);
+      if (!isHandlingReq.current) {
+        const {
+          data: { payload },
+        } = await axios.get(`${url}?${query}=${searchValue}`, {
+          cancelToken: source.token,
+        });
+        setResult(payload);
+      }
+      source.cancel();
+      isHandlingReq.current = true;
+    };
+
+    searchApi();
     return () => {
       source.cancel();
-      clearTimeout(timeout);
+      if (timeout) clearTimeout(timeout);
       isHandlingReq.current = false;
     };
   }, [searchValue]);
+
   return [searchValue, setSearchValue, result];
 }

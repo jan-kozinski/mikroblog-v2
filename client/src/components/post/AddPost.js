@@ -15,7 +15,7 @@ function AddPost() {
   return (
     <form className="post" onSubmit={onSubmit}>
       <textarea
-        className="textbox"
+        className="textbox w-full"
         onChange={(e) => setContent(e.target.value)}
         value={content}
         placeholder="What's poppin'?"

@@ -6,6 +6,7 @@ import ListConversations from "./ListConversations";
 import Chat from "./Chat";
 import Loading from "../Loading";
 import { Switch, Route } from "react-router-dom";
+import InboxHeader from "./InboxHeader";
 function Inbox() {
   const dispatch = useDispatch();
   const isLoading = useSelector(
@@ -22,12 +23,7 @@ function Inbox() {
       }}
       className="bg-white m-2 rounded-lg grid grid-cols-3 grid-rows-2 auto-rows-min"
     >
-      <div className="rows-start-0 row-end-1 h-16 font-bold text-2xl text-primary border-b-2 solid p-4">
-        Conversations
-      </div>
-      <div className="row-start-0 col-start-2 text-white font-bold text-2xl text-center rounded-tr-lg col-end-4 bg-secondary h-16 w-full">
-        <h4 className="transform translate-y-1/2">Start new conversation</h4>
-      </div>
+      <InboxHeader />
       <Switch>
         <Route path="/inbox" exact>
           <CreateConversation className="row-start-1 row-end-3 col-start-2 col-end-4" />

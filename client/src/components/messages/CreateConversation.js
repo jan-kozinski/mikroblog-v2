@@ -1,19 +1,13 @@
 import React from "react";
+import SearchRecipients from "./SearchRecipients";
 
 function CreateConversation({ className = "" }) {
   return (
     <form className={className + " flex flex-col"}>
-      <div className="flex m-4 p-2">
-        <h4 className="mr-4">recipients</h4>
-        <input
-          type="text"
-          className="w-full h-8 bg-gray-200 rounded-lg p-2"
-        ></input>
-      </div>
-
+      <SearchRecipients />
       <div className="flex m-4 p-2">
         <h4 className="mr-4">message</h4>
-        <textarea className="textbox"></textarea>
+        <textarea className="textbox w-full"></textarea>
       </div>
 
       <button
