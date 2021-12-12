@@ -4,6 +4,8 @@ import {
   CONVERSATIONS_LOADING,
   SEND_MSG,
   SEND_MSG_ERROR,
+  CREATE_CONV_ERROR,
+  CREATE_CONV,
 } from "../actions/types";
 
 const initialState = {
@@ -27,6 +29,17 @@ export default function chatReducer(state = initialState, action) {
         error: { ...action.payload, origin: "GET_CONV" },
         loading: false,
       };
+    case CREATE_CONV:
+      return {
+        ...state,
+        conversations: [action.payload, ...state.conversations],
+      };
+    case CREATE_CONV_ERROR:
+      return {
+        ...state,
+        error: { ...action.payload, origin: "CREATE_CONV" },
+      };
+
     case SEND_MSG:
       return {
         ...state,
