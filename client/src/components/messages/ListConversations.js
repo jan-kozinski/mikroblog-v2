@@ -19,7 +19,7 @@ function ListConversations({ className = "", chats = [] }) {
               {chat.members.filter((m) => m !== loggedUser.name).join(", ")}
             </span>
           </Link>
-          <p>
+          <p className="truncate max-h-32 overflow-hidden">
             {chat.messages.length
               ? lastMsg(chat)
               : "This is a new conversation"}

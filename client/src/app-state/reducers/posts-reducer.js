@@ -31,7 +31,7 @@ import {
 
 const initialState = {
   posts: [],
-  loading: true,
+  loading: false,
   lastPostReached: false,
   error: null,
   postsAddedSinceLastFetch: 0,

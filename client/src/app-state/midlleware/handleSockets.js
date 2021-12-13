@@ -1,9 +1,9 @@
 import * as actions from "../actions/socket-actions";
 import {
   SOCKET_CONNECT,
-  SOCKET_ADDED_POST,
   SOCKET_DISCONNECT,
   POST_ADDED,
+  SOCKET_SENT_MSG,
 } from "../actions/types";
 import io from "socket.io-client";
 
@@ -12,6 +12,7 @@ export default function handleSockets() {
   return (store) => (next) => (action) => {
     switch (action.type) {
       case SOCKET_CONNECT:
+        console.log("connect socket");
         openSocketConnection();
         break;
       case SOCKET_DISCONNECT:
@@ -22,8 +23,12 @@ export default function handleSockets() {
         break;
       case POST_ADDED:
         if (socket !== null) {
-          console.log("SDKSDFKSFDKFDSKFDK");
           socket.emit("new-post-added");
+        }
+        return next(action);
+      case SOCKET_SENT_MSG:
+        if (socket !== null) {
+          socket.emit("new-msg-sent", action.payload);
         }
         return next(action);
       default:
@@ -46,6 +51,11 @@ export default function handleSockets() {
 
         socket.on("new-post-added", () => {
           store.dispatch(actions.socketReceivedNewPostInfo());
+        });
+        socket.on("msg-received", ({ payload }) => {
+          console.log("MSG RECEIVED");
+          console.log(payload);
+          store.dispatch(actions.socketReceivedNewChatMsg(payload));
         });
       });
 

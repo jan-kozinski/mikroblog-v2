@@ -6,11 +6,12 @@ import {
   SEND_MSG_ERROR,
   CREATE_CONV_ERROR,
   CREATE_CONV,
+  SOCKET_RECEIVED_MSG,
 } from "../actions/types";
 
 const initialState = {
   conversations: [],
-  loading: true,
+  loading: false,
   error: null,
 };
 
@@ -41,6 +42,7 @@ export default function chatReducer(state = initialState, action) {
       };
 
     case SEND_MSG:
+    case SOCKET_RECEIVED_MSG:
       return {
         ...state,
         conversations: state.conversations.map((c) => {
@@ -57,6 +59,7 @@ export default function chatReducer(state = initialState, action) {
         ...state,
         error: { ...action.payload, origin: "SEND_MSG" },
       };
+
     case CONVERSATIONS_LOADING:
       return {
         ...state,
