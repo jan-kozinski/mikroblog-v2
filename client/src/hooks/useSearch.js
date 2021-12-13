@@ -10,17 +10,19 @@ export default function useSearch({ url, query, options = {} }) {
   useEffect(() => {
     let timeout;
     const searchApi = async () => {
-      if (!searchValue) return setResult(null);
-      if (!isHandlingReq.current) {
-        const {
-          data: { payload },
-        } = await axios.get(`${url}?${query}=${searchValue}`, {
-          cancelToken: source.token,
-        });
-        setResult(payload);
-      }
-      source.cancel();
-      isHandlingReq.current = true;
+      try {
+        if (!searchValue) return setResult(null);
+        if (!isHandlingReq.current) {
+          const {
+            data: { payload },
+          } = await axios.get(`${url}?${query}=${searchValue}`, {
+            cancelToken: source.token,
+          });
+          setResult(payload);
+        }
+        source.cancel();
+        isHandlingReq.current = true;
+      } catch (error) {}
     };
 
     searchApi();

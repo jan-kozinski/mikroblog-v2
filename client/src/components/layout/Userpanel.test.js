@@ -1,16 +1,23 @@
 import Userpanel from "./Userpanel";
 import { cleanup, render, screen } from "../../__test__/test-utils";
 import userEvent from "@testing-library/user-event";
-
+import { Router } from "react-router-dom";
+import { createBrowserHistory } from "history";
 describe("Signin user in", () => {
   beforeEach(() => {
-    render(<Userpanel />, {
-      preloadedState: {
-        auth: {
-          isLoading: false,
+    const history = createBrowserHistory();
+    render(
+      <Router history={history}>
+        <Userpanel />
+      </Router>,
+      {
+        preloadedState: {
+          auth: {
+            isLoading: false,
+          },
         },
-      },
-    });
+      }
+    );
   });
 
   it("Should successfully login the user", async () => {
@@ -43,13 +50,19 @@ describe("Signin user in", () => {
     await screen.findByRole(/alert/i);
 
     cleanup();
-    render(<Userpanel />, {
-      preloadedState: {
-        auth: {
-          isLoading: false,
+    let history = createBrowserHistory();
+    render(
+      <Router history={history}>
+        <Userpanel />
+      </Router>,
+      {
+        preloadedState: {
+          auth: {
+            isLoading: false,
+          },
         },
-      },
-    });
+      }
+    );
     emailInput = screen.getByLabelText("E-mail");
     passwordInput = screen.getByLabelText("Password");
     await userEvent.type(emailInput, "test@test.com", {
@@ -61,13 +74,19 @@ describe("Signin user in", () => {
     await screen.findByRole(/alert/i);
 
     cleanup();
-    render(<Userpanel />, {
-      preloadedState: {
-        auth: {
-          isLoading: false,
+    history = createBrowserHistory();
+    render(
+      <Router history={history}>
+        <Userpanel />
+      </Router>,
+      {
+        preloadedState: {
+          auth: {
+            isLoading: false,
+          },
         },
-      },
-    });
+      }
+    );
     emailInput = screen.getByLabelText("E-mail");
     passwordInput = screen.getByLabelText("Password");
     await userEvent.type(emailInput, "test@test.com", {

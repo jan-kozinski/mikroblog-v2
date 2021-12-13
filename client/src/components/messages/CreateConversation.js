@@ -21,6 +21,7 @@ function CreateConversation({ className = "" }) {
 
       <button
         type="submit"
+        aria-label="send"
         className="m-auto mb-8 w-4/5 btn shadow-btn"
         onClick={(e) => {
           e.preventDefault();

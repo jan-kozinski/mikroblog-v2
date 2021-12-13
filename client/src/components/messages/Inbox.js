@@ -14,7 +14,7 @@ function Inbox() {
   );
   const chats = useSelector((state) => state.chat.conversations);
   useEffect(() => {
-    dispatch(fetchConversations());
+    if (isLoading) dispatch(fetchConversations());
   }, []);
   return (
     <div

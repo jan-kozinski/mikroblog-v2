@@ -11,7 +11,7 @@ function Chat({ chats, className }) {
   const dispatch = useDispatch();
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(text);
+    setText("");
     dispatch(sendMessage({ chatId, text }));
   };
 
@@ -45,6 +45,7 @@ function Chat({ chats, className }) {
           type="text"
           className="w-full bg-gray-200 rounded-l-full p-2"
           placeholder="Send a message"
+          aria-label="message"
           value={text}
           onChange={(e) => {
             e.preventDefault();
@@ -55,6 +56,7 @@ function Chat({ chats, className }) {
         <button
           type="submit"
           className="btn shadow-btn px-3"
+          aria-label="send"
           style={{
             borderTopLeftRadius: "0",
             borderBottomLeftRadius: "0",

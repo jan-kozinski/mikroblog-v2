@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { useSelector } from "react-redux";
 import useSearch from "../../hooks/useSearch";
 import { createUserEndpoint as userEndpoint } from "../../constants/api-endpoints";
 
@@ -9,13 +10,16 @@ function SearchRecipients({ recipientsIds }) {
   });
   const [recipients, setRecipients] = useState([]);
   const [selectedRes, setSelectedRes] = useState(null);
+  const loggedUser = useSelector((state) => state.auth.user);
   const fieldRef = useRef(null);
   const inputRef = useRef(null);
   const resultsRef = useRef(null);
   const resultToSelect = useRef(0);
   return (
     <div className="flex m-4 p-2">
-      <h4 className="mr-4">recipients</h4>
+      <h4 id="recipients-label" className="mr-4">
+        recipients
+      </h4>
       <div
         className="w-full p-2 bg-gray-200 rounded-lg flex flex-row overflow-x-auto overflow-y-hidden"
         ref={fieldRef}
@@ -25,6 +29,7 @@ function SearchRecipients({ recipientsIds }) {
         </div>
         <input
           type="text"
+          aria-labelledby="recipients-label"
           ref={inputRef}
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
@@ -41,7 +46,11 @@ function SearchRecipients({ recipientsIds }) {
             }}
           >
             {result
-              .filter((r) => !recipients.includes(r.name))
+
+              .filter(
+                (r) =>
+                  !recipients.includes(r.name) && r.name !== loggedUser.name
+              )
               .map((r) => (
                 <li
                   className={`p-2 border-b cursor-pointer hover:bg-gray-300 ${

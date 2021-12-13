@@ -53,7 +53,7 @@ describe("POST@/api/conversation/:conversationId", () => {
       expect.objectContaining({
         id: expect.any(String),
         conversationId,
-        authorId: creatorId,
+        author: expect.any(String),
         text: "test-text",
         createdAt: expect.any(String),
         modifiedAt: expect.any(String),

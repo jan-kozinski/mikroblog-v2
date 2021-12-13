@@ -2,6 +2,8 @@ import { rest } from "msw";
 import {
   authUserEndpoint,
   commentsEndpoint,
+  conversationsEndpoint,
+  createUserEndpoint,
   postsEndpoint,
 } from "../../constants/api-endpoints";
 
@@ -176,6 +178,17 @@ export const handlers = [
       })
     );
   }),
+  rest.get(createUserEndpoint, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.body({
+        success: true,
+        payload: [
+          { id: `id-${Math.round(Math.random() * 1000)}`, name: "test-user" },
+        ],
+      })
+    );
+  }),
   rest.get(commentsEndpoint + "/:originalPostId", (req, res, ctx) => {
     return res(
       ctx.status(200),
@@ -279,6 +292,42 @@ export const handlers = [
         payload: {
           isDeleted: "true",
           content: "deleted",
+        },
+      })
+    );
+  }),
+  rest.post(`${conversationsEndpoint}`, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.body({
+        success: true,
+        payload: {
+          id: `id-${Math.round(Math.random() * 1000)}`,
+          members: ["test12", "test"],
+          messages: [],
+        },
+      })
+    );
+  }),
+  rest.get(`${conversationsEndpoint}`, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.body({
+        success: true,
+        payload: [],
+      })
+    );
+  }),
+  rest.post(`${conversationsEndpoint}/:convId`, (req, res, ctx) => {
+    return res(
+      ctx.status(200),
+      ctx.body({
+        success: true,
+        payload: {
+          id: `id-${Math.round(Math.random() * 1000)}`,
+          author: "test",
+          conversationId: req.params.convId,
+          text: req.body.text,
         },
       })
     );

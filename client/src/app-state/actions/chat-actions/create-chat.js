@@ -8,8 +8,8 @@ export const createChat =
   async (dispatch, getState) => {
     try {
       const apiClient = useApi({ dispatch, getState });
-      //   const user = getState().auth.user;
-      //   membersIds.push(user.id);
+      const user = getState().auth.user;
+      membersIds.push(user.id);
       const response = await apiClient.post(conversationsEndpoint, {
         membersIds,
         message,
