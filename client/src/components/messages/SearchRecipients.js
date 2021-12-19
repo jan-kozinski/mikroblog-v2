@@ -16,7 +16,10 @@ function SearchRecipients({ recipientsIds }) {
   const resultsRef = useRef(null);
   const resultToSelect = useRef(0);
   return (
-    <div className="flex m-4 p-2">
+    <div
+      className="flex m-4 p-2 cursor-text"
+      onClick={() => inputRef.current.focus()}
+    >
       <h4 id="recipients-label" className="mr-4">
         recipients
       </h4>

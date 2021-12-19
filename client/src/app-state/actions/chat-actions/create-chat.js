@@ -14,6 +14,8 @@ export const createChat =
         membersIds,
         message,
       });
+      // console.log({ ...response });
+      console.log(response.response);
       const { payload } = response.data;
       dispatch({
         type: CREATE_CONV,

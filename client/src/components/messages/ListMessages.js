@@ -1,5 +1,6 @@
 import { useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
+import Loading from "../Loading";
 
 function ListMessages({ chat }) {
   const loggedUser = useSelector((state) => state.auth.user);
@@ -8,8 +9,9 @@ function ListMessages({ chat }) {
     if (msgsRef.current && msgsRef.current.scrollHeight)
       msgsRef.current.scrollTop = msgsRef.current.scrollHeight;
   }, []);
+  if (!chat) return <Loading />;
   return chat.messages.length ? (
-    <div className="overflow-y-scroll" ref={msgsRef}>
+    <div className="overflow-y-auto" ref={msgsRef}>
       {chat.messages.map((msg) => {
         let isAuthor = loggedUser && msg.author === loggedUser.name;
         return (

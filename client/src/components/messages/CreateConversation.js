@@ -1,11 +1,12 @@
 import { useRef, useState } from "react";
 import SearchRecipients from "./SearchRecipients";
 import { createChat } from "../../app-state/actions/chat-actions/create-chat";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 function CreateConversation({ className = "" }) {
   const recipientsIds = useRef([]);
   const [msg, setMsg] = useState("");
+  const { error } = useSelector((state) => state.chat);
   const dispatch = useDispatch();
   return (
     <form className={className + " flex flex-col"}>
@@ -18,7 +19,9 @@ function CreateConversation({ className = "" }) {
           onChange={(e) => setMsg(e.target.value)}
         ></textarea>
       </div>
-
+      {error && error.origin === "CREATE_CONV" && (
+        <div className="danger w-4/5 mx-auto">{error.message}</div>
+      )}
       <button
         type="submit"
         aria-label="send"

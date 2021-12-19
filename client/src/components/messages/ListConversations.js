@@ -1,30 +1,39 @@
-import React from "react";
+import { useCallback } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 function ListConversations({ className = "", chats = [] }) {
   const loggedUser = useSelector((state) => state.auth.user);
+  const { pathname } = useLocation();
+  const isSelected = useCallback((id) => id === pathname.slice(9), [pathname]);
+
   return (
     <ul className={className + " h-full border-r-2 solid"}>
-      <li className="border-b-2 p-2 solid">
-        <Link to="/inbox" className="font-bold flex justify-between">
+      <Link to="/inbox">
+        <li className="border-b-2 px-2 h-16 solid font-bold flex justify-between flex items-center">
           start new conversation
           <div className="btn w-8">+</div>
-        </Link>
-      </li>
+        </li>
+      </Link>
       {chats.map((chat) => (
-        <li key={chat.id} className="border-b-2 p-2 solid">
-          <Link to={"/inbox/c/" + chat.id}>
+        <Link to={"/inbox/c/" + chat.id} key={chat.id}>
+          <li
+            className={`border-b-2 p-2 transition duration-200 ease-in rounded-xl ${
+              isSelected(chat.id)
+                ? "bg-primary bg-opacity-80 text-white"
+                : "hover:bg-gray-300"
+            }`}
+          >
             <span className="text-secondary font-bold">
               {chat.members.filter((m) => m !== loggedUser.name).join(", ")}
             </span>
-          </Link>
-          <p className="truncate max-h-32 overflow-hidden">
-            {chat.messages.length
-              ? lastMsg(chat)
-              : "This is a new conversation"}
-          </p>
-        </li>
+            <p className="truncate max-h-32 overflow-hidden">
+              {chat.messages.length
+                ? lastMsg(chat)
+                : "This is a new conversation"}
+            </p>
+          </li>
+        </Link>
       ))}
     </ul>
   );

@@ -7,6 +7,11 @@ export const sendMessage =
   ({ chatId, text }) =>
   async (dispatch, getState) => {
     try {
+      if (!text)
+        return dispatch({
+          type: SEND_MSG_ERROR,
+          payload: { message: "Message can't be empty" },
+        });
       const apiClient = useApi({ dispatch, getState });
       const response = await apiClient.post(
         `${conversationsEndpoint}/${chatId}`,

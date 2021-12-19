@@ -30,6 +30,11 @@ export default function chatReducer(state = initialState, action) {
         error: { ...action.payload, origin: "GET_CONV" },
         loading: false,
       };
+    case CONVERSATIONS_LOADING:
+      return {
+        ...state,
+        loading: true,
+      };
     case CREATE_CONV:
       return {
         ...state,
@@ -60,11 +65,6 @@ export default function chatReducer(state = initialState, action) {
         error: { ...action.payload, origin: "SEND_MSG" },
       };
 
-    case CONVERSATIONS_LOADING:
-      return {
-        ...state,
-        loadind: true,
-      };
     default:
       return state;
   }

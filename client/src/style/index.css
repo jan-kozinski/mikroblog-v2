@@ -39,7 +39,7 @@
 }
 
 .msg {
-  @apply block py-1 px-4 mt-2 w-max rounded-full;
+  @apply block py-1 px-4 mt-2 w-max rounded-3xl;
 }
 
 .received-msg {

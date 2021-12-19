@@ -12,10 +12,16 @@ function Inbox() {
   const isLoading = useSelector(
     (state) => state.chat.loading || state.auth.isLoading
   );
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const chats = useSelector((state) => state.chat.conversations);
   useEffect(() => {
-    if (isLoading) dispatch(fetchConversations());
-  }, []);
+    dispatch(fetchConversations());
+  }, [dispatch, fetchConversations]);
+
+  useEffect(() => {
+    if (!isLoading && !isAuthenticated) window.location.replace("/");
+  }, [isLoading, isAuthenticated]);
+
   return (
     <div
       style={{
