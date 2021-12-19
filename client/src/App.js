@@ -4,6 +4,7 @@ import store from "./app-state/store";
 import Wall from "./components/layout/Wall";
 import Wrapper from "./components/layout/Wrapper";
 import WebSocketWrapper from "./components/WebSocketWrapper";
+import Inbox from "./components/messages/Inbox";
 function App() {
   return (
     <Provider store={store}>
@@ -13,6 +14,11 @@ function App() {
             <Route path="/" exact>
               <Wrapper>
                 <Wall />
+              </Wrapper>
+            </Route>
+            <Route path="/inbox">
+              <Wrapper>
+                <Inbox />
               </Wrapper>
             </Route>
           </Switch>

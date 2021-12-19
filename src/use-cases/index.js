@@ -21,6 +21,11 @@ import makeRemoveComment from "./comments/remove-comment.js";
 import makeLikeComment from "./comments/like-comment.js";
 import makeUndoCommentLike from "./comments/undo-like.js";
 
+import makeSaveConversation from "./conversation/save-conversation.js";
+import makeListUserConvs from "./conversation/list-user-conversations.js";
+import makeAddMessage from "./conversation/add-message.js";
+import makeSearchUsersByName from "./user/search-users-by-name.js";
+
 const hasher = {
   hash: async (password, saltRounds = 10) => {
     return await bcrypt.hash(password, saltRounds);
@@ -31,15 +36,17 @@ const hasher = {
   },
 };
 
-let usersDb, postsDb, commentsDb;
+let usersDb, postsDb, commentsDb, conversationsDb;
 
 if (process.env.NODE_ENV !== "test") {
   usersDb = new MongoDb("users");
   commentsDb = new MongoDb("comments");
   postsDb = new MongoDb("posts");
+  conversationsDb = new MongoDb("conversations");
   await usersDb.connect();
   await postsDb.connect();
   await commentsDb.connect();
+  await conversationsDb.connect();
 
   process.on("uncaughtException", (err, origin) => {
     console.error("ERR:", err, "ORIGIN:", origin);
@@ -62,6 +69,7 @@ if (process.env.NODE_ENV !== "test") {
   usersDb = new inMemoryDb();
   commentsDb = new inMemoryDb();
   postsDb = new inMemoryDb();
+  conversationsDb = new inMemoryDb();
 }
 
 const Id = { genId: () => cuid() };
@@ -75,6 +83,7 @@ const saveUser = makeSaveUser({
 });
 
 const authUser = makeAuthUser({ dbGateway: usersDb, hasher });
+const searchUsers = makeSearchUsersByName({ dbGateway: usersDb });
 
 //---POST-SERVICE---
 
@@ -117,39 +126,62 @@ function closeDbConnections() {
   usersDb.close();
   postsDb.close();
   commentsDb.close();
+  conversationsDb.close();
 }
 
+//---CONVERSATION-SERVICE---
+
+const saveConversation = makeSaveConversation({ conversationsDb, usersDb, Id });
+const addMessage = makeAddMessage({ conversationsDb, usersDb, Id });
+const listUserConvs = makeListUserConvs({ dbGateway: conversationsDb, Id });
+
 const service = Object.freeze({
+  //USER
   saveUser,
   authUser,
+  searchUsers,
+  //POST
   savePost,
   editPost,
   listPosts,
   likePost,
   undoLike,
   removePost,
+  //COMMENT
   saveComment,
   listCommsByPost,
   editComment,
   removeComment,
   likeComment,
   undoCommentLike,
+  //CONVERSATION
+  saveConversation,
+  addMessage,
+  listUserConvs,
 });
 
 export default service;
 export {
+  //USER
   saveUser,
   authUser,
+  searchUsers,
+  //POST
   savePost,
   editPost,
   listPosts,
   likePost,
   undoLike,
   removePost,
+  //COMMENT
   saveComment,
   listCommsByPost,
   editComment,
   removeComment,
   likeComment,
   undoCommentLike,
+  //CONVERSATION
+  saveConversation,
+  addMessage,
+  listUserConvs,
 };

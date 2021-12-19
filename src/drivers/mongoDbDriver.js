@@ -49,6 +49,7 @@ class MongoDb {
       skip,
       after,
       before,
+      treatAsPattern,
       byNewest,
       byLikesCount,
       returnTotal,
@@ -60,6 +61,7 @@ class MongoDb {
       skip: number,
       after: string,
       before: string,
+      treatAsPattern: boolean,
       byNewest: boolean, 
       byLikesCount: boolean,
       returnTotal: boolean, 
@@ -79,7 +81,11 @@ class MongoDb {
         queries.createdAt = { ...queries.createdAt, $gt: new Date(after) };
       if (typeof before === "string")
         queries.createdAt = { ...queries.createdAt, $lt: new Date(before) };
-
+      if (treatAsPattern === true) {
+        for (let q in queries) {
+          queries[q] = { $regex: queries[q], $options: "is" };
+        }
+      }
       if (Array.isArray(matchAny)) {
         for (let i in matchAny) {
           const field = matchAny[i];

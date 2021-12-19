@@ -13,13 +13,22 @@ function useApi({ dispatch, getState }) {
     },
   });
 
-  apiClient.interceptors.response.use((res) => {
-    dispatch({
-      type: SET_CSRF_TOKEN,
-      payload: res.data.csrfToken,
-    });
-    return res;
-  });
+  apiClient.interceptors.response.use(
+    (res) => {
+      dispatch({
+        type: SET_CSRF_TOKEN,
+        payload: res.data.csrfToken,
+      });
+      return res;
+    },
+    (err) => {
+      dispatch({
+        type: SET_CSRF_TOKEN,
+        payload: err.response.data.csrfToken,
+      });
+      throw err;
+    }
+  );
 
   return apiClient;
 }

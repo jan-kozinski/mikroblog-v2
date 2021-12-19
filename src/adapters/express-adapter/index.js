@@ -57,6 +57,29 @@ export default async function start(callback) {
       socket.on("new-post-added", () =>
         socket.broadcast.emit("new-post-added")
       );
+      socket.on("new-msg-sent", (payload) => {
+        connectedSockets.forEach((s) => {
+          if (
+            !payload ||
+            !payload.recipients ||
+            !Array.isArray(payload.recipients)
+          )
+            return;
+          console.log(s.name);
+          if (payload.recipients.includes(s.name)) {
+            socket.to(s.socket).emit("msg-received", {
+              payload: {
+                id: payload.id,
+                author: payload.author,
+                conversationId: payload.conversationId,
+                createdAt: payload.createdAt,
+                modifiedAt: payload.modifiedAt,
+                text: payload.text,
+              },
+            });
+          }
+        });
+      });
     });
     server.listen(PORT, () => {
       console.log(

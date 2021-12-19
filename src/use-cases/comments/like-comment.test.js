@@ -86,7 +86,7 @@ describe("like-comment use case", () => {
 
   it("Should throw an error if comment is deleted", async () => {
     const anotherComment = {
-      id: `id-${Math.round(Math.random() * 100)}`,
+      id: `id-${Math.round(Math.random() * 1000 + 101)}`,
       originalPostId: `post-${Math.round(Math.random() * 100)}`,
       authorId: `author-${Math.round(Math.random() * 100)}`,
       content: `content-${Math.round(Math.random() * 100)}`,
@@ -99,11 +99,10 @@ describe("like-comment use case", () => {
 
     await dbMockup.insert(anotherComment);
     await expect(
-      async () =>
-        await likeComment({
-          commentId: anotherComment.id,
-          userId: "doesn't matter",
-        })
+      likeComment({
+        commentId: anotherComment.id,
+        userId: "doesn't matter",
+      })
     ).rejects.toThrow();
   });
 });

@@ -4,6 +4,7 @@ import {
   postUser,
   signUser,
   sessionUser,
+  getUsers,
 } from "../../controllers/user-controller/index.js";
 import {
   addPost,
@@ -21,10 +22,16 @@ import {
   likeComment,
   unlikeComment,
 } from "../../controllers/comment-controller/index.js";
+import {
+  sendMsg,
+  createConv,
+  getUserConvs,
+} from "../../controllers/conversation-controller/index.js";
 
 const router = express.Router();
 
 router.post("/user", makeCallback(postUser));
+router.get("/user", makeCallback(getUsers));
 router.post("/user/auth", makeCallback(signUser));
 router.post("/user/auth/session", makeCallback(sessionUser));
 
@@ -44,6 +51,10 @@ router.delete("/comment/:commentId", makeCallback(deleteComment));
 
 router.post("/comment/:commentId/likes", makeCallback(likeComment));
 router.delete("/comment/:commentId/likes", makeCallback(unlikeComment));
+
+router.post("/conversation", makeCallback(createConv));
+router.get("/conversation", makeCallback(getUserConvs));
+router.post("/conversation/:conversationId", makeCallback(sendMsg));
 
 export default router;
 export { router };

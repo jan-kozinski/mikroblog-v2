@@ -6,7 +6,7 @@ import {
 } from "../app-state/actions/socket-actions";
 function WebSocketWrapper({ children }) {
   const isLoading = useSelector(
-    (state) => state.auth.loading || state.posts.loading
+    (state) => state.auth.isLoading || state.posts.loading || state.chat.loading
   );
   const authorizedUser = useSelector((state) =>
     state.auth.user ? state.auth.user.name : null

@@ -22,7 +22,7 @@ function AddComment({ originalPostId, closeModal }) {
       }}
     >
       <textarea
-        className="textbox"
+        className="textbox w-full"
         onChange={(e) => setContent(e.target.value)}
         value={content}
         placeholder="What's poppin'?"
