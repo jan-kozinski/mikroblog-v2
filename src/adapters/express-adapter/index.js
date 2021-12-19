@@ -6,10 +6,10 @@ import csrf from "csurf";
 import http from "http";
 import cors from "cors";
 import { Server as Socketio } from "socket.io";
-import path from "path";
-
+import path, { dirname } from "path";
+import { fileUrlToPath } from "url";
 let server;
-
+const __dirname = dirname(fileUrlToPath(import.meta.url));
 export default async function start(callback) {
   const app = express();
 
@@ -46,7 +46,7 @@ export default async function start(callback) {
     app.use(express.static("client/build"));
 
     app.get("*", (req, res) =>
-      res.sendFile(path.resolve(process.cwd(), "./client/build/index.html"))
+      res.sendFile(path.resolve(__dirname, "./client/build/index.html"))
     );
   }
 
