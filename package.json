@@ -8,6 +8,10 @@
       "client"
     ]
   },
+  "engines": {
+    "node": "16.13.0",
+    "npm": "8.1.0"
+  },
   "scripts": {
     "test": "NODE_OPTIONS=--experimental-vm-modules jest src",
     "test:watch": "NODE_OPTIONS=--experimental-vm-modules jest src --watchAll",
