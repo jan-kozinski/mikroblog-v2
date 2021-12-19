@@ -314,7 +314,13 @@ export const handlers = [
       ctx.status(200),
       ctx.body({
         success: true,
-        payload: [],
+        payload: [
+          {
+            id: "chatid",
+            members: ["author", "user2"],
+            messages: [],
+          },
+        ],
       })
     );
   }),

@@ -85,6 +85,7 @@ describe("<Inbox rendering test: ", () => {
     const submitBtn = await screen.findByLabelText("send");
     userEvent.click(submitBtn);
     expect(msgTextbox).toHaveValue("");
+    screen.debug();
     await screen.findByText("hello there, friend");
   });
 });
