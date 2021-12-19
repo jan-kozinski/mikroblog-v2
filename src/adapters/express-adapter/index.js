@@ -41,6 +41,14 @@ export default async function start(callback) {
 
   app.use("/api", router);
 
+  if (process.env.NODE_ENV === "production") {
+    app.use(express.static("client/build"));
+
+    app.get("*", (req, res) =>
+      res.sendFile(path.resolve(__dirname, "client", "build", "index.html"))
+    );
+  }
+
   //WEB SOCKETS
   if (process.env.NODE_ENV !== "test") {
     server = http.createServer(app);
@@ -65,7 +73,7 @@ export default async function start(callback) {
             !Array.isArray(payload.recipients)
           )
             return;
-          console.log(s.name);
+
           if (payload.recipients.includes(s.name)) {
             socket.to(s.socket).emit("msg-received", {
               payload: {
