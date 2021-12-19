@@ -6,6 +6,7 @@ import csrf from "csurf";
 import http from "http";
 import cors from "cors";
 import { Server as Socketio } from "socket.io";
+import path from "path";
 
 let server;
 
