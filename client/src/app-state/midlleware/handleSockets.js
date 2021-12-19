@@ -41,7 +41,8 @@ export default function handleSockets() {
       }
 
       // connect to the remote host
-      const BASE_URL = process.env.BASE_URL || "http://localhost:5000";
+      const BASE_URL =
+        process.env.BASE_URL || "https://mikroblog-website.herokuapp.com/";
       socket = io(BASE_URL);
       socket.on("connect", () => {
         if (action.payload.username)
