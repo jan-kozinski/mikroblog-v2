@@ -16,7 +16,7 @@
     "dev": "NODE_ENV=development nodemon src/index.js --ignore client/ --ignore **/*.test.js",
     "client": "npm start --prefix client",
     "build": "npm run build --prefix client",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix client && npm run build --prefix client && cd client/public && ls -a",
     "start": "NODE_ENV=production node src/index.js"
   },
   "keywords": [],
