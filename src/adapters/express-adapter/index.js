@@ -7,9 +7,9 @@ import http from "http";
 import cors from "cors";
 import { Server as Socketio } from "socket.io";
 import path, { dirname } from "path";
-import { fileUrlToPath } from "url";
+import { fileURLToPath } from "url";
 let server;
-const __dirname = dirname(fileUrlToPath(import.meta.url));
+const __dirname = dirname(fileURLToPath(import.meta.url));
 export default async function start(callback) {
   const app = express();
 

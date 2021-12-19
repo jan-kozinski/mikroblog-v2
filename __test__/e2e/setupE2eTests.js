@@ -21,5 +21,6 @@ beforeAll(() => {
 });
 
 afterAll((done) => {
-  server.close(done);
+  server.close();
+  done();
 });
