@@ -5,12 +5,11 @@ import startExpressApp, {
 import dotenv from "dotenv";
 import path from "path";
 
-const PORT = process.env.PORT || 5000;
 beforeAll(() => {
   dotenv.config({
     path: path.resolve(process.cwd(), "./src/config.env"),
   });
-
+  const PORT = process.env.PORT || 3000;
   axios.defaults.baseURL = `http://localhost:${PORT}`;
   axios.defaults.headers.common["Content-Type"] = "application/json";
   axios.defaults.validateStatus = function (status) {
