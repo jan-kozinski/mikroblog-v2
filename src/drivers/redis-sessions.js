@@ -1,7 +1,11 @@
 import RedisSessions from "redis-sessions";
 import util from "util";
+
+const redisOptions = {};
+if (process.env.REDIS_URL) redisOptions["url"] = process.env.REDIS_URL;
+
 const rs = new RedisSessions({
-  options: { url: process.env.REDIS_URL || "127.0.0.1" },
+  options: redisOptions,
 });
 
 const rsapp = process.env.REDIS_NAMESPACE || "mikroblog-web-client";
